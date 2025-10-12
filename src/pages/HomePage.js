@@ -243,17 +243,17 @@ export function HomePage() {
         <div class="row">
           <div class="col-md-4 mb-3">
             <h5><i class="bi bi-egg-fried me-2"></i>Sabores & Delicias</h5>
-            <p class="text-muted">Donde cada comida es una experiencia memorable.</p>
+            <p class="text-muted text-footer">Donde cada comida es una experiencia memorable.</p>
           </div>
           <div class="col-md-4 mb-3">
             <h5>Horario</h5>
-            <p class="text-muted mb-1">Lunes a Viernes: 12:00 - 23:00</p>
-            <p class="text-muted">Sábados y Domingos: 11:00 - 00:00</p>
+            <p class="text-muted mb-1 text-footer">Lunes a Viernes: 12:00 - 23:00</p>
+            <p class="text-muted text-footer">Sábados y Domingos: 11:00 - 00:00</p>
           </div>
           <div class="col-md-4 mb-3">
             <h5>Contacto</h5>
-            <p class="text-muted mb-1"><i class="bi bi-telephone me-2"></i> (57) 322 43567898</p>
-            <p class="text-muted"><i class="bi bi-geo-alt me-2"></i> Cra 45 #123-45, Tuluá</p>
+            <p class="text-muted mb-1 text-footer"><i class="bi bi-telephone me-2"></i> (57) 322 43567898</p>
+            <p class="text-muted text-footer"><i class="bi bi-geo-alt me-2"></i> Cra 45 #123-45, Tuluá</p>
           </div>
         </div>
         <hr class="my-4">
