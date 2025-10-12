@@ -12,8 +12,8 @@ class Router {
   navigate(path) {
     this.currentRoute = path;
     this.render();
-    // Actualizar URL sin recargar la página
-    window.history.pushState({}, '', path);
+    // Usar hash en lugar de history API para GitHub Pages
+    window.location.hash = path;
   }
 
   render() {
@@ -27,15 +27,22 @@ class Router {
   }
 
   init() {
-    // Manejar el botón de retroceso
-    window.addEventListener('popstate', () => {
-      this.currentRoute = window.location.pathname;
+    // Manejar cambios en el hash para GitHub Pages
+    const handleHashChange = () => {
+      // Obtener el hash sin el #, o usar '/' por defecto
+      const hash = window.location.hash.slice(1) || '/';
+      this.currentRoute = hash;
       this.render();
-    });
+    };
 
-    // Ruta inicial
-    this.currentRoute = window.location.pathname || '/';
-    this.render();
+    // Escuchar cambios en el hash
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Manejar carga inicial
+    window.addEventListener('load', handleHashChange);
+    
+    // También ejecutar al inicializar
+    handleHashChange();
   }
 }
 
