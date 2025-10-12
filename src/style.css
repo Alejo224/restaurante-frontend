@@ -101,6 +101,52 @@ a.text-primary:hover {
   color: #0a58ca !important;
 }
 
+/* Estilos para la landing page pública */
+.hero-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+.hero-image {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.access-teaser {
+  border: 2px solid #343a40;
+}
+
+.preview-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.preview-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.preview-item:nth-child(2) {
+  border-left-color: #ffc107;
+}
+
+.preview-item:nth-child(3) {
+  border-left-color: #198754;
+}
+
+.preview-item:nth-child(4) {
+  border-left-color: #0d6efd;
+}
+
+.bg-darker {
+  background-color: #1a1a1a !important;
+}
+
+/* texto footer*/
+.text-footer {
+  color: #adb5bd !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .container {
