@@ -1,4 +1,3 @@
-// src/services/userService.js
 export async function registerUser(data) {
   const API_URL = 'http://localhost:8080/api/usuarios/register';
 
@@ -75,6 +74,54 @@ export async function registerUser(data) {
     
   } catch (error) {
     console.error('Error en registerUser:', error);
+    throw error;
+  }
+}
+
+
+export async function loginUser(credentials) {
+  const API_URL = 'http://localhost:8080/api/usuarios/login';
+
+  try {
+    console.log('🌐 Enviando POST a:', API_URL);
+    console.log('📦 Credenciales:', credentials);
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
+
+    console.log('📨 Status de respuesta:', response.status);
+
+    if (!response.ok) {
+      let errorMessage = 'Error al iniciar sesión';
+      let errorDetails = null;
+
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+        errorDetails = errorData;
+      } catch {
+        const errorText = await response.text();
+        errorMessage = errorText || errorMessage;
+      }
+
+      const error = new Error(errorMessage);
+      error.details = errorDetails;
+      throw error;
+    }
+
+    const result = await response.json();
+    console.log('✅ Inicio de sesión exitoso:', result);
+
+    // Aquí podrías guardar los datos del usuario en localStorage si lo deseas
+    localStorage.setItem('usuario', JSON.stringify(result));
+
+    return result;
+
+  } catch (error) {
+    console.error('Error en loginUser:', error);
     throw error;
   }
 }

@@ -1,8 +1,8 @@
-// src/pages/RegisterPage.js
-import { RegisterForm } from './RegisterForm.js';
+// src/modules/auth/LoginPage.js
+import { LoginForm } from './LoginForm.js';
 import { router } from '../../router.js';
 
-export function RegisterPage() {
+export function LoginPage() {
   const page = document.createElement('div');
   page.classList.add('auth-container');
   
@@ -26,17 +26,16 @@ export function RegisterPage() {
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
           <div class="auth-form-container"> <!-- 👈 CLASE NUEVA -->
-            <div id="register-form-container"></div>
+            <div id="login-form-container"></div>
           </div>
         </div>
       </div>
     </div>
   `;
 
-  // Agregar el formulario de registro
-  const formContainer = page.querySelector('#register-form-container');
-  const registerForm = RegisterForm();
-  formContainer.appendChild(registerForm);
+  // Agregar el formulario
+  const formContainer = page.querySelector('#login-form-container');
+  formContainer.appendChild(LoginForm());
 
   // Event listeners para navegación
   page.querySelector('#homeLink').addEventListener('click', (e) => {

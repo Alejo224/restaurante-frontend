@@ -1,19 +1,24 @@
 import { registerUser } from './userService.js';
+import { router } from '../../router.js';
 
 export function RegisterForm() {
   const container = document.createElement('div');
 
-  // cuerpo del formulario
   container.innerHTML = `
-    <form id="registerForm" class="p-4 shadow-lg rounded-4 bg-white mt-5" style="max-width: 420px; margin:auto;">
-      <h3 class="mb-4 text-center text-primary fw-bold">Registro de Usuario</h3>
+    <form id="registerForm" class="p-4 shadow-lg rounded-4 bg-white form-card-hover">
+      <!-- Header consistente con el login -->
+      <div class="text-center mb-4">
+        <i class="bi bi-egg-fried display-4 text-primary mb-3"></i>
+        <h3 class="text-dark fw-bold">Únete a Nuestra Comunidad</h3>
+        <p class="text-muted">Crea tu cuenta y descubre experiencias exclusivas</p>
+      </div>
 
       <!-- Nombre completo -->
       <div class="mb-3">
-        <label for="nombreCompleto" class="form-label fw-semibold">Nombre Completo *</label>
+        <label for="nombreCompleto" class="form-label fw-semibold text-dark">Nombre Completo *</label>
         <input 
           type="text" 
-          class="form-control" 
+          class="form-control form-control-lg" 
           id="nombreCompleto" 
           name="nombreCompleto" 
           placeholder="Mario Montoya Torres" 
@@ -24,10 +29,10 @@ export function RegisterForm() {
 
       <!-- Correo electrónico -->
       <div class="mb-3">
-        <label for="email" class="form-label fw-semibold">Correo Electrónico *</label>
+        <label for="email" class="form-label fw-semibold text-dark">Correo Electrónico *</label>
         <input 
           type="email" 
-          class="form-control" 
+          class="form-control form-control-lg" 
           id="email" 
           name="email" 
           placeholder="correo@ejemplo.com" 
@@ -38,10 +43,10 @@ export function RegisterForm() {
 
       <!-- Teléfono -->
       <div class="mb-3">
-        <label for="telefono" class="form-label fw-semibold">Teléfono *</label>
+        <label for="telefono" class="form-label fw-semibold text-dark">Teléfono *</label>
         <input 
           type="tel" 
-          class="form-control" 
+          class="form-control form-control-lg" 
           id="telefono" 
           name="telefono" 
           placeholder="38229837410" 
@@ -54,10 +59,10 @@ export function RegisterForm() {
 
       <!-- Contraseña -->
       <div class="mb-3">
-        <label for="password" class="form-label fw-semibold">Contraseña *</label>
+        <label for="password" class="form-label fw-semibold text-dark">Contraseña *</label>
         <input 
           type="password" 
-          class="form-control" 
+          class="form-control form-control-lg" 
           id="password" 
           name="password"
           placeholder="Mínimo 8 caracteres"
@@ -69,10 +74,10 @@ export function RegisterForm() {
 
       <!-- Confirmar contraseña -->
       <div class="mb-3">
-        <label for="confirmPassword" class="form-label fw-semibold">Confirmar Contraseña *</label>
+        <label for="confirmPassword" class="form-label fw-semibold text-dark">Confirmar Contraseña *</label>
         <input 
           type="password" 
-          class="form-control" 
+          class="form-control form-control-lg" 
           id="confirmPassword" 
           name="confirmPassword" 
           placeholder="Repite tu contraseña" 
@@ -83,22 +88,22 @@ export function RegisterForm() {
 
       <!-- Botón de registro -->
       <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary" id="submitBtn">
-          <i class="bi bi-person-plus-fill me-2"></i>Registrarse
+        <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold" id="submitBtn">
+          <i class="bi bi-person-plus-fill me-2"></i>Crear Cuenta
         </button>
       </div>
 
-      <!-- Link para el login-->
-      <div class="mb-3">
+      <!-- Link para el login -->
+      <div class="text-center mb-3">
         <small class="text-muted">
-        ¿Ya tienes una cuenta? <a href="#" id="loginLink">Inicia sesión</a>
+          ¿Ya tienes una cuenta? 
+          <a href="#" id="loginLink" class="text-primary text-decoration-none fw-semibold">Inicia sesión</a>
         </small>
       </div>
 
       <!-- Mensajes generales -->
-      <div id="messageContainer" class="mt-3 text-center"></div>
-  </form>
-    
+      <div id="messageContainer" class="mt-3"></div>
+    </form>
   `;
 
   const form = container.querySelector('#registerForm');
@@ -150,7 +155,9 @@ export function RegisterForm() {
       `;
     } else {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Registrarse';
+      submitBtn.innerHTML = `
+        <i class="bi bi-person-plus-fill me-2"></i>Crear Cuenta
+      `;
     }
   }
 
@@ -158,8 +165,8 @@ export function RegisterForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    console.log('Iniciando envío de formulario...');
-    clearErrors(); // Limpiar errores anteriores
+    console.log('📤 Iniciando envío de formulario...');
+    clearErrors();
 
     const data = {
       nombreCompleto: form.nombreCompleto.value.trim(),
@@ -169,19 +176,20 @@ export function RegisterForm() {
       telefono: form.telefono.value.trim()
     };
     
-    console.log('Datos a enviar:', data);
+    console.log('📝 Datos a enviar:', data);
 
     // Validación básica del frontend
     if (data.password !== data.confirmPassword) {
       showFieldError('password', 'Las contraseñas no coinciden');
       showFieldError('confirmPassword', 'Las contraseñas no coinciden');
+      showMessage('Por favor corrige los errores en el formulario', 'warning');
       return;
     }
 
     setLoading(true);
 
     try {
-      console.log('Enviando datos a la API...');
+      console.log('🔄 Enviando datos a la API...');
       const response = await registerUser(data);
       
       console.log('✅ Registro exitoso:', response);
@@ -189,76 +197,72 @@ export function RegisterForm() {
       
       form.reset();
       
-      // Redirigir después de éxito
+      // Redirigir al login después de éxito
       setTimeout(() => {
-        // router.navigate('/login'); // Cuando tengas login
-        console.log('Redirigiendo...');
+        router.navigate('/login');
+        console.log('🔄 Redirigiendo al login...');
       }, 2000);
       
-    // En el catch del RegisterForm.js - ACTUALIZA ESTA PARTE:
-} catch (error) {
-    console.error('❌ Error en el registro:', error);
-    
-    // Limpiar errores anteriores
-    clearErrors();
-    
-    // CASO 1: Error con campos específicos (JSON con estructura de validación)
-    if (error.fields && typeof error.fields === 'object') {
-      console.log('Mostrando errores por campo:', error.fields);
+    } catch (error) {
+      console.error('❌ Error en el registro:', error);
       
-      // Mapear nombres de campos del backend al frontend
-      Object.entries(error.fields).forEach(([field, message]) => {
-        const fieldMap = {
-          'password': 'password',
-          'confirmPassword': 'confirmPassword', 
-          'email': 'email',
-          'nombreCompleto': 'nombreCompleto',
-          'telefono': 'telefono',
-          'confirmarPassword': 'confirmPassword' // por si acaso
-        };
+      clearErrors();
+      
+      // Manejo de errores por campo
+      if (error.fields && typeof error.fields === 'object') {
+        console.log('📝 Mostrando errores por campo:', error.fields);
         
-        const fieldId = fieldMap[field] || field;
-        showFieldError(fieldId, message);
-      });
-      
-      // Mostrar mensaje general si existe
-      if (error.message && error.message !== 'Error desconocido en el registro') {
-        showMessage(error.message, 'danger');
-      }
-    } 
-    // CASO 2: Error en texto plano (como "El email ya está registrado")
-    else {
-      console.log('Mostrando error simple:', error.message);
-      
-      const errorMessage = error.message;
-      
-      // Detectar automáticamente el campo del error
-      if (errorMessage.includes('email') || errorMessage.toLowerCase().includes('correo')) {
-        showFieldError('email', errorMessage);
-        showMessage(errorMessage, 'danger');
-      } else if (errorMessage.includes('contraseña') || errorMessage.includes('password')) {
-        showFieldError('password', errorMessage);
-        showMessage(errorMessage, 'danger');
-      } else if (errorMessage.includes('confirmar') || errorMessage.includes('confirm')) {
-        showFieldError('confirmPassword', errorMessage);
-        showMessage(errorMessage, 'danger');
-      } else if (errorMessage.includes('nombre')) {
-        showFieldError('nombreCompleto', errorMessage);
-        showMessage(errorMessage, 'danger');
-      } else if (errorMessage.includes('teléfono') || errorMessage.includes('telefono')) {
-        showFieldError('telefono', errorMessage);
-        showMessage(errorMessage, 'danger');
+        Object.entries(error.fields).forEach(([field, message]) => {
+          const fieldMap = {
+            'password': 'password',
+            'confirmPassword': 'confirmPassword', 
+            'email': 'email',
+            'nombreCompleto': 'nombreCompleto',
+            'telefono': 'telefono',
+            'confirmarPassword': 'confirmPassword'
+          };
+          
+          const fieldId = fieldMap[field] || field;
+          showFieldError(fieldId, message);
+        });
+        
+        if (error.message && error.message !== 'Error desconocido en el registro') {
+          showMessage(error.message, 'danger');
+        }
       } else {
-        // Mostrar error general
-        showMessage(errorMessage, 'danger');
+        console.log('📝 Mostrando error simple:', error.message);
+        
+        const errorMessage = error.message;
+        
+        if (errorMessage.includes('email') || errorMessage.toLowerCase().includes('correo')) {
+          showFieldError('email', errorMessage);
+          showMessage(errorMessage, 'danger');
+        } else if (errorMessage.includes('contraseña') || errorMessage.includes('password')) {
+          showFieldError('password', errorMessage);
+          showMessage(errorMessage, 'danger');
+        } else if (errorMessage.includes('confirmar') || errorMessage.includes('confirm')) {
+          showFieldError('confirmPassword', errorMessage);
+          showMessage(errorMessage, 'danger');
+        } else if (errorMessage.includes('nombre')) {
+          showFieldError('nombreCompleto', errorMessage);
+          showMessage(errorMessage, 'danger');
+        } else if (errorMessage.includes('teléfono') || errorMessage.includes('telefono')) {
+          showFieldError('telefono', errorMessage);
+          showMessage(errorMessage, 'danger');
+        } else {
+          showMessage(errorMessage, 'danger');
+        }
       }
-    }
-  } finally {
+    } finally {
       setLoading(false);
     }
   });
 
+  // Event listener para el link de login
+  container.querySelector('#loginLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    router.navigate('/login');
+  });
+
   return container;
 }
-
-

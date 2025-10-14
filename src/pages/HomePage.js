@@ -266,7 +266,7 @@ export function HomePage() {
 
   // Event listeners para navegación
   const navigateToRegister = () => router.navigate('/register');
-  const navigateToLogin = () => alert('Página de login - Próximamente');
+  const navigateToLogin = () => router.navigate('/login');
 
   // Todos los botones de registro van a la misma página
   page.querySelector('#registerBtn').addEventListener('click', navigateToRegister);
