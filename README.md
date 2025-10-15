@@ -389,3 +389,208 @@ src/modules/tu-modulo/
 ├── utils/          # Utilidades específicas
 └── index.js        # Punto de entrada del módulo
 ```
+
+---
+
+
+🎨 Guía de Estilos y Estructura - Proyecto Restaurante Frontend
+
+🚀 INSTRUCCIONES RÁPIDAS PARA DESARROLLAR INTERFACES
+
+Para mantener la consistencia en nuestro proyecto, por favor sigan estas guías al crear nuevas interfaces:
+
+---
+
+🎨 PALETA DE COLORES Y ESTILOS
+
+Colores principales (USAR ESTOS):
+
+```css
+/* Colores de la marca */
+--primary: #0d6efd;      /* Azul principal - Botones, links */
+--warning: #ffc107;      /* Amarillo/Naranja - Acentos, destacados */
+--hero-blue: #667eea;    /* Azul gradiente */
+--hero-purple: #764ba2;  /* Morado gradiente */
+--success: #198754;      /* Verde - Éxito, confirmaciones */
+--dark: #343a40;         /* Gris oscuro - Textos, headers */
+--light: #f8f9fa;        /* Gris claro - Fondos */
+```
+
+Estilos de componentes:
+
+· Botones: btn btn-primary btn-lg py-3 fw-bold
+· Cards: card border-0 shadow-sm feature-card
+· Formularios: form-control form-control-lg + form-card-hover
+· Títulos: fw-bold text-dark
+· Textos secundarios: text-muted
+
+---
+
+📁 ESTRUCTURA DEL PROYECTO
+
+```
+src/
+├── modules/
+│   ├── auth/           # Autenticación (login/registro)
+│   │   ├── LoginForm.js
+│   │   ├── LoginPage.js
+│   │   ├── RegisterForm.js
+│   │   ├── RegisterPage.js
+│   │   └── userService.js
+│   └── [nuevo-modulo]/ # 👈 CREAR ASÍ NUEVOS MÓDULOS
+│       ├── components/ # Componentes reutilizables
+│       ├── pages/      # Páginas del módulo
+│       ├── services/   # Lógica de API
+│       └── index.js    # Exportaciones
+├── pages/              # Páginas principales
+│   └── HomePage.js     # Landing page
+├── router.js           # Sistema de navegación
+├── main.js             # Punto de entrada
+└── style.css           # 👈 ESTILOS GLOBALES (ENVIAR ESTE ARCHIVO A LA IA)
+```
+
+---
+
+🛠️ PLANTILLA PARA NUEVAS PÁGINAS
+
+```javascript
+// Ejemplo de estructura para nuevas páginas
+export function NuevaPagina() {
+  const page = document.createElement('div');
+  
+  page.innerHTML = `
+    <!-- Navbar (usar misma estructura) -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+          <i class="bi bi-egg-fried me-2"></i>
+          Sabores & Delicias
+        </a>
+        <button class="btn btn-outline-light btn-sm" id="backBtn">
+          <i class="bi bi-arrow-left me-1"></i>
+          Volver
+        </button>
+      </div>
+    </nav>
+
+    <!-- Espacio para navbar fixed -->
+    <div style="height: 80px;"></div>
+
+    <!-- Contenido principal -->
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="fw-bold text-dark mb-4">Título de la Página</h1>
+          <!-- Tu contenido aquí -->
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Navegación
+  page.querySelector('#backBtn').addEventListener('click', () => {
+    router.navigate('/');
+  });
+
+  return page;
+}
+```
+
+---
+
+📝 INSTRUCCIONES PARA LA IA
+
+Cuando pidas a la IA que cree interfaces, incluye este prompt:
+
+```
+"Crear una interfaz [DESCRIPCIÓN] usando Bootstrap 5 con los siguientes estilos:
+
+COLORES: 
+- Primario: #0d6efd (azul)
+- Secundario: #ffc107 (amarillo/naranja)
+- Gradiente hero: #667eea a #764ba2
+- Textos: #343a40 (oscuro), #6c757d (muted)
+
+ESTILOS:
+- Botones: btn btn-primary btn-lg py-3 fw-bold
+- Formularios: form-control form-control-lg + form-card-hover
+- Cards: card border-0 shadow-sm feature-card
+- Títulos: fw-bold text-dark
+- Usar Bootstrap Icons (bi)
+
+Estructura de componentes como en el ejemplo proporcionado.
+```
+
+---
+
+🔄 SISTEMA DE RUTAS
+
+Para agregar nuevas páginas al router:
+
+```javascript
+// En main.js
+import { NuevaPagina } from './modules/nuevo-modulo/pages/NuevaPagina.js';
+
+router.addRoute('/nueva-ruta', NuevaPagina);
+```
+
+Navegación entre páginas:
+
+```javascript
+// En cualquier componente
+button.addEventListener('click', () => {
+  router.navigate('/nueva-ruta');
+});
+```
+
+---
+
+🎯 CONVENCIONES DE CÓDIGO
+
+· Componentes: PascalCase (UserProfile.js)
+· Servicios: camelCase (userService.js)
+· Páginas: PascalCase + Page (MenuPage.js)
+· Eventos: Usar router.navigate() para navegación
+· Estilos: Primero Bootstrap, luego personalizados en style.css
+
+---
+
+📱 RESPONSIVE DESIGN
+
+· Usar Bootstrap grid system: container > row > col-*
+· Breakpoints: sm (576px), md (768px), lg (992px), xl (1200px)
+· Siempre probar en móvil y desktop
+
+---
+
+🔧 DESARROLLO LOCAL
+
+```bash
+# Instalar dependencias
+npm install
+
+# Servidor de desarrollo
+npm run dev
+
+# Build para producción
+npm run build
+```
+
+---
+
+💡 EJEMPLOS DE MÓDULOS POR IMPLEMENTAR
+
+1. 📋 Menú - Lista de platos, categorías, filtros
+2. 📅 Reservas - Calendario, horarios, mesas
+3. 🛒 Pedidos - Carrito, checkout, historial
+4. 👤 Perfil - Datos usuario, preferencias
+5. 📊 Dashboard - Estadísticas, reportes
+
+---
+
+📎 ARCHIVOS ADJUNTOS
+
+· style.css - Estilos globales y componentes
+· Estructura completa del proyecto
+· Ejemplos de componentes existentes
+
