@@ -7,6 +7,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false
   },
+  publicDir: 'public',  // Esto permite archvos estacticos
   server: {
     port: 5173
   }

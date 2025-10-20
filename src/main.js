@@ -9,6 +9,7 @@ import { RegisterPage } from './modules/auth/RegisterPage.js';
 import { LoginPage } from './modules/auth/LoginPage.js';
 import { MenuPublicPage } from './modules/menu/pages/MenuPublicPage.js';    
 import { MenuManagementPage } from './modules/admin/pages/MenuManagementPage.js';
+import { AdminDashboardWrapper } from './modules/admin/pages/AdminDashboardWrapper.js';
 
 // Configurar rutas
 router.addRoute('/', HomePage);
@@ -16,6 +17,8 @@ router.addRoute('/register', RegisterPage);
 router.addRoute('/login', LoginPage);
 router.addRoute('/menu', MenuPublicPage);
 router.addRoute('/admin/menu', MenuManagementPage);
+router.addRoute('/admin/panel', AdminDashboardWrapper);
+
 // Inicializar router
 router.init();
 

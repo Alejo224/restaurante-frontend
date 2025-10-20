@@ -149,11 +149,7 @@ function renderPlatos(container, platos, isAdminView = false) {
               </div>
             </div>
           ` : `
-            <div class="mt-auto">
-              <button class="btn btn-primary w-100 add-to-cart" data-id="${plato.id}">
-                <i class="bi bi-cart-plus me-1"></i>Agregar al Carrito
-              </button>
-            </div>
+          
           `}
         </div>
       </div>

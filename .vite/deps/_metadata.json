@@ -1,0 +1,15 @@
+{
+  "hash": "0aae7199",
+  "configHash": "398f42ad",
+  "lockfileHash": "5940d601",
+  "browserHash": "3fc99f7f",
+  "optimized": {
+    "bootstrap/dist/js/bootstrap.bundle.min.js": {
+      "src": "../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "file": "bootstrap_dist_js_bootstrap__bundle__min__js.js",
+      "fileHash": "8aa2b36b",
+      "needsInterop": true
+    }
+  },
+  "chunks": {}
+}

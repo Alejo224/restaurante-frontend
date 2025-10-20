@@ -1,4 +1,4 @@
-// src/modules/admin/pages/MenuManagementPage.js
+// src/modules/admin/pages/MenuManagementPage.js - MODIFICAR
 import { PlatoList } from '../../menu/components/PlatoList.js';
 import { router } from '../../../router.js';
 import { logout } from '../../auth/userService.js';
@@ -7,7 +7,6 @@ export function MenuManagementPage() {
   const page = document.createElement('div');
   
   page.innerHTML = `
-    <!-- Navbar -->
     <nav class="navbar navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand fw-bold" href="#" id="homeLink">
@@ -15,9 +14,9 @@ export function MenuManagementPage() {
           Sabores & Delicias - Admin
         </a>
         <div>
-          <button class="btn btn-outline-warning btn-sm me-2" id="addPlatoBtn">
+          <button class="btn btn-outline-warning btn-sm me-2" id="crearPlatoBtn">
             <i class="bi bi-plus-circle me-1"></i>
-            Agregar Plato
+            Crear Plato
           </button>
           <button class="btn btn-outline-light btn-sm me-2" id="backBtn">
             <i class="bi bi-arrow-left me-1"></i>
@@ -31,10 +30,8 @@ export function MenuManagementPage() {
       </div>
     </nav>
 
-    <!-- Espacio para navbar fixed -->
     <div style="height: 80px;"></div>
 
-    <!-- Contenido principal -->
     <div class="container my-4">
       <div class="row">
         <div class="col-12">
@@ -53,7 +50,7 @@ export function MenuManagementPage() {
 
   // Agregar el componente de lista de platos en MODO ADMIN
   const container = page.querySelector('#plato-list-container');
-  container.appendChild(PlatoList(true)); // 👈 true = vista de admin
+  container.appendChild(PlatoList(true));
 
   // Event listeners
   page.querySelector('#homeLink').addEventListener('click', (e) => {
@@ -71,8 +68,11 @@ export function MenuManagementPage() {
     }
   });
 
-  page.querySelector('#addPlatoBtn').addEventListener('click', () => {
-    alert('Funcionalidad de agregar plato - Próximamente');
+    // En MenuManagementPage.js - MODIFICAR solo los event listeners del botón "Crear Plato"
+  page.querySelector('#crearPlatoBtn').addEventListener('click', () => {
+    // router.navigate('/admin/crear-plato');
+    window.open('src/modules/admin/crear-plato/index.html', '_blank')
+
   });
 
   return page;
