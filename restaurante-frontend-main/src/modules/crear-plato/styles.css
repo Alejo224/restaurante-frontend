@@ -10,14 +10,12 @@ body{
     align-items: center;
     min-height: 100vh;
     background: #171D0B;
-   
-    
 }
 .container{
     display: flex;
     background: #3A412E;
-    width: 800px;
-    height: 600px;
+    width: 1000px;
+    min-height: 600px;
     flex-direction: column;
     overflow: hidden;
     border-radius: 15px;
@@ -41,7 +39,7 @@ body{
     flex-direction: column;
     justify-content:flex-start;
     width: 300px;
-    height: 100%;
+    min-height: 100%;
     border-radius: 15px;
 }
 .grupotsBotns button{
@@ -66,7 +64,8 @@ body{
     background: transparent;
     border-radius: 15px;
     color: #fff;
-    border: 2px solid rgba(255, 255, 255, 0.1)
+    border: 2px solid rgba(255, 255, 255, 0.1);
+
 }
 .content_Derecho h2{
     text-align: center;
@@ -116,4 +115,94 @@ body{
 .data_plato button:hover{
     background: #808873;
     color: #fff ;
+}
+
+.formBuscarPlato{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.formBuscarPlato input{
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 15px;
+    border:none;
+    outline: none;
+}
+.formBuscarPlato button{
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: #808873;
+    color: #fff;
+}
+.formBuscarPlato button:hover{
+    background: #A2AC96;
+}
+
+
+
+/* Mantener misma estética entre crear y modificar */
+#modificar-plato .content_plato {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 10px;
+}
+
+#modificar-plato .data_plato {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#modificar-plato .data_plato input,
+#modificar-plato .data_plato select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 45px;
+    border: none;
+    outline: none;
+}
+
+/* Botones de editar y eliminar con estilo uniforme */
+#modificar-plato .botones-modificar {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+#modificar-plato .botones-modificar button {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 45px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#modificar-plato #btn-editar-guardar {
+    background: #808873;
+    color: #fff;
+}
+
+#modificar-plato #btn-editar-guardar:hover {
+    background: #A2AC96;
+}
+
+#modificar-plato #btn-borrar {
+    background: #a84c4c;
+    color: #fff;
+}
+
+#modificar-plato #btn-borrar:hover {
+    background: #c76161;
 }

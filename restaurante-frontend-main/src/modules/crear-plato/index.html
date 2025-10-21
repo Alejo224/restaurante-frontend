@@ -18,7 +18,6 @@
                 <button id="btn-negocio" type="submit"> Tu negocio</button>
                 <button id="btn-creacion-plato" type="submit"> Crear plato </button>
                 <button id="btn-modificacion-plato" type="submit"> Modificar plato </button>
-                <button id="btn-eliminar-plato" type="submit"> Eliminar plato </button>
                 <button id="btn-gestion-mesas" type="submit"> Gestionar mesa </button>
             </div>
 
@@ -52,19 +51,51 @@
                                 <option value="4">Postre</option>
                                 <option value="5">Bebida</option>
                             </select>
-                            <button id="btn-guardar"type="submit">Guardar</button>
+                            <button id="btn-guardar" type="submit">Guardar</button>
                         </div>
                     </div>
                 </div>
                 <!-- este es  la seccion del modificar un plato -->
                 <div id="modificar-plato" class="content_section" style="display: none;">
                     <h2>Modificar Plato</h2>
-                </div>
+                    <form id="form-buscar-plato" class="formBuscarPlato">
+                        <label for="buscar-plato">Buscar por ID:</label>
+                        <input type="text" id="buscar-plato" placeholder="Ej: 5">
+                        <button type="button" id="btn-buscar">Buscar</button>
+                    </form>
 
-                <!-- este es  la seccion del eliminar un plato -->
-                <div id="eliminar-plato" class="content_section" style="display:none;">
-                    <h2>Eliminar plato</h2>
+                    <section id="resultados-busqueda" style="display: none;" class="content_plato">
+                        <div class="data_plato">
+                            <label for="nombre-plato">Nombre del plato</label>
+                            <input type="text" id="nombre-plato" placeholder="Nombre del plato" required>
 
+                            <label for="imagen-plato">Imagen del plato</label>
+                            <input type="file" id="imagen-plato" accept=".jpg, .jpeg, .png">
+
+                            <img id="imagen-plato-actual"
+                                style="max-width: 150px; height: auto; margin: 10px 0; display: none;"
+                                alt="Imagen actual del plato">
+
+                            <label for="descripcion-plato">Descripcion del plato</label>
+                            <input type="text" id="descripcion-plato" placeholder="Descripcion" required>
+
+                            <label for="precio-plato">Precio</label>
+                            <input type="number" id="precio-plato" placeholder="Precio" required>
+                            <h3>Categoria</h3>
+                            <select id="categoria-plato" required>
+                                <option value="1">Entrada</option>
+                                <option value="2">Hamburgesa </option>
+                                <option value="3">Plato Fuerte</option>
+                                <option value="4">Postre</option>
+                                <option value="5">Bebida</option>
+                            </select>
+                            <div class="botones-modificar">
+                                <button id="btn-editar-guardar" type="button">Editar y Guardar</button>
+                                <button id="btn-Borrar" type="button">Eliminar</button>
+                            </div>
+                        </div>
+
+                    </section>
                 </div>
                 <!-- este es  la seccion del gestionar mesa -->
                 <div id="gestion-mesas" class="content_section" style="display:none;">
