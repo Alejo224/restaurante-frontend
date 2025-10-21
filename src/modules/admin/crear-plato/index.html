@@ -1,0 +1,61 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Crear Plato - Administrador</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Crear Nuevo Plato</h1>
+        <!-- este es el contenedor principal -->
+        <div class="main-content">
+            <!-- este es el contenedor de los botones -->
+            <div class="grupotsBotns">
+                <button id="btn-creacion-plato" type="submit"> Crear Plato </button>
+                <button id="btn-volver-menu" type="submit"> ← Volver al Menú </button>
+            </div>
+
+            <!-- este es el contenedor de todo el lado derecho-->
+            <div class="content_Derecho">
+                <!-- este es  la seccion del crear un plato -->
+                <div id="creacion-plato" class="content_section">
+                    <h2>Crear Plato</h2>
+                    <div class="content_plato">
+                        <div class="data_plato">
+                            <label for="nombre-plato">Nombre del plato</label>
+                            <input type="text" id="nombre-plato" placeholder="Nombre del plato" required>
+
+                            <label for="imagen-plato">Imagen del plato</label>
+                            <input type="file" id="imagen-plato" accept=".jpg, .jpeg, .png" required>
+
+                            <label for="descripcion-plato">Descripcion del plato</label>
+                            <input type="text" id="descripcion-plato" placeholder="Descripcion" required>
+
+                            <label for="precio-plato">Precio</label>
+                            <input type="number" id="precio-plato" placeholder="Precio" required>
+
+                            <h3>Categoria</h3>
+                            <select id="categoria-plato" required>
+                                <option value="6">Entrada</option>
+                                <option value="7">Hamburgesa</option>
+                                <option value="8">Plato Fuerte</option>
+                                <option value="9">Postre</option>
+                                <option value="10">Bebida</option>
+                            </select>
+
+                            <button id="btn-guardar" type="submit">Guardar Plato</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+</body>
+
+</html>

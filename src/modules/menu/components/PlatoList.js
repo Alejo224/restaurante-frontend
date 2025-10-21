@@ -1,4 +1,4 @@
-// src/modules/menu/components/PlatoList.js
+ // src/modules/menu/components/PlatoList.js
 import { platoService } from '../services/platoService.js';
 
 export function PlatoList(isAdminView = false) {
@@ -138,16 +138,7 @@ function renderPlatos(container, platos, isAdminView = false) {
 
           <!-- Botones diferentes según la vista -->
           ${isAdminView ? `
-            <div class="mt-auto">
-              <div class="btn-group w-100" role="group">
-                <button type="button" class="btn btn-outline-primary btn-sm edit-plato" data-id="${plato.id}">
-                  <i class="bi bi-pencil me-1"></i>Editar
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-sm delete-plato" data-id="${plato.id}">
-                  <i class="bi bi-trash me-1"></i>Eliminar
-                </button>
-              </div>
-            </div>
+            
           ` : `
           
           `}
