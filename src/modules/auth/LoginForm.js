@@ -157,12 +157,22 @@ export function LoginForm() {
       console.log('✅ Login exitoso:', userData);
       showMessage(`¡Bienvenido ${userData.nombre || userData.email}!`, 'success');
       
-      // Redirigir después de login exitoso
+      
+
       setTimeout(() => {
-        // Aquí puedes redirigir al dashboard o página principal del usuario
-        //router.navigate('/');
-        showMessage('Redirigiendo al dashboard... (proximamente)', 'info');
-        console.log('🔄 Redirigiendo al dashboard...');
+        // Importar las funciones necesarias para verificar el rol
+        import('./userService.js').then(({ isAdmin }) => {
+          if (isAdmin()) {
+            console.log('🎭 Usuario es ADMIN, redirigiendo a gestión de menú');
+            router.navigate('/admin/menu');
+          } else {
+            console.log('🎭 Usuario es USER, redirigiendo a menú público');
+            router.navigate('/menu');
+          }
+        }).catch(error => {
+          console.error('Error al verificar rol:', error);
+          router.navigate('/menu'); // Redirigir a menú por defecto
+        });
       }, 1500);
       
     } catch (error) {
@@ -196,5 +206,5 @@ export function LoginForm() {
     showMessage('Funcionalidad de recuperación de contraseña - Próximamente', 'info');
   });
 
-  return container;
+  return container;
 }

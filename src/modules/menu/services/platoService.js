@@ -71,6 +71,6 @@ export const platoService = {
     } catch (error) {
       console.error('Error en eliminarPlato:', error);
       throw error;
-    }
-  }
+    }
+  }
 };
