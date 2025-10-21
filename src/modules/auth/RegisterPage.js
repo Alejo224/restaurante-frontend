@@ -1,3 +1,4 @@
+
 // src/pages/RegisterPage.js
 import { RegisterForm } from './RegisterForm.js';
 import { router } from '../../router.js';
