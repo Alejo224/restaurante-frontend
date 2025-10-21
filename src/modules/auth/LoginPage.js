@@ -1,3 +1,4 @@
+
 // src/modules/auth/LoginPage.js
 import { LoginForm } from './LoginForm.js';
 import { router } from '../../router.js';

@@ -1,4 +1,4 @@
-import { router } from "../router.js";
+ import { router } from "../router.js";
 
 export function HomePage() {
   const page = document.createElement('div');

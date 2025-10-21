@@ -1,4 +1,4 @@
-  // src/modules/admin/crear-plato/index.js
+ // src/modules/admin/crear-plato/index.js
 import { crearPlato } from "./platosServices.js";  
 
 // Obtener referencias a los botones

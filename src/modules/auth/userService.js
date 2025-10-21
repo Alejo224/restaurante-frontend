@@ -1,4 +1,4 @@
-export async function registerUser(data) {
+ export async function registerUser(data) {
   const API_URL = 'http://localhost:8080/api/usuarios/register';
 
   try {
@@ -89,6 +89,7 @@ export async function loginUser(credentials) {
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // Incluir cookies para sesiones
       body: JSON.stringify(credentials),
     });
 
@@ -124,4 +125,49 @@ export async function loginUser(credentials) {
     console.error('Error en loginUser:', error);
     throw error;
   }
+}
+
+// Función para obtener el usuario actual
+export function getCurrentUser() {
+  const userData = localStorage.getItem('usuario');
+  return userData ? JSON.parse(userData) : null;
+}
+
+// Función para verificar si es ADMIN
+export function isAdmin() {
+  const user = getCurrentUser();
+  if (!user || !user.roles || user.roles.length === 0) return false;
+  
+  // Verificar si tiene rol ADMIN en el array de roles
+  return user.roles.some(role => role.roleEnum === 'ADMIN');
+}
+
+// Función para verificar si es USER
+export function isUser() {
+  const user = getCurrentUser();
+  if (!user || !user.roles || user.roles.length === 0) return false;
+  
+  return user.roles.some(role => role.roleEnum === 'USER');
+}
+
+// Función para cerrar sesión
+export function logout() {
+  localStorage.removeItem('usuario');
+  // También deberías llamar al endpoint de logout del backend si existe
+  fetch('http://localhost:8080/api/usuarios/logout', {
+    method: 'POST',
+    credentials: 'include'
+  }).catch(console.error);
+  
+  // Redirigir al home
+  if (typeof router !== 'undefined') {
+    router.navigate('/');
+  } else {
+    window.location.hash = '/';
+  }
+}
+
+// Función para verificar autenticación
+export function isAuthenticated() {
+  return localStorage.getItem('usuario') !== null;
 }

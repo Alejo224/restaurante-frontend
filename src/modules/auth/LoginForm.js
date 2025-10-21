@@ -1,3 +1,4 @@
+
 // src/modules/auth/LoginForm.js
 import { loginUser } from './userService.js';
 import { router } from '../../router.js';
@@ -206,5 +207,5 @@ export function LoginForm() {
     showMessage('Funcionalidad de recuperación de contraseña - Próximamente', 'info');
   });
 
-  return container;
+  return container;
 }
