@@ -1,4 +1,4 @@
- // src/modules/menu/services/platoService.js
+// src/modules/menu/services/platoService.js
 const API_BASE = 'http://localhost:8080/api';
 
 export const platoService = {
@@ -38,5 +38,34 @@ export const platoService = {
     }
   },
 
-  
+  // Eliminar plato
+  async eliminarPlato(id) {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      
+      const response = await fetch(`${API_BASE}/platos/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Error al eliminar plato');
+      }
+
+      // Si la respuesta es exitosa pero no tiene contenido
+      if (response.status === 204) {
+        return { success: true, message: 'Plato eliminado correctamente' };
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error en eliminarPlato:', error);
+      throw error;
+    }
+  }
 };

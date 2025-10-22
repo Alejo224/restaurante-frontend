@@ -138,7 +138,12 @@ function renderPlatos(container, platos, isAdminView = false) {
 
           <!-- Botones diferentes según la vista -->
           ${isAdminView ? `
-            
+            <div class="mt-auto">
+                <button type="button" class="btn btn-outline-danger btn-sm delete-plato" data-id="${plato.id}">
+                  <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+              </div>
+            </div>
           ` : `
           
           `}
@@ -204,7 +209,7 @@ function addUserEventListeners(container, platos) {
 // Función para editar plato (placeholder)
 function editarPlato(plato) {
   console.log('Editar plato:', plato);
-  alert(`Función de edición para: ${plato.nombre}\n\nEsta funcionalidad será implementada por el equipo de desarrollo.`);
+  alert(`Función de edición para: ${plato.nombre}\n\nEsta funcionalidad será implementada por el desarrollor.`);
 }
 
 // Función para agregar al carrito (placeholder)
