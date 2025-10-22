@@ -1,4 +1,4 @@
- // src/modules/menu/services/platoService.js
+// src/modules/menu/services/platoService.js
 const API_BASE = 'http://localhost:8080/api';
 
 export const platoService = {
@@ -38,5 +38,39 @@ export const platoService = {
     }
   },
 
-  
+  // Actualizar plato
+  async actualizarPlato(id, platoData) {
+    try {
+      const response = await fetch(`${API_BASE}/platos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(platoData)
+      });
+
+      if (!response.ok) throw new Error('Error al actualizar plato');
+      return await response.json();
+    } catch (error) {
+      console.error('Error en actualizarPlato:', error);
+      throw error;
+    }
+  },
+
+  // Eliminar plato
+  async eliminarPlato(id) {
+    try {
+      const response = await fetch(`${API_BASE}/platos/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      if (!response.ok) throw new Error('Error al eliminar plato');
+      return await response.text();
+    } catch (error) {
+      console.error('Error en eliminarPlato:', error);
+      throw error;
+    }
+  }
 };
