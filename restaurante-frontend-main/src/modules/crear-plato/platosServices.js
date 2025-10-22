@@ -62,3 +62,4 @@ export async function obtenerPlatosPorId(id) {
         throw new Error('Error al obtener el plato: ' + error.message);
     }
 }
+
