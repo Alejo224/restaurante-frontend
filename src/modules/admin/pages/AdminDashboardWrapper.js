@@ -7,7 +7,7 @@ export function AdminDashboardWrapper() {
   page.innerHTML = `
     <!-- Aquí va TODO el HTML de tu compañero, pero con algunos ajustes -->
     <div class="container">
-      <h1>Administrador - Sabores & Delicias</h1>
+      <h1>Administrador - Sabores & Delicias prubea</h1>
       <!-- este es el contenedor principal -->
       <div class="main-content">
         <!-- este es el contenedor de los botones -->

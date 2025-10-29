@@ -1,5 +1,6 @@
- // src/modules/menu/components/PlatoList.js
+// src/modules/menu/components/PlatoList.js
 import { platoService } from '../services/platoService.js';
+import { eliminarPlato } from '../../admin/crear-plato/platosServices.js';
 
 export function PlatoList(isAdminView = false) {
   const container = document.createElement('div');
@@ -32,8 +33,8 @@ export function PlatoList(isAdminView = false) {
     <!-- Estado vacío -->
     <div id="emptyState" class="text-center py-5" style="display: none;">
       <i class="bi bi-inbox display-4 text-muted"></i>
-      <h5 class="text-muted mt-3">No hay platos disponibles</h5>
-      <p class="text-muted">${isAdminView ? 'Comienza agregando el primer plato al menú.' : 'Próximamente tendremos nuevos platos.'}</p>
+      <h5 class="text-muted mt-3">${isAdminView ? 'No hay platos registrados' : 'No hay platos disponibles'}</h5>
+      <p class="text-muted">${isAdminView ? 'Comienza agregando el primer plato al menú.' : 'Todos nuestros platos están temporalmente agotados. ¡Vuelve pronto!'}</p>
     </div>
 
     <!-- Estado de error -->
@@ -98,9 +99,31 @@ function renderPlatos(container, platos, isAdminView = false) {
   container.querySelector('#loadingState').style.display = 'none';
   container.querySelector('#errorState').style.display = 'none';
 
-  if (!platos || platos.length === 0) {
+  // ✅ FILTRAR PLATOS: Si no es admin, mostrar solo los disponibles
+  let platosAMostrar = platos;
+  if (!isAdminView) {
+    platosAMostrar = platos.filter(plato => plato.disponible === true);
+    console.log(`👤 Vista usuario: Mostrando ${platosAMostrar.length} de ${platos.length} platos (solo disponibles)`);
+  } else {
+    console.log(`👨‍💼 Vista admin: Mostrando todos los ${platos.length} platos`);
+  }
+
+  if (!platosAMostrar || platosAMostrar.length === 0) {
     platosContainer.style.display = 'none';
     emptyState.style.display = 'block';
+    
+    // Mensaje específico según la vista
+    const emptyTitle = emptyState.querySelector('h5');
+    const emptyMessage = emptyState.querySelector('p');
+    
+    if (isAdminView) {
+      emptyTitle.textContent = 'No hay platos registrados';
+      emptyMessage.textContent = 'Comienza agregando el primer plato al menú.';
+    } else {
+      emptyTitle.textContent = 'No hay platos disponibles';
+      emptyMessage.textContent = 'Todos nuestros platos están temporalmente agotados. ¡Vuelve pronto!';
+    }
+    
     return;
   }
 
@@ -108,9 +131,9 @@ function renderPlatos(container, platos, isAdminView = false) {
   platosContainer.style.display = 'flex';
   emptyState.style.display = 'none';
 
-  platosContainer.innerHTML = platos.map(plato => `
+  platosContainer.innerHTML = platosAMostrar.map(plato => `
     <div class="col-md-6 col-lg-4 mb-4">
-      <div class="card border-0 shadow-sm card-hover h-100">
+      <div class="card border-0 shadow-sm card-hover h-100 ${!plato.disponible && !isAdminView ? 'opacity-50' : ''}">
         <!-- Imagen del plato -->
         <div class="position-relative">
           <img 
@@ -120,9 +143,19 @@ function renderPlatos(container, platos, isAdminView = false) {
             style="height: 200px; object-fit: cover;"
             onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+No+Disponible'"
           >
-          <span class="position-absolute top-0 end-0 m-2 badge ${plato.disponible ? 'bg-success' : 'bg-danger'}">
-            ${plato.disponible ? 'Disponible' : 'No Disponible'}
-          </span>
+          <!-- Badge de estado (solo para admin o si no está disponible) -->
+          ${(isAdminView || !plato.disponible) ? `
+            <span class="position-absolute top-0 end-0 m-2 badge ${plato.disponible ? 'bg-success' : 'bg-danger'}">
+              ${plato.disponible ? 'Disponible' : 'No Disponible'}
+            </span>
+          ` : ''}
+          
+          <!-- Overlay para platos no disponibles en vista usuario -->
+          ${!plato.disponible && !isAdminView ? `
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center">
+              <span class="text-white fw-bold">NO DISPONIBLE</span>
+            </div>
+          ` : ''}
         </div>
 
         <div class="card-body d-flex flex-column">
@@ -132,20 +165,37 @@ function renderPlatos(container, platos, isAdminView = false) {
           
           <!-- Precio y categoría -->
           <div class="mb-2">
-            <span class="fw-bold text-primary h5">$${plato.precio?.toLocaleString() || '0'}</span>
+            <span class="fw-bold text-primary h5">COP $ ${plato.precio?.toLocaleString() || '0'}</span>
             <span class="badge bg-light text-dark ms-2">${plato.categoria?.nombreCategoria || 'Sin categoría'}</span>
           </div>
 
           <!-- Botones diferentes según la vista -->
           ${isAdminView ? `
             <div class="mt-auto">
+              <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary btn-sm edit-plato" data-id="${plato.id}">
+                  <i class="bi bi-pencil me-1"></i>Editar
+                </button>
                 <button type="button" class="btn btn-outline-danger btn-sm delete-plato" data-id="${plato.id}">
                   <i class="bi bi-trash me-1"></i>Eliminar
                 </button>
               </div>
             </div>
           ` : `
-          
+            <!-- Botón de agregar al carrito (solo si está disponible) -->
+            ${plato.disponible ? `
+              <div class="mt-auto">
+                <button type="button" class="btn btn-primary w-100 add-to-cart" data-id="${plato.id}">
+                  <i class="bi bi-cart-plus me-1"></i>Agregar al Carrito
+                </button>
+              </div>
+            ` : `
+              <div class="mt-auto">
+                <button type="button" class="btn btn-outline-secondary w-100" disabled>
+                  <i class="bi bi-slash-circle me-1"></i>No Disponible
+                </button>
+              </div>
+            `}
           `}
         </div>
       </div>
@@ -154,9 +204,9 @@ function renderPlatos(container, platos, isAdminView = false) {
 
   // Solo agregar eventos de admin si es vista de admin
   if (isAdminView) {
-    addAdminEventListeners(container, platos);
+    addAdminEventListeners(container, platosAMostrar);
   } else {
-    addUserEventListeners(container, platos);
+    addUserEventListeners(container, platosAMostrar);
   }
 }
 
@@ -181,9 +231,9 @@ function addAdminEventListeners(container, platos) {
       
       if (confirm(`¿Estás seguro de que quieres eliminar "${plato.nombre}"?`)) {
         try {
-          await platoService.eliminarPlato(platoId);
+          await eliminarPlato(platoId);
           // Recargar la lista después de eliminar
-          location.reload(); // Recarga simple por ahora
+          loadPlatos(container, true); // Recarga solo la lista, no toda la página
         } catch (error) {
           alert('Error al eliminar plato: ' + error.message);
         }
@@ -196,26 +246,42 @@ function addAdminEventListeners(container, platos) {
 function addUserEventListeners(container, platos) {
   const platosContainer = container.querySelector('#platosContainer');
   
-  // Botones de agregar al carrito
+  // Botones de agregar al carrito (solo funcionan para platos disponibles)
   platosContainer.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const platoId = e.currentTarget.dataset.id;
       const plato = platos.find(p => p.id == platoId);
-      agregarAlCarrito(plato);
+      
+      // Doble verificación de disponibilidad
+      if (plato && plato.disponible) {
+        agregarAlCarrito(plato);
+      } else {
+        showToast('Este plato ya no está disponible', 'warning');
+      }
     });
   });
 }
 
-// Función para editar plato (placeholder)
+// Función para editar plato
 function editarPlato(plato) {
-  console.log('Editar plato:', plato);
-  alert(`Función de edición para: ${plato.nombre}\n\nEsta funcionalidad será implementada por el desarrollor.`);
+  console.log('🔄 Redirigiendo a edición del plato:', plato);
+  
+  if (plato && plato.id) {
+    // Redirección directa al archivo HTML de actualización
+    window.location.href = `src/modules/admin/actualizar-plato/index.html?id=${plato.id}`;
+  } else {
+    alert('❌ Error: No se puede editar el plato. ID no disponible.');
+  }
 }
 
 // Función para agregar al carrito (placeholder)
 function agregarAlCarrito(plato) {
   console.log('Agregar al carrito:', plato);
   showToast(`"${plato.nombre}" agregado al carrito`, 'success');
+  
+  // Aquí puedes integrar tu lógica del carrito de compras
+  // Por ejemplo:
+  // carritoService.agregarPlato(plato);
 }
 
 // Función para mostrar notificaciones
@@ -225,7 +291,7 @@ function showToast(message, type = 'info') {
   toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
   toast.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
   toast.innerHTML = `
-    <i class="bi bi-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+    <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
     ${message}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
   `;
