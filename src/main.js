@@ -1,23 +1,98 @@
- // main.js
+// main.js
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './style.css';
-
 import { router } from './router.js';
+
+// Páginas públicas
 import { HomePage } from './pages/HomePage.js';
 import { RegisterPage } from './modules/auth/RegisterPage.js';
 import { LoginPage } from './modules/auth/LoginPage.js';
-import { MenuPublicPage } from './modules/menu/pages/MenuPublicPage.js';    
+import { MenuPublicPage } from './modules/menu/pages/MenuPublicPage.js';
+
+// Páginas de administrador
 import { MenuManagementPage } from './modules/admin/pages/MenuManagementPage.js';
 import { AdminDashboardWrapper } from './modules/admin/pages/AdminDashboardWrapper.js';
 
-// Configurar rutas
-router.addRoute('/', HomePage);
-router.addRoute('/register', RegisterPage);
-router.addRoute('/login', LoginPage);
-router.addRoute('/menu', MenuPublicPage);
-router.addRoute('/admin/menu', MenuManagementPage);
-router.addRoute('/admin/panel', AdminDashboardWrapper);
+// ========================================
+// 🌐 RUTAS PÚBLICAS (sin autenticación)
+// ========================================
 
-// Inicializar router
+router.addRoute('/', HomePage, {
+  requiresAuth: false
+});
+
+router.addRoute('/register', RegisterPage, {
+  requiresAuth: false
+});
+
+router.addRoute('/login', LoginPage, {
+  requiresAuth: false
+});
+
+router.addRoute('/menu', MenuPublicPage, {
+  requiresAuth: false  // Menú público visible para todos
+});
+
+// ========================================
+// 🔒 RUTAS PROTEGIDAS - SOLO USUARIOS AUTENTICADOS
+// ========================================
+
+// Ejemplo: Perfil de usuario (requiere estar logueado, cualquier rol)
+// router.addRoute('/profile', ProfilePage, {
+//   requiresAuth: true
+// });
+
+// ========================================
+// 👨‍💼 RUTAS DE ADMINISTRADOR (requiere rol ADMIN)
+// ========================================
+
+router.addRoute('/admin/menu', MenuManagementPage, {
+  requiresAuth: true,
+  requiresRole: 'ADMIN'
+});
+
+router.addRoute('/admin/panel', AdminDashboardWrapper, {
+  requiresAuth: true,
+  requiresRole: 'ADMIN'
+});
+
+// Puedes agregar más rutas de admin aquí:
+// router.addRoute('/admin/dashboard', AdminDashboard, {
+//   requiresAuth: true,
+//   requiresRole: 'ADMIN'
+// });
+
+// router.addRoute('/admin/users', UserManagement, {
+//   requiresAuth: true,
+//   requiresRole: 'ADMIN'
+// });
+
+// router.addRoute('/admin/orders', OrderManagement, {
+//   requiresAuth: true,
+//   requiresRole: 'ADMIN'
+// });
+
+// ========================================
+// 🚀 INICIALIZAR ROUTER
+// ========================================
+
 router.init();
+
+// ========================================
+// 🔍 DEBUG - Solo en desarrollo
+// ========================================
+
+if (import.meta.env.DEV) {
+  console.log('🔧 Modo desarrollo activado');
+  console.log('📍 Rutas configuradas:', Object.keys(router.routes));
+  
+  // Exponer funciones útiles para debugging
+  window.routerDebug = {
+    navigate: (path) => router.navigate(path),
+    currentRoute: () => router.currentRoute,
+    routes: router.routes
+  };
+  
+  console.log('💡 Tip: Usa window.routerDebug para debuggear el router');
+}

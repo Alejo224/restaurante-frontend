@@ -1,9 +1,90 @@
- export async function registerUser(data) {
+// ========================================
+// 🔐 UTILIDADES JWT
+// ========================================
+
+/**
+ * Decodifica un JWT sin validar firma (solo lectura)
+ * IMPORTANTE: Esta decodificación es solo para leer datos, 
+ * la validación real la hace el backend
+ */
+function decodeJWT(token) {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      throw new Error('Token JWT inválido');
+    }
+
+    // Decodificar el payload (parte 2)
+    const payload = parts[1];
+    const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    return JSON.parse(decodedPayload);
+  } catch (error) {
+    console.error('Error decodificando JWT:', error);
+    return null;
+  }
+}
+
+/**
+ * Verifica si el token ha expirado
+ */
+function isTokenExpired(token) {
+  const decoded = decodeJWT(token);
+  if (!decoded || !decoded.exp) return true;
+
+  const now = Math.floor(Date.now() / 1000);
+  return decoded.exp < now;
+}
+
+/**
+ * Extrae roles del token JWT
+ */
+function extractRolesFromToken(token) {
+  const decoded = decodeJWT(token);
+  if (!decoded || !decoded.authorities) return [];
+
+  // Las authorities vienen como string: "ROLE_ADMIN,READ,WRITE,..."
+  const authorities = decoded.authorities.split(',');
+  
+  // Filtrar solo los roles (empiezan con ROLE_)
+  return authorities
+    .filter(auth => auth.startsWith('ROLE_'))
+    .map(role => role.replace('ROLE_', ''));
+}
+
+/**
+ * Extrae permisos del token JWT
+ */
+function extractPermissionsFromToken(token) {
+  const decoded = decodeJWT(token);
+  if (!decoded || !decoded.authorities) return [];
+
+  const authorities = decoded.authorities.split(',');
+  
+  // Filtrar solo permisos (NO empiezan con ROLE_)
+  return authorities.filter(auth => !auth.startsWith('ROLE_'));
+}
+
+/**
+ * Extrae el email del token JWT
+ */
+function extractEmailFromToken(token) {
+  const decoded = decodeJWT(token);
+  return decoded?.sub || null;
+}
+
+// ========================================
+// 📡 API CALLS
+// ========================================
+
+/**
+ * Registra un nuevo cliente (público)
+ */
+export async function registerUser(data) {
   const API_URL = 'http://localhost:8080/api/usuarios/register';
 
   try {
-    console.log('🌐 Enviando POST a:', API_URL);
-    console.log('📦 Payload:', data);
+    console.log('🌐 Registrando usuario en:', API_URL);
+    console.log('📦 Datos:', data);
 
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -11,163 +92,334 @@
       body: JSON.stringify(data),
     });
 
-    console.log('📨 Status de respuesta:', response.status);
-    console.log('📨 Content-Type:', response.headers.get('content-type'));
+    console.log('📨 Status:', response.status);
 
     if (!response.ok) {
-      let errorMessage = 'Error desconocido en el registro';
+      let errorMessage = 'Error en el registro';
       let errorFields = {};
       
-      // Verificar el tipo de contenido
       const contentType = response.headers.get('content-type');
       const isJson = contentType && contentType.includes('application/json');
       
       if (isJson) {
-        // CASO 1: Respuesta en JSON (nueva estructura con errores de validación)
         try {
           const errorData = await response.json();
-          console.error('📩 Error JSON de la API:', errorData);
+          console.error('📩 Error JSON:', errorData);
 
-          // Manejar estructura con errores por campo
           if (errorData?.errors && typeof errorData.errors === 'object') {
             errorFields = errorData.errors;
-            // Crear mensaje general con todos los errores
             const errorMessages = Object.values(errorData.errors);
             errorMessage = errorMessages.join(', ');
-          } 
-          // Manejar mensaje simple en JSON
-          else if (errorData?.message) {
+          } else if (errorData?.message) {
             errorMessage = errorData.message;
           } else if (typeof errorData === 'string') {
             errorMessage = errorData;
           }
-
         } catch (parseError) {
-          console.warn('⚠️ Error parseando JSON:', parseError);
           errorMessage = `Error ${response.status}: ${response.statusText}`;
         }
       } else {
-        // CASO 2: Respuesta en texto plano (errores simples como "El email ya está registrado")
         try {
           const errorText = await response.text();
-          console.error('📩 Error texto de la API:', errorText);
           errorMessage = errorText || `Error ${response.status}: ${response.statusText}`;
-        } catch (textError) {
-          console.warn('⚠️ Error leyendo texto:', textError);
+        } catch {
           errorMessage = `Error ${response.status}: ${response.statusText}`;
         }
       }
 
-      // Crear error personalizado con toda la información
       const customError = new Error(errorMessage);
       if (Object.keys(errorFields).length > 0) {
         customError.fields = errorFields;
       }
-      customError.isJsonError = isJson;
-      
       throw customError;
     }
 
     const result = await response.json();
-    console.log('Registro exitoso:', result);
+    console.log('✅ Registro exitoso:', result);
+
+    // Guardar token y datos del usuario
+    if (result.jwt) {
+      saveUserSession(result);
+    }
+
     return result;
     
   } catch (error) {
-    console.error('Error en registerUser:', error);
+    console.error('❌ Error en registerUser:', error);
     throw error;
   }
 }
 
-
+/**
+ * Inicia sesión
+ */
 export async function loginUser(credentials) {
   const API_URL = 'http://localhost:8080/api/usuarios/login';
 
   try {
-    console.log('🌐 Enviando POST a:', API_URL);
-    console.log('📦 Credenciales:', credentials);
+    console.log('🌐 Iniciando sesión en:', API_URL);
 
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // Incluir cookies para sesiones
       body: JSON.stringify(credentials),
     });
 
-    console.log('📨 Status de respuesta:', response.status);
+    console.log('📨 Status:', response.status);
 
     if (!response.ok) {
       let errorMessage = 'Error al iniciar sesión';
-      let errorDetails = null;
-
+      
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorMessage;
-        errorDetails = errorData;
       } catch {
         const errorText = await response.text();
         errorMessage = errorText || errorMessage;
       }
 
-      const error = new Error(errorMessage);
-      error.details = errorDetails;
-      throw error;
+      throw new Error(errorMessage);
     }
 
     const result = await response.json();
-    console.log('✅ Inicio de sesión exitoso:', result);
+    console.log('✅ Login exitoso:', result);
 
-    // Aquí podrías guardar los datos del usuario en localStorage si lo deseas
-    localStorage.setItem('usuario', JSON.stringify(result));
+    // Guardar sesión
+    if (result.jwt) {
+      saveUserSession(result);
+    }
 
     return result;
 
   } catch (error) {
-    console.error('Error en loginUser:', error);
+    console.error('❌ Error en loginUser:', error);
     throw error;
   }
 }
 
-// Función para obtener el usuario actual
-export function getCurrentUser() {
-  const userData = localStorage.getItem('usuario');
-  return userData ? JSON.parse(userData) : null;
-}
-
-// Función para verificar si es ADMIN
-export function isAdmin() {
-  const user = getCurrentUser();
-  if (!user || !user.roles || user.roles.length === 0) return false;
-  
-  // Verificar si tiene rol ADMIN en el array de roles
-  return user.roles.some(role => role.roleEnum === 'ADMIN');
-}
-
-// Función para verificar si es USER
-export function isUser() {
-  const user = getCurrentUser();
-  if (!user || !user.roles || user.roles.length === 0) return false;
-  
-  return user.roles.some(role => role.roleEnum === 'USER');
-}
-
-// Función para cerrar sesión
-export function logout() {
-  localStorage.removeItem('usuario');
-  // También deberías llamar al endpoint de logout del backend si existe
-  fetch('http://localhost:8080/api/usuarios/logout', {
-    method: 'POST',
-    credentials: 'include'
-  }).catch(console.error);
-  
-  // Redirigir al home
-  if (typeof router !== 'undefined') {
-    router.navigate('/');
-  } else {
+/**
+ * Cierra sesión
+ */
+export async function logout() {
+  try {
+    // Llamar endpoint de logout del backend
+    await fetch('http://localhost:8080/api/usuarios/logout', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`
+      }
+    });
+  } catch (error) {
+    console.warn('⚠️ Error cerrando sesión en backend:', error);
+  } finally {
+    // Limpiar localStorage
+    clearUserSession();
+    
+    // Redirigir al home
     window.location.hash = '/';
+    window.location.reload();
   }
 }
 
-// Función para verificar autenticación
+// ========================================
+// 💾 MANEJO DE SESIÓN (localStorage)
+// ========================================
+
+/**
+ * Guarda la sesión del usuario
+ */
+function saveUserSession(authResponse) {
+  const { email, jwt } = authResponse;
+  
+  // Extraer información del token
+  const roles = extractRolesFromToken(jwt);
+  const permissions = extractPermissionsFromToken(jwt);
+  const decoded = decodeJWT(jwt);
+  
+  const userData = {
+    email,
+    roles,
+    permissions,
+    token: jwt,
+    expiresAt: decoded?.exp ? new Date(decoded.exp * 1000).toISOString() : null
+  };
+
+  localStorage.setItem('user_token', jwt);
+  localStorage.setItem('user_data', JSON.stringify(userData));
+  
+  console.log('💾 Sesión guardada:', userData);
+}
+
+/**
+ * Limpia la sesión del usuario
+ */
+function clearUserSession() {
+  localStorage.removeItem('user_token');
+  localStorage.removeItem('user_data');
+}
+
+/**
+ * Obtiene el token JWT
+ */
+export function getToken() {
+  return localStorage.getItem('user_token');
+}
+
+/**
+ * Obtiene los datos del usuario actual
+ */
+export function getCurrentUser() {
+  const userData = localStorage.getItem('user_data');
+  if (!userData) return null;
+  
+  try {
+    const user = JSON.parse(userData);
+    
+    // Verificar si el token expiró
+    if (isTokenExpired(user.token)) {
+      console.warn('⚠️ Token expirado, cerrando sesión');
+      clearUserSession();
+      return null;
+    }
+    
+    return user;
+  } catch {
+    return null;
+  }
+}
+
+// ========================================
+// 🔒 VERIFICACIÓN DE ROLES Y PERMISOS
+// ========================================
+
+/**
+ * Verifica si el usuario está autenticado
+ */
 export function isAuthenticated() {
-  return localStorage.getItem('usuario') !== null;
+  const token = getToken();
+  if (!token) return false;
+  return !isTokenExpired(token);
+}
+
+/**
+ * Verifica si el usuario tiene un rol específico
+ */
+export function hasRole(roleName) {
+  const user = getCurrentUser();
+  if (!user || !user.roles) return false;
+  return user.roles.includes(roleName);
+}
+
+/**
+ * Verifica si el usuario es ADMIN
+ */
+export function isAdmin() {
+  return hasRole('ADMIN');
+}
+
+/**
+ * Verifica si el usuario es USER
+ */
+export function isUser() {
+  return hasRole('USER');
+}
+
+/**
+ * Verifica si el usuario tiene un permiso específico
+ */
+export function hasPermission(permissionName) {
+  const user = getCurrentUser();
+  if (!user || !user.permissions) return false;
+  return user.permissions.includes(permissionName);
+}
+
+/**
+ * Verifica si el usuario puede crear (CREATE)
+ */
+export function canCreate() {
+  return hasPermission('CREATE');
+}
+
+/**
+ * Verifica si el usuario puede editar (UPDATE)
+ */
+export function canUpdate() {
+  return hasPermission('UPDATE');
+}
+
+/**
+ * Verifica si el usuario puede eliminar (DELETE)
+ */
+export function canDelete() {
+  return hasPermission('DELETE');
+}
+
+/**
+ * Verifica si el usuario puede leer (READ)
+ */
+export function canRead() {
+  return hasPermission('READ');
+}
+
+// ========================================
+// 🌐 FUNCIÓN HELPER PARA FETCH CON AUTH
+// ========================================
+
+/**
+ * Fetch con autorización automática
+ */
+export async function fetchWithAuth(url, options = {}) {
+  const token = getToken();
+  
+  if (!token) {
+    throw new Error('No hay token de autenticación');
+  }
+
+  if (isTokenExpired(token)) {
+    clearUserSession();
+    throw new Error('Token expirado, por favor inicia sesión nuevamente');
+  }
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    ...options.headers
+  };
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers
+    });
+
+    // Si el token es inválido, limpiar sesión
+    if (response.status === 401 || response.status === 403) {
+      clearUserSession();
+      throw new Error('Sesión inválida o expirada');
+    }
+
+    return response;
+  } catch (error) {
+    console.error('❌ Error en fetchWithAuth:', error);
+    throw error;
+  }
+}
+
+// ========================================
+// 📊 DEBUG (solo desarrollo)
+// ========================================
+
+/**
+ * Muestra información del usuario actual (debug)
+ */
+export function debugUserInfo() {
+  const user = getCurrentUser();
+  console.group('👤 Información del usuario');
+  console.log('Email:', user?.email);
+  console.log('Roles:', user?.roles);
+  console.log('Permisos:', user?.permissions);
+  console.log('Token expira:', user?.expiresAt);
+  console.log('¿Es Admin?:', isAdmin());
+  console.log('¿Es User?:', isUser());
+  console.groupEnd();
 }

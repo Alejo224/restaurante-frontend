@@ -1,18 +1,19 @@
- 
- // src/modules/admin/pages/MenuManagementPage.js - MODIFICAR
+// src/modules/admin/pages/MenuManagementPage.js
 import { PlatoList } from '../../menu/components/PlatoList.js';
 import { router } from '../../../router.js';
-import { logout } from '../../auth/userService.js';
+import { logout, getCurrentUser } from '../../auth/userService.js';
 
 export function MenuManagementPage() {
   const page = document.createElement('div');
-  
+  const user = getCurrentUser();
+  const userName = user?.email?.split('@')[0] || 'Admin';
+
   page.innerHTML = `
     <nav class="navbar navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand fw-bold" href="#" id="homeLink">
           <i class="bi bi-egg-fried me-2"></i>
-          Sabores & Delicias - Admin
+          Sabores & Delicias - Admin ${userName}
         </a>
         <div>
           <button class="btn btn-outline-warning btn-sm me-2" id="crearPlatoBtn">
@@ -30,9 +31,9 @@ export function MenuManagementPage() {
         </div>
       </div>
     </nav>
-
+    
     <div style="height: 80px;"></div>
-
+    
     <div class="container my-4">
       <div class="row">
         <div class="col-12">
@@ -63,17 +64,23 @@ export function MenuManagementPage() {
     router.navigate('/');
   });
 
-  page.querySelector('#logoutBtn').addEventListener('click', () => {
+  // LOGOUT - Usa la función del userService
+  page.querySelector('#logoutBtn').addEventListener('click', async () => {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      logout();
+      try {
+        console.log('👋 Cerrando sesión...');
+        await logout(); // Esta función ya limpia todo y redirige
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        // Forzar limpieza y redirección en caso de error
+        localStorage.clear();
+        router.navigate('/login');
+      }
     }
   });
 
-    // En MenuManagementPage.js - MODIFICAR solo los event listeners del botón "Crear Plato"
   page.querySelector('#crearPlatoBtn').addEventListener('click', () => {
-    // router.navigate('/admin/crear-plato');
-    window.open('src/modules/admin/crear-plato/index.html', '_blank')
-
+    window.open('src/modules/admin/crear-plato/index.html', '_blank');
   });
 
   return page;

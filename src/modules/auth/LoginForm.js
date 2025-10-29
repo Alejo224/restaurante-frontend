@@ -1,6 +1,5 @@
-
 // src/modules/auth/LoginForm.js
-import { loginUser } from './userService.js';
+import { loginUser, isAdmin, isUser, getCurrentUser } from './userService.js';
 import { router } from '../../router.js';
 
 export function LoginForm() {
@@ -44,6 +43,7 @@ export function LoginForm() {
       </div>
 
       <!-- Recordar sesión y olvidé contraseña -->
+      
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="rememberMe">
@@ -55,6 +55,7 @@ export function LoginForm() {
           ¿Olvidaste tu contraseña?
         </a>
       </div>
+
 
       <!-- Botón de login -->
       <div class="d-grid mb-3">
@@ -131,6 +132,35 @@ export function LoginForm() {
     }
   }
 
+  // Función para redirigir según el rol
+  function redirectByRole() {
+    const user = getCurrentUser();
+    
+    if (!user) {
+      console.warn('⚠️ No se pudo obtener usuario después del login');
+      router.navigate('/menu');
+      return;
+    }
+
+    console.log('👤 Usuario logueado:', {
+      email: user.email,
+      roles: user.roles,
+      permissions: user.permissions
+    });
+
+    // Redirigir según rol
+    if (isAdmin()) {
+      console.log('🎭 Usuario es ADMIN → Redirigiendo a panel de administración');
+      router.navigate('/admin/menu');
+    } else if (isUser()) {
+      console.log('🎭 Usuario es USER → Redirigiendo a menú público');
+      router.navigate('/menu');
+    } else {
+      console.warn('⚠️ Usuario sin rol específico → Redirigiendo a menú por defecto');
+      router.navigate('/menu');
+    }
+  }
+
   // Evento del formulario
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -153,41 +183,45 @@ export function LoginForm() {
 
     try {
       console.log('🔄 Enviando credenciales...');
-      const userData = await loginUser(credentials);
       
-      console.log('✅ Login exitoso:', userData);
-      showMessage(`¡Bienvenido ${userData.nombre || userData.email}!`, 'success');
+      // ✅ loginUser ahora devuelve { email, message, jwt, status }
+      const response = await loginUser(credentials);
       
+      console.log('✅ Login exitoso:', response);
       
-
+      // ✅ Obtener el usuario del localStorage (ya guardado por loginUser)
+      const user = getCurrentUser();
+      
+      // Mostrar mensaje de bienvenida
+      const displayName = user?.email.split('@')[0] || 'Usuario';
+      showMessage(`¡Bienvenido ${displayName}!`, 'success');
+      
+      // ✅ Redirigir después de 1 segundo
       setTimeout(() => {
-        // Importar las funciones necesarias para verificar el rol
-        import('./userService.js').then(({ isAdmin }) => {
-          if (isAdmin()) {
-            console.log('🎭 Usuario es ADMIN, redirigiendo a gestión de menú');
-            router.navigate('/admin/menu');
-          } else {
-            console.log('🎭 Usuario es USER, redirigiendo a menú público');
-            router.navigate('/menu');
-          }
-        }).catch(error => {
-          console.error('Error al verificar rol:', error);
-          router.navigate('/menu'); // Redirigir a menú por defecto
-        });
-      }, 1500);
+        redirectByRole();
+      }, 1000);
       
     } catch (error) {
       console.error('❌ Error en el login:', error);
       
       // Mostrar error específico
-      const errorMessage = error.message;
+      const errorMessage = error.message || 'Error al iniciar sesión';
       
-      if (errorMessage.includes('credenciales') || errorMessage.includes('contraseña') || errorMessage.includes('password')) {
-        showFieldError('password', errorMessage);
-        showMessage(errorMessage, 'danger');
-      } else if (errorMessage.includes('email') || errorMessage.includes('correo') || errorMessage.includes('usuario')) {
+      // Detectar tipo de error
+      if (errorMessage.toLowerCase().includes('credenciales') || 
+          errorMessage.toLowerCase().includes('contraseña') || 
+          errorMessage.toLowerCase().includes('password') ||
+          errorMessage.toLowerCase().includes('inválid')) {
+        showFieldError('password', 'Correo o contraseña incorrectos');
+        showMessage('Correo o contraseña incorrectos', 'danger');
+      } else if (errorMessage.toLowerCase().includes('email') || 
+                 errorMessage.toLowerCase().includes('correo') || 
+                 errorMessage.toLowerCase().includes('usuario')) {
         showFieldError('email', errorMessage);
         showMessage(errorMessage, 'danger');
+      } else if (errorMessage.toLowerCase().includes('token') ||
+                 errorMessage.toLowerCase().includes('expirado')) {
+        showMessage('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.', 'warning');
       } else {
         showMessage(errorMessage, 'danger');
       }
