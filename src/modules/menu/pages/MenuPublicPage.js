@@ -19,10 +19,6 @@ export function MenuPublicPage() {
           <i class="bi bi-egg-fried me-2"></i>
           Sabores & Delicias ${authenticated ? `- ${userName}` : ''}
         </a>
-        <button class="btn btn-outline-warning btn-sm me-2" id="crearPlatoBtn">
-            <i class="bi bi-plus-circle me-1"></i>
-            Crear Plato
-        </button>
         <div class="d-flex align-items-center gap-2">
           ${authenticated ? `
             <!-- Botón del carrito en el navbar -->
@@ -63,10 +59,8 @@ export function MenuPublicPage() {
       </div>
     </nav>
     
-    <!-- Espacio para navbar fixed -->
     <div style="height: 80px;"></div>
     
-    <!-- Contenido principal -->
     <div class="container my-4">
       <div class="row">
         <div class="col-12">
@@ -84,7 +78,6 @@ export function MenuPublicPage() {
             </div>
           ` : ''}
           
-          <!-- Componente de lista de platos -->
           <div id="plato-list-container"></div>
         </div>
       </div>
@@ -102,17 +95,7 @@ export function MenuPublicPage() {
     
     // Agregar botón flotante del carrito
     page.appendChild(CarritoButton());
-
-    // DEBUG: Mostrar estado del carrito en consola
-    window.debugCarrito = () => {
-      import('../../carrito/carritoService.js').then(({ obtenerCarrito, obtenerResumenCarrito }) => {
-        console.log('🛒 Estado actual del carrito:');
-        console.log('Items:', obtenerCarrito());
-        console.log('Resumen:', obtenerResumenCarrito());
-      });
-    };
-  
-  
+    
     // Actualizar badge del navbar
     actualizarBadgeNavbar();
     window.addEventListener('carritoActualizado', actualizarBadgeNavbar);
@@ -128,18 +111,15 @@ export function MenuPublicPage() {
     router.navigate('/');
   });
 
-  // LOGOUT ACTUALIZADO - Solo si está autenticado
   const logoutBtn = page.querySelector('#logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-        console.log('Cerrando sesión...');
-        logout(); // Esta función ya es async internamente
+        logout();
       }
     });
   }
 
-  // BOTONES DE LOGIN/REGISTER - Solo si NO está autenticado
   const loginBtn = page.querySelector('#loginBtn');
   if (loginBtn) {
     loginBtn.addEventListener('click', () => {
@@ -153,10 +133,6 @@ export function MenuPublicPage() {
       router.navigate('/register');
     });
   }
-
-  page.querySelector('#crearPlatoBtn').addEventListener('click', () => {
-    window.open('src/modules/admin/crear-plato/index.html', '_blank');
-  });
 
   return page;
 }
