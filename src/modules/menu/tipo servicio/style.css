@@ -77,6 +77,12 @@ legend {
     margin-top: 8px;
 }
 
+.tipoServicio i{
+    font-size: 15px;
+    margin-right: 8px;
+    color: #0d6efd;
+}
+
 .DatosContacto {
     margin-top: 14px;
 }
