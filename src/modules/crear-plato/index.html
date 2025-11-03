@@ -1,0 +1,84 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Administrador</h1>
+        <!-- este es el contenedor principal -->
+        <div class="main-content">
+            <!-- este es el contenedor de los botones -->
+            <div class="grupotsBotns">
+                <button id="btn-negocio" type="submit"> Tu negocio</button>
+                <button id="btn-creacion-plato" type="submit"> Crear plato </button>
+                <button id="btn-modificacion-plato" type="submit"> Modificar plato </button>
+                <button id="btn-eliminar-plato" type="submit"> Eliminar plato </button>
+                <button id="btn-gestion-mesas" type="submit"> Gestionar mesa </button>
+            </div>
+
+            <!-- este es el contenedor de todo el lado derechp-->
+            <div class="content_Derecho">
+                <!-- este es  la seccion del tu negocio -->
+                <div id="tu-negocio" class="content_section">
+                    <h2>Tu negocio</h2>
+                </div>
+                <!-- este es  la seccion del crear un plato -->
+                <div id="creacion-plato" class="content_section" style="display: none;">
+                    <h2>Crear plato</h2>
+                    <div class="content_plato">
+                        <div class="data_plato">
+                            <label for="nombre-plato">Nombre del plato</label>
+                            <input type="text" id="nombre-plato" placeholder="Nombre del plato" required>
+
+                            <label for="imagen-plato">Imagen del plato</label>
+                            <input type="file" id="imagen-plato" accept=".jpg, .jpeg, .png" , required>
+
+                            <label for="descripcion-plato">Descripcion del plato</label>
+                            <input type="text" id="descripcion-plato" placeholder="Descripcion" required>
+
+                            <label for="precio-plato">Precio</label>
+                            <input type="number" id="precio-plato" placeholder="Precio" required>
+                            <h3>Categoria</h3>
+                            <select id="categoria-plato" required>
+                                <option value="6">Entrada</option>
+                                <option value="7">Hamburgesa </option>
+                                <option value="8">Plato Fuerte</option>
+                                <option value="9">Postre</option>
+                                <option value="10">Bebida</option>
+                            </select>
+                            <button id="btn-guardar" type="submit">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- este es  la seccion del modificar un plato -->
+                <div id="modificar-plato" class="content_section" style="display: none;">
+                    <h2>Modificar Plato</h2>
+                </div>
+
+                <!-- este es  la seccion del eliminar un plato -->
+                <div id="eliminar-plato" class="content_section" style="display:none;">
+                    <h2>Eliminar plato</h2>
+
+                </div>
+                <!-- este es  la seccion del gestionar mesa -->
+                <div id="gestion-mesas" class="content_section" style="display:none;">
+                    <h2>Gestionar mesa</h2>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <!-- “Ey, este archivo es un módulo ES6, así que puede usar import y export.” -->
+    <!--Al agregar type="module", el navegador entiende el código como un módulo moderno y ya puede interpretar import y export.-->
+    <script type="module" src="index.js"></script>
+</body>
+
+</html>
