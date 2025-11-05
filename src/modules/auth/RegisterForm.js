@@ -1,6 +1,7 @@
 
 import { registerUser } from './userService.js';
 import { router } from '../../router.js';
+import { LoginForm } from  '../auth/LoginForm.js';
 
 export function RegisterForm() {
   const container = document.createElement('div');
@@ -200,8 +201,9 @@ export function RegisterForm() {
       
       // Redirigir al login después de éxito
       setTimeout(() => {
-        router.navigate('/login');
-        console.log('🔄 Redirigiendo al login...');
+        //router.navigate('/login');
+        //console.log('🔄 Redirigiendo al login...');
+        router.navigate('/menu');
       }, 2000);
       
     } catch (error) {
