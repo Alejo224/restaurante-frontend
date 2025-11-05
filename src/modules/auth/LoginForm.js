@@ -132,7 +132,7 @@ export function LoginForm() {
     }
   }
 
-  // Función para redirigir según el rol
+  // Función para edirigir según el rol
   function redirectByRole() {
     const user = getCurrentUser();
     

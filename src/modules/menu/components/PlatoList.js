@@ -1,6 +1,7 @@
 // src/modules/menu/components/PlatoList.js
 import { platoService } from '../services/platoService.js';
 import { eliminarPlato } from '../../admin/crear-plato/platosServices.js';
+import { agregarAlCarrito } from '../../carrito/carritoService.js';
 
 export function PlatoList(isAdminView = false) {
   const container = document.createElement('div');
@@ -274,15 +275,6 @@ function editarPlato(plato) {
   }
 }
 
-// Función para agregar al carrito (placeholder)
-function agregarAlCarrito(plato) {
-  console.log('Agregar al carrito:', plato);
-  showToast(`"${plato.nombre}" agregado al carrito`, 'success');
-  
-  // Aquí puedes integrar tu lógica del carrito de compras
-  // Por ejemplo:
-  // carritoService.agregarPlato(plato);
-}
 
 // Función para mostrar notificaciones
 function showToast(message, type = 'info') {

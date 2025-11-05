@@ -215,6 +215,10 @@ export async function logout() {
     // Limpiar localStorage
     clearUserSession();
     
+    // 🛒 IMPORTANTE: Limpiar carrito al cerrar sesión
+    // Nota: No importamos aquí para evitar dependencia circular
+    // El carrito se limpiará automáticamente porque usa el email del usuario
+    
     // Redirigir al home
     window.location.hash = '/';
     window.location.reload();
@@ -222,7 +226,7 @@ export async function logout() {
 }
 
 // ========================================
-// 💾 MANEJO DE SESIÓN (localStorage)
+// MANEJO DE SESIÓN (localStorage)
 // ========================================
 
 /**
