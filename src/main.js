@@ -12,7 +12,7 @@ import { MenuPublicPage } from './modules/menu/pages/MenuPublicPage.js';
 
 // Páginas de administrador
 import { MenuManagementPage } from './modules/admin/pages/MenuManagementPage.js';
-import { AdminDashboardWrapper } from './modules/admin/pages/AdminDashboardWrapper.js';
+import { AdminDashboard } from './modules/admin/pages/AdminDashboard.js';
 
 // ========================================
 // 🌐 RUTAS PÚBLICAS (sin autenticación)
@@ -46,13 +46,13 @@ router.addRoute('/menu', MenuPublicPage, {
 // ========================================
 // 👨‍💼 RUTAS DE ADMINISTRADOR (requiere rol ADMIN)
 // ========================================
-
+/*
 router.addRoute('/admin/menu', MenuManagementPage, {
   requiresAuth: true,
   requiresRole: 'ADMIN'
 });
-
-router.addRoute('/admin/panel', AdminDashboardWrapper, {
+*/
+router.addRoute('/admin/panel', AdminDashboard, {
   requiresAuth: true,
   requiresRole: 'ADMIN'
 });
