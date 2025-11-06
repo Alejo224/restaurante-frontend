@@ -51,9 +51,7 @@ export function LoginForm() {
             Recordar sesión
           </label>
         </div>
-        <a href="#" id="forgotPassword" class="text-primary text-decoration-none small">
-          ¿Olvidaste tu contraseña?
-        </a>
+        
       </div>
 
 
@@ -236,10 +234,12 @@ export function LoginForm() {
     router.navigate('/register');
   });
 
+  /* Eent listeneres para recuperacion de constraseña (funcionalidad no terminada)
   container.querySelector('#forgotPassword').addEventListener('click', (e) => {
     e.preventDefault();
     showMessage('Funcionalidad de recuperación de contraseña - Próximamente', 'info');
   });
+  */
 
   return container;
 }

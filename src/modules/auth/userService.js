@@ -161,21 +161,36 @@ export async function loginUser(credentials) {
 
     const response = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify(credentials),
     });
 
     console.log('📨 Status:', response.status);
+    console.log('📨 OK:', response.ok);
 
     if (!response.ok) {
       let errorMessage = 'Error al iniciar sesión';
       
       try {
+        // Intentar leer como JSON
         const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
-      } catch {
-        const errorText = await response.text();
-        errorMessage = errorText || errorMessage;
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (parseError) {
+        // Si no hay cuerpo JSON, determinar por status
+        console.log('ℹ️ Respuesta sin cuerpo JSON, usando código de estado:', response.status);
+        
+        if (response.status === 401 || response.status === 403) {
+          errorMessage = 'Email o contraseña incorrectas, por favor inténtelo de nuevo.';
+        } else if (response.status === 404) {
+          errorMessage = 'Servicio no disponible';
+        } else if (response.status >= 500) {
+          errorMessage = 'Error interno del servidor';
+        } else {
+          errorMessage = `Error ${response.status}: ${response.statusText}`;
+        }
       }
 
       throw new Error(errorMessage);
