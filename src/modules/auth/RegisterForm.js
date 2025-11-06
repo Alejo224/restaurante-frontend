@@ -1,5 +1,5 @@
 
-import { registerUser } from './userService.js';
+import { registerUser, isUser } from './userService.js';
 import { router } from '../../router.js';
 import { LoginForm } from  '../auth/LoginForm.js';
 
@@ -203,7 +203,13 @@ export function RegisterForm() {
       setTimeout(() => {
         //router.navigate('/login');
         //console.log('🔄 Redirigiendo al login...');
-        router.navigate('/menu');
+        // Para verificar si es un usuario con rol de cliente (USER) para ingresar al menu
+        if (isUser()){
+          router.navigate('/menu');
+        } else {
+          showMessage('No se pudo redirigir automáticamente. Por favor, inicia sesión.', 'warning');
+        }
+        
       }, 2000);
       
     } catch (error) {

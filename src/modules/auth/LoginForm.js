@@ -149,7 +149,7 @@ export function LoginForm() {
     // Redirigir según rol
     if (isAdmin()) {
       console.log('🎭 Usuario es ADMIN → Redirigiendo a panel de administración');
-      router.navigate('/admin/menu');
+      router.navigate('/admin/panel');
     } else if (isUser()) {
       console.log('🎭 Usuario es USER → Redirigiendo a menú público');
       router.navigate('/menu');
