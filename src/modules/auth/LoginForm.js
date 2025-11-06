@@ -51,9 +51,7 @@ export function LoginForm() {
             Recordar sesión
           </label>
         </div>
-        <a href="#" id="forgotPassword" class="text-primary text-decoration-none small">
-          ¿Olvidaste tu contraseña?
-        </a>
+        
       </div>
 
 
@@ -151,7 +149,7 @@ export function LoginForm() {
     // Redirigir según rol
     if (isAdmin()) {
       console.log('🎭 Usuario es ADMIN → Redirigiendo a panel de administración');
-      router.navigate('/admin/menu');
+      router.navigate('/admin/panel');
     } else if (isUser()) {
       console.log('🎭 Usuario es USER → Redirigiendo a menú público');
       router.navigate('/menu');
@@ -236,10 +234,12 @@ export function LoginForm() {
     router.navigate('/register');
   });
 
+  /* Eent listeneres para recuperacion de constraseña (funcionalidad no terminada)
   container.querySelector('#forgotPassword').addEventListener('click', (e) => {
     e.preventDefault();
     showMessage('Funcionalidad de recuperación de contraseña - Próximamente', 'info');
   });
+  */
 
   return container;
 }

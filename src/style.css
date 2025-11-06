@@ -1,25 +1,51 @@
-/* ===== VARIABLES GLOBALES Y CONFIGURACIÓN ===== */
+/* ========================================
+   VARIABLES GLOBALES Y CONFIGURACIÓN
+   ======================================== */
 :root {
+  /* Colores principales */
   --hero-blue: #667eea;
   --hero-purple: #764ba2;
   --primary: #0d6efd;
   --warning: #ffc107;
   --success: #198754;
+  --danger: #dc3545;
+  --info: #0dcaf0;
   --dark: #343a40;
   --light: #f8f9fa;
   --white: #ffffff;
   --darker: #1a1a1a;
   --text-muted: #6c757d;
+  
+
+  /* Admin Panel */
+  --sidebar-width: 280px;
+  --admin-bg: #f8f9fa;
+  --card-hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== ESTILOS GENERALES Y UTILIDADES ===== */
+/* ========================================
+   ESTILOS BASE Y RESET
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-/* Utilidades de color de fondo */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--dark);
+  background: var(--light);
+}
+
+/* ========================================
+   UTILIDADES GENERALES
+   ======================================== */
 .bg-darker {
   background-color: var(--darker) !important;
 }
 
-/* Utilidades de texto */
 .text-footer {
   color: #adb5bd !important;
 }
@@ -27,27 +53,22 @@
 .text-primary {
   color: var(--primary) !important;
 }
-
-/* Estados de hover para enlaces */
-a.text-primary:hover {
-  color: #0a58ca !important;
+.text-panel {
+  color: #e9ecef;
 }
 
-/* ===== COMPONENTES DE FORMULARIOS ===== */
-
-/* Contenedor principal para páginas de autenticación - CORREGIDO */
+/* ========================================
+   COMPONENTES DE FORMULARIOS
+   ======================================== */
 .auth-container {
   background: linear-gradient(135deg, var(--hero-blue) 0%, var(--hero-purple) 100%);
   min-height: 100vh;
   display: flex;
   align-items: center;
   padding-top: 80px;
-  /* 👈 NUEVO: Compensa navbar fixed */
   padding-bottom: 40px;
-  /* 👈 NUEVO: Espacio inferior */
 }
 
-/* Contenedor específico para formularios de auth */
 .auth-form-container {
   width: 100%;
   max-width: 450px;
@@ -55,7 +76,6 @@ a.text-primary:hover {
   padding: 20px;
 }
 
-/* Inputs de formulario grandes */
 .form-control-lg {
   border-radius: 10px;
   border: 2px solid #e9ecef;
@@ -70,26 +90,36 @@ a.text-primary:hover {
   transform: translateY(-2px);
 }
 
-/* Estados de validación de formularios */
 .is-invalid {
-  border-color: #dc3545 !important;
+  border-color: var(--danger) !important;
 }
 
 .invalid-feedback {
   font-size: 0.875rem;
-  color: #dc3545;
+  color: var(--danger);
 }
 
-/* ===== COMPONENTES DE BOTONES ===== */
+.form-card-hover {
+  transition: all 0.3s ease;
+  border: 2px solid #e9ecef;
+  margin-top: 20px;
+}
 
-/* Botones grandes */
+.form-card-hover:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+  transform: translateY(-3px);
+}
+
+/* ========================================
+   COMPONENTES DE BOTONES
+   ======================================== */
 .btn-lg {
   border-radius: 10px;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
-/* Botón primario con gradiente */
 .btn-primary {
   background: linear-gradient(135deg, var(--primary) 0%, #0a58ca 100%);
   border: none;
@@ -100,112 +130,17 @@ a.text-primary:hover {
   box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
 }
 
-/* ===== COMPONENTES DE CARDS Y CONTENEDORES ===== */
-
-/* Efectos de sombra */
+/* ========================================
+   COMPONENTES DE CARDS
+   ======================================== */
 .shadow-lg {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Bordes redondeados */
 .rounded-4 {
   border-radius: 20px !important;
 }
 
-/* Efecto hover para cards de formularios - CORREGIDO */
-.form-card-hover {
-  transition: all 0.3s ease;
-  border: 2px solid #e9ecef;
-  margin-top: 20px;
-  /* 👈 NUEVO: Espacio desde la parte superior */
-}
-
-.form-card-hover:hover {
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary);
-  transform: translateY(-3px);
-}
-
-/* ===== COMPONENTES DE ALERTAS ===== */
-
-.alert {
-  border-radius: 10px;
-  border: none;
-  font-weight: 500;
-}
-
-.alert-success {
-  background: linear-gradient(135deg, #d1edff 0%, #a3d5ff 100%);
-  color: #155724;
-}
-
-.alert-danger {
-  background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%);
-  color: #721c24;
-}
-
-.alert-warning {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  color: #856404;
-}
-
-/* ===== PÁGINA HOME/LANDING ===== */
-
-/* Hero Section - Página principal */
-.hero-section {
-  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-}
-
-.hero-image {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Sección de acceso exclusivo */
-.access-teaser {
-  border: 2px solid #343a40;
-}
-
-/* Items de preview en home */
-.preview-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border-left: 4px solid transparent;
-}
-
-.preview-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Colores de borde para items de preview */
-.preview-item:nth-child(2) {
-  border-left-color: var(--warning);
-}
-
-.preview-item:nth-child(3) {
-  border-left-color: var(--success);
-}
-
-.preview-item:nth-child(4) {
-  border-left-color: var(--primary);
-}
-
-/* ===== PÁGINA DE LOGIN ===== */
-
-/* Características específicas del login */
-.login-features {
-  background: linear-gradient(135deg, var(--hero-blue) 0%, var(--hero-purple) 100%);
-  color: white;
-}
-
-.remember-me:hover {
-  color: var(--primary) !important;
-}
-
-/* ===== EFECTOS HOVER Y ANIMACIONES ===== */
-
-/* Efecto principal para cards */
 .card-hover {
   transition: all 0.3s ease;
   border: 2px solid transparent;
@@ -214,101 +149,352 @@ a.text-primary:hover {
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--card-hover-shadow);
   border-color: var(--primary);
 }
 
-/* Efecto para cards de características */
-.feature-card {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 2px solid #f8f9fa;
-  cursor: pointer;
+/* ========================================
+   ADMIN PANEL - LAYOUT PRINCIPAL
+   ======================================== */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--admin-bg);
 }
 
-.feature-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.1),
-    0 0 0 1px var(--primary);
-  border-color: var(--primary);
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+/* Sidebar */
+.admin-sidebar {
+  width: var(--sidebar-width);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--dark);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Efecto gradiente para elementos premium */
-.gradient-border-hover {
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, var(--hero-blue), var(--hero-purple)) border-box;
+.admin-sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+/* Contenido principal */
+.admin-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+.admin-content.expanded {
+  margin-left: 0;
+}
+
+/* ========================================
+   ADMIN PANEL - SIDEBAR NAVEGACIÓN
+   ======================================== */
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.sidebar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.sidebar-nav .nav-link:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
+}
+
+.sidebar-nav .nav-link.active {
+  background: linear-gradient(135deg, var(--warning) 0%, #ff9800 100%);
+  color: var(--dark);
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+}
+
+.sidebar-nav .nav-link.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   ADMIN PANEL - DASHBOARD CARDS
+   ======================================== */
+.dashboard-welcome {
+  background: linear-gradient(135deg, var(--primary) 0%, #0a58ca 100%);
+  color: white;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(13, 110, 253, 0.2);
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
   border: 2px solid transparent;
   transition: all 0.3s ease;
-}
-
-.gradient-border-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
-}
-
-/* Efecto sutil para botones */
-.btn-hover {
-  transition: all 0.3s ease;
+  cursor: pointer;
   position: relative;
   overflow: hidden;
 }
 
-.btn-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--primary), var(--hero-blue));
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
 }
 
-/* Efecto para items de lista */
-.list-item-hover {
-  transition: all 0.2s ease;
-  border-left: 3px solid transparent;
+.dashboard-card:hover::before {
+  transform: scaleY(1);
 }
 
-.list-item-hover:hover {
-  border-left-color: var(--primary);
-  background-color: rgba(13, 110, 253, 0.05);
-  transform: translateX(5px);
+.dashboard-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary);
 }
 
-/* Animación de pulso para elementos importantes */
-.pulse-hover {
+.dashboard-card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
   transition: all 0.3s ease;
 }
 
-.pulse-hover:hover {
-  animation: pulse 1.5s infinite;
+.dashboard-card:hover .dashboard-card-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4);
-  }
-
-  70% {
-    box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
-  }
+.dashboard-card-icon.primary {
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.1), rgba(13, 110, 253, 0.2));
+  color: var(--primary);
 }
 
-/* Efecto de brillo para icons */
-.icon-hover {
+.dashboard-card-icon.success {
+  background: linear-gradient(135deg, rgba(25, 135, 84, 0.1), rgba(25, 135, 84, 0.2));
+  color: var(--success);
+}
+
+.dashboard-card-icon.warning {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.2));
+  color: var(--warning);
+}
+
+.dashboard-card-icon.info {
+  background: linear-gradient(135deg, rgba(13, 202, 240, 0.1), rgba(13, 202, 240, 0.2));
+  color: var(--info);
+}
+
+.dashboard-card-title {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.dashboard-card-content {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.dashboard-card-action {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
   transition: all 0.3s ease;
 }
 
-.icon-hover:hover {
-  filter: brightness(1.2);
-  transform: scale(1.1);
+.dashboard-card:hover .dashboard-card-action {
+  opacity: 1;
+  transform: translateX(0);
 }
 
-/* ===== DISEÑO RESPONSIVE ===== */
+/* ========================================
+   ADMIN PANEL - ESTADÍSTICAS RÁPIDAS
+   ======================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
 
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0.5rem 0;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+/* ========================================
+   OVERLAY Y MODALES
+   ======================================== */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.content-section {
+  animation: fadeIn 0.3s ease;
+}
+
+.dashboard-card {
+  animation: slideInLeft 0.4s ease;
+}
+
+.dashboard-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.dashboard-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.dashboard-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+/* ========================================
+   RESPONSIVE - TABLETS
+   ======================================== */
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .admin-sidebar.show {
+    transform: translateX(0);
+  }
+
+  .admin-content {
+    margin-left: 0;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MÓVILES
+   ======================================== */
 @media (max-width: 768px) {
-
-  /* Ajustes para auth en móviles */
   .auth-container {
     padding-top: 70px !important;
     padding-bottom: 20px;
@@ -322,64 +508,56 @@ a.text-primary:hover {
     margin-top: 15px !important;
   }
 
-  /* Ajustes generales para móviles */
-  .container {
-    padding: 20px;
-  }
-
-  /* Previene zoom en iOS en formularios */
   .form-control-lg {
     font-size: 16px;
   }
 
-  /* Bordes más pequeños en móviles */
   .rounded-4 {
     border-radius: 15px !important;
   }
 
-  /* Efectos hover más sutiles en móviles */
-  .card-hover:hover,
-  .feature-card:hover {
-    transform: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-welcome {
+    padding: 1.5rem;
   }
 }
 
-/* ===== CLASES PARA FUTURAS PÁGINAS ===== */
+/* ========================================
+   CLASES PARA PÁGINAS ESPECÍFICAS
+   ======================================== */
 
-/* 
-  PARA AGREGAR NUEVAS PÁGINAS:
-  1. Usar el prefijo .page-[nombre] para estilos específicos
-  2. Seguir la estructura de componentes existente
-  3. Agregar estilos responsive cuando sea necesario
-*/
-
-/* Ejemplo para futura página de menú */
+/* Página de menú público */
 .page-menu {
-  /* Estilos específicos de la página de menú */
+  padding: 2rem 0;
 }
 
-.page-menu .menu-category {
-  /* Estilos para categorías del menú */
-}
-
-/* Ejemplo para futura página de reservas */
+/* Página de reservas */
 .page-reservations {
-  /* Estilos específicos de la página de reservas */
+  padding: 2rem 0;
 }
 
-.page-reservations .reservation-card {
-  /* Estilos para cards de reserva */
+/* Landing page */
+.hero-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
 }
 
-/* ===== SOLUCIÓN DE EMERGENCIA (elimina esto si lo anterior funciona) ===== */
-/*
-.auth-container {
-  padding-top: 90px !important;
-  min-height: calc(100vh - 90px) !important;
+.access-teaser {
+  border: 2px solid var(--dark);
 }
 
-.form-card-hover {
-  margin: 30px auto !important;
+.preview-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid transparent;
 }
-*/
+
+.preview-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
