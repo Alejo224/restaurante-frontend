@@ -37,7 +37,7 @@ export function MenuPublicPage() {
           
           <button class="btn btn-outline-light btn-sm" id="backBtn">
             <i class="bi bi-arrow-left me-1"></i>
-            Volver
+            Dashboard
           </button>
           
           ${authenticated ? `
@@ -108,7 +108,7 @@ export function MenuPublicPage() {
   });
 
   page.querySelector('#backBtn').addEventListener('click', () => {
-    router.navigate('/');
+    router.navigate('/dashboard');
   });
 
   const logoutBtn = page.querySelector('#logoutBtn');
