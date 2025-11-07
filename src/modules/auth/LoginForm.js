@@ -152,7 +152,7 @@ export function LoginForm() {
       router.navigate('/admin/panel');
     } else if (isUser()) {
       console.log('🎭 Usuario es USER → Redirigiendo a menú público');
-      router.navigate('/menu');
+      router.navigate('/dashboard');
     } else {
       console.warn('⚠️ Usuario sin rol específico → Redirigiendo a menú por defecto');
       router.navigate('/menu');

@@ -205,7 +205,7 @@ export function RegisterForm() {
         //console.log('🔄 Redirigiendo al login...');
         // Para verificar si es un usuario con rol de cliente (USER) para ingresar al menu
         if (isUser()){
-          router.navigate('/menu');
+          router.navigate('/dashboard');
         } else {
           showMessage('No se pudo redirigir automáticamente. Por favor, inicia sesión.', 'warning');
         }

@@ -527,6 +527,21 @@ body {
   .dashboard-welcome {
     padding: 1.5rem;
   }
+
+  /* DASHBOARD USUARIO*/
+  .user-action-card {
+    min-height: 180px;
+    padding: 1.5rem 1rem;
+  }
+
+  .user-action-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-action-icon i {
+    font-size: 1.5rem;
+  }
 }
 
 /* ========================================
@@ -560,4 +575,118 @@ body {
 .preview-item:hover {
   transform: translateX(5px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   USUARIO DASHBOARD - COMPONENTES
+   ======================================== */
+
+/* Cards de Acción del Usuario */
+.user-action-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  border: 2px solid #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.user-action-card:hover::before {
+  transform: scaleX(1);
+}
+
+.user-action-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary);
+}
+
+.user-action-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  transition: all 0.3s ease;
+}
+
+.user-action-icon i {
+  font-size: 2rem;
+}
+
+.user-action-card:hover .user-action-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.user-action-title {
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.user-action-description {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.user-action-arrow {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.user-action-card:hover .user-action-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Cards de Información */
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.info-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.info-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
 }
