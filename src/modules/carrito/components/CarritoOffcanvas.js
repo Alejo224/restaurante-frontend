@@ -68,7 +68,7 @@ export function CarritoOffcanvas() {
           <div class="d-grid mb-3">
              <a class="btn btn-primary btn-lg" id="btnTipoServicio" href="src/modules/tipo servicio/tipo.html">
              <i class="bi bi-gear-fill me-2"></i>
-             Tipo de servicio
+             Tipo de servicio 
              </a>
           </div> 
 
