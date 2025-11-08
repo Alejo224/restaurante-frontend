@@ -3,9 +3,14 @@ const recogerRestaurante = document.getElementById('recoger-restaurante');
 const entregaDomicilio = document.getElementById('entrega-domicilio');
 const direccionEntrega = document.getElementById('direccion');
 const telefonoContacto = document.getElementById('telefono');
+const btnIconoSalir = document.getElementById("icono-salir");
 
 
 
+
+btnIconoSalir.addEventListener('click', () => {
+   
+});
 
 
 recogerRestaurante.addEventListener('change', suspenderBotones);

@@ -1,0 +1,174 @@
+[33mcommit 480daf646a4af2c90df6bb0ba7573afa7139ba5a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mArchivos_copiados[m[33m)[m
+Merge: 625c635 f5a2e12
+Author: Kevin <zuluaga.kevin@correounivalle.edu.co>
+Date:   Sat Nov 8 12:35:51 2025 -0500
+
+    implemantacion
+
+[33mcommit f5a2e1257dc75119c06ac876bf86fbe41ee7dc27[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Fri Nov 7 11:29:58 2025 -0500
+
+    feat(UserDahboard): Nueva interfaz para el dahboard del usuario,cencillo, con botones que redirige a diferentes paginas que puede utilizar el usuario (#15)
+
+[33mcommit 625c6359a5a8b80d2a68ea68497068e52ecd26e3[m
+Author: Kevin <zuluaga.kevin@correounivalle.edu.co>
+Date:   Thu Nov 6 20:29:43 2025 -0500
+
+    implementacion de archivos para reserva y tipo de servicio
+
+[33mcommit 1868bbce5344d2ab477155ee940c0d67864a6512[m[33m ([m[1;32mmain[m[33m)[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Thu Nov 6 17:31:26 2025 -0500
+
+    Admin menu feat (#14)
+    
+    * feat(login): Quitamos el evento de recuperacion de contraseña, y dar un mejor informacion cuando ingresa credenciales incorrectas
+    
+    * fixed(bug Login y registro): Cambiendo la ruta para redigirir a la pagina segun su rol
+    
+    * feact(Panel,Dashboard Admin): Implemtacion del dashboard de administrador.
+    Style.css Agregando los estilos del dashboard y panel del administrador con su media queris (movil o table)
+
+[33mcommit 3a63ec8cbce9b870525874ec97a377448f3284d4[m[33m ([m[1;31morigin/eliminar[m[33m)[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Tue Nov 4 19:58:53 2025 -0500
+
+    Gdr 19 gestionar productos en el carrito (#13)
+    
+    * feat(Carrito): Implementacion del carrito.
+    - Bug de crear plato y modificar plato.
+    - Aun no corregido.
+    
+    * fixed(bug): Arreglo del bug del buton crear y actualizar plato
+    
+    * chacnged: cambio de loguin y registro para iniciar al menu
+
+[33mcommit 0c025e549e505d49a6a8381095718549618bba90[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Tue Oct 28 21:11:37 2025 -0500
+
+    changed(JWT): Cambio para el implemtacion de JWT con el token. (#12)
+    
+    - Agregar el metodo de actualizar
+    - agregando JWT para el login, registor, con un tiempo de 30 minutos para poder utilizar el Mejora en el visual con el nombre personalizado
+
+[33mcommit 9d80cbfa9f79cdd11c78c490e671f4b1493630f5[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Wed Oct 22 07:43:21 2025 -0500
+
+    Button eliminar (#11)
+    
+    * prueba
+    
+    * feat: agregando el boton de aliminar
+    - Tambien optimización de la categoria del plato para que no sea estatico, que aparescan las categorias que ya se encuentran registrados en la base de datos.
+    - el boton de eliminar ya funciona correctamente.
+
+[33mcommit df756b5a08f3065ddb0b6b9a911cbbdd454176f3[m
+Author: Andres23-C <marlon.romero@correounivalle.edu.co>
+Date:   Tue Oct 21 01:04:42 2025 -0500
+
+    eliminar frontent review (#10)
+    
+    * eliminar frontent review
+    
+    * fixed: arreglo de login for para que el arreglo de la pag se muestre
+
+[33mcommit 4cfacd4c2c43d6d9dc8abd8c2ad7f5ec017d60b1[m
+Author: nicolpena25 <149029475+nicolpena25@users.noreply.github.com>
+Date:   Mon Oct 20 21:50:26 2025 -0500
+
+    listar platos (#8)
+    
+    * listar platos
+    
+    * listar platos arreglo
+
+[33mcommit abc303c249393ead2515342c0f40c4c20a534d80[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Mon Oct 20 17:52:37 2025 -0500
+
+    changed: Cambiando el directorio y organizacion correcta eliminando duplicado de la carpeta restaurante-frontend (#7)
+
+[33mcommit fdbe1a298c5714c52f0dcd211bbda58de5030f94[m
+Author: kevin-Z01 <zuluaga.kevin@correounivalle.edu.co>
+Date:   Mon Oct 20 14:38:31 2025 -0500
+
+    Limpieza de repositorio anidado y preparación del frontend (#6)
+
+[33mcommit 507c054e31f79263361d230a015088c291db9e51[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Tue Oct 14 22:45:16 2025 -0500
+
+    Update README.md
+    
+    agregando la guía para hacer interfaces
+
+[33mcommit 8dd92558c77ba197250382108b64afe7be6b6442[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Tue Oct 14 17:07:33 2025 -0500
+
+    Login (#5)
+    
+    * fix: add environment to github pages workflow
+    
+    * chore: trigger deployment test
+    
+    * feact(login):  - Implementacion del la la interfaz del login y hacer la validacion con credenciales guardada en la api. - feact (register) Cambiando el estilo para que sean iguales el de y legistro
+
+[33mcommit 5466267a142fc3391cee4bfda10094db1bc984a7[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Sun Oct 12 19:37:03 2025 -0500
+
+    Configure GitHub action (#4)
+    
+    * fix: add environment to github pages workflow
+    
+    * chore: trigger deployment test
+
+[33mcommit d80fd04f22c9d5938eca3af26cd6a73c898b5e17[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Sun Oct 12 19:06:02 2025 -0500
+
+    fix: add environment to github pages workflow (#3)
+
+[33mcommit 379c5f7225d9aeed2a0378bbddd68e0651d0591c[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Sun Oct 12 18:44:42 2025 -0500
+
+    Style home page (#2)
+    
+    * feact: Agregando animaciones al preview item y cambiando el color del texto del footer
+    
+    * feat: add github actions workflow
+
+[33mcommit e0bf6861d0e2230f1df83bbcd9ef48a4ffb6cf79[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Sun Oct 12 18:19:41 2025 -0500
+
+    feact: Agregando animaciones al preview item y cambiando el color del texto del footer (#1)
+
+[33mcommit 57c37d619e2c3fbcf7e09335fd0ea9fbed12698c[m
+Author: Alejo224 <160759479+Alejo224@users.noreply.github.com>
+Date:   Sun Oct 12 15:52:15 2025 -0500
+
+    Create README.md
+
+[33mcommit 3c4b58c8bf49f9682775495fba7b20471c100114[m
+Author: johan <johan.alejandro.angulo@correounivalle.edu.co>
+Date:   Sun Oct 12 15:41:33 2025 -0500
+
+    feact: Interfaces princiapal y el registro de usuario con las validaciones necesarias y configuracion para la conxion con la api
+
+[33mcommit 003be614f4211e1b885156889006b5bbefe9ff21[m
+Author: johan <johan.alejandro.angulo@correounivalle.edu.co>
+Date:   Thu Oct 9 17:52:40 2025 -0500
+
+    feat: integrar Bootstrap y habilitar importación global de estilos
+
+[33mcommit 26f33d04f0567ef0ce36e3eeef339ac41b94afc2[m
+Author: johan <johan.alejandro.angulo@correounivalle.edu.co>
+Date:   Thu Oct 9 17:44:42 2025 -0500
+
+    My first commit
