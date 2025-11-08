@@ -64,6 +64,14 @@ export function CarritoOffcanvas() {
             </div>
           </div>
 
+          <!-- Boton tipo de servicio-->
+          <div class="d-grid mb-3">
+             <a class="btn btn-primary btn-lg" id="btnTipoServicio" href="src/modules/tipo servicio/tipo.html">
+             <i class="bi bi-gear-fill me-2"></i>
+             Tipo de servicio
+             </a>
+          </div> 
+
           <!-- Botones de acción -->
           <div class="d-grid gap-2">
             <button class="btn btn-success btn-lg" id="btnProcederPago">
