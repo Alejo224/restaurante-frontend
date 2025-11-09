@@ -446,7 +446,7 @@ export function AdminDashboard() {
 
   // Botón Crear Mesa (placeholder para tu compañero)
   crearMesaBtn.addEventListener('click', () => {
-    alert('Funcionalidad de crear mesa - Próximamente');
+    alert('Funcionalidad de crear mesa - Hola mundo');
   });
 
   // Logout
@@ -464,3 +464,4 @@ export function AdminDashboard() {
 
   return page;
 }
+
