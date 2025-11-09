@@ -2,6 +2,7 @@
 import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
+import { MesasList } from '../../Mesa/MesasList.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -286,23 +287,25 @@ export function AdminDashboard() {
           <div id="plato-list-container" role="region" aria-label="Lista de platos"></div>
         </section>
 
-        <!-- SECCIÓN GESTIONAR MESAS -->
-        <section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
-          <header class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h2 id="mesas-heading" class="fw-bold mb-1">
-                <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
-                Gestión de Mesas
-              </h2>
-              <p class="text-muted mb-0">Administra las mesas del restaurante</p>
-            </div>
-          </header>
 
-          <div class="alert alert-info" role="status">
-            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
-            <strong>Esperando:</strong> Aquí va el componente de gestión de mesas (MesasList.js)
-          </div>
-        </section>
+
+         <!-- SECCIÓN GESTIONAR MESAS -->
+<section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
+  <header class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 id="mesas-heading" class="fw-bold mb-1">
+        <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
+        Gestión de Mesas
+      </h2>
+      <p class="text-muted mb-0">Administra las mesas del restaurante</p>
+    </div>
+  </header>
+
+  <!-- Aquí se mostrará la lista de mesas -->
+  <div id="mesa-list-container" class="mt-3"></div>
+</section>
+
+
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
         <section id="seccionReservas" class="content-section" style="display: none;" aria-labelledby="reservas-heading">
@@ -338,6 +341,45 @@ export function AdminDashboard() {
       platoContainer.appendChild(PlatoList(true)); // true = modo admin con CRUD
     }
   }, 100);
+
+
+   
+// CARGAR COMPONENTE DE MESAS
+// ========================================
+ //setTimeout(async() => {
+  //const mesaContainer = page.querySelector("#mesa-list-container");
+  //if (mesaContainer) {
+  //const mesasComponent = await
+  //MesasList();
+
+  
+     
+   // mesaContainer.appendChild(MesasList(mesasComponent));
+  //}
+  //},300);
+
+  // CARGAR COMPONENTE DE MESAS
+// ========================================
+setTimeout(async () => {
+  const mesaContainer = page.querySelector("#mesa-list-container");
+  if (mesaContainer) {
+    // Esperamos a que MesasList devuelva un elemento DOM
+    const mesasComponent = await MesasList();
+
+    // Aseguramos que sea un nodo HTML antes de agregarlo
+    if (mesasComponent instanceof Node) {
+      mesaContainer.appendChild(mesasComponent);
+    } else {
+      console.warn("⚠️ MesasList no devolvió un nodo válido");
+    }
+  }
+}, 300);
+
+
+   
+ 
+
+
 
   // ========================================
   // EVENT LISTENERS
@@ -461,6 +503,8 @@ export function AdminDashboard() {
       }
     }
   });
+
+
 
   return page;
 }
