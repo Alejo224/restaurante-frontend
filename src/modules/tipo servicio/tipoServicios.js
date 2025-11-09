@@ -17,7 +17,7 @@ recogerRestaurante.addEventListener('change', suspenderBotones);
 entregaDomicilio.addEventListener('change', suspenderBotones);
 
 
-function suspenderBotones() {
+/*function suspenderBotones() {
     if (recogerRestaurante.checked) {
 
         // Deshabilitar las otras dos opciones
@@ -39,5 +39,39 @@ function suspenderBotones() {
         // Habilitar los campos de contacto
         direccionEntrega.disabled = false;
         telefonoContacto.disabled = false;
+    }
+}*/
+function suspenderBotones(){
+    const campos ={
+        //objeto con los campos del formulario
+        domicilio : {
+            radio : entregaDomicilio,
+            campos:[direccionEntrega]
+        },
+
+        recoger:{
+            radio: recogerRestaurante,
+            campos:[]
+        }
+    };
+
+    //Funcion auxiliar para habilitar/deshabilitar campos 
+    const toggleCampos = (elementos, deshabilitar)=>{ 
+        elementos.forEach(elemento => {
+            elemento.disabled = deshabilitar;
+        });
+    };
+     // Resetear todo a habilitado primero
+    Object.values(campos).forEach(tipo => {
+        tipo.radio.disabled = false;
+        toggleCampos(tipo.campos, false);
+    });
+
+    // Aplicar lógica según selección
+    if (campos.recoger.radio.checked) {
+        campos.domicilio.radio.disabled = true;
+        toggleCampos(campos.domicilio.campos, true);
+    } else if (campos.domicilio.radio.checked) {
+        campos.recoger.radio.disabled = true;
     }
 }

@@ -11,10 +11,50 @@ import {
   vaciarCarrito,
   carritoEstaVacio
 } from '../carritoService.js';
+// Estoy lo hizo kevin
+// Funciones públicas para abrir / cerrar el panel del carrito (módulo-scope)
+export function abrirCarritoPanel() {
+  const offcanvasEl = document.getElementById('carritoOffcanvas');
+  if (!offcanvasEl) return;
 
+  // Intentar renderizar antes de mostrar (si la función existe)
+  try {
+    if (typeof renderizarCarrito === 'function') renderizarCarrito();
+  } catch (e) {
+    console.warn('No se pudo renderizar antes de abrir:', e);
+  }
+
+  // Usar la API correcta de Bootstrap
+  if (window.bootstrap && bootstrap.Offcanvas) {
+    const instance = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+    instance.show();
+
+    offcanvasEl.addEventListener('shown.bs.offcanvas', () => {
+      const primerControl = offcanvasEl.querySelector('#btnProcederPago, #btnTipoServicio, .btn-incrementar, .btn-decrementar, .btn-eliminar');
+      if (primerControl) primerControl.focus();
+    }, { once: true });
+  } else {
+    // Fallback: disparar evento global para que quien maneje el DOM lo abra
+    window.dispatchEvent(new Event('abrirCarrito'));
+  }
+}
+
+export function cerrarCarritoPanel() {
+  const offcanvasEl = document.getElementById('carritoOffcanvas');
+  if (!offcanvasEl) return;
+
+  if (window.bootstrap && bootstrap.Offcanvas) {
+    const instance = bootstrap.Offcanvas.getInstance(offcanvasEl) || bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+    if (instance) instance.hide();
+  } else {
+    // Fallback: disparar evento global si no hay bootstrap
+    window.dispatchEvent(new Event('cerrarCarrito'));
+  }
+}
+// hasta aca
 export function CarritoOffcanvas() {
   const offcanvas = document.createElement('div');
-  
+
   offcanvas.innerHTML = `
     <!-- Offcanvas del Carrito -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="carritoOffcanvas" aria-labelledby="carritoOffcanvasLabel">
@@ -66,18 +106,14 @@ export function CarritoOffcanvas() {
 
           <!-- Boton tipo de servicio-->
           <div class="d-grid mb-3">
-             <a class="btn btn-primary btn-lg" id="btnTipoServicio" href="src/modules/tipo servicio/tipo.html">
-             <i class="bi bi-gear-fill me-2"></i>
-             Tipo de servicio 
+             <a class="btn btn-success btn-lg" id="btnTipoServicio" href="src/modules/tipo servicio/tipo.html">
+             <i class="bi bi-credit-card me-2"></i>
+             Proceder al Pago
              </a>
           </div> 
 
           <!-- Botones de acción -->
           <div class="d-grid gap-2">
-            <button class="btn btn-success btn-lg" id="btnProcederPago">
-              <i class="bi bi-credit-card me-2"></i>
-              Proceder al Pago
-            </button>
             <button class="btn btn-outline-danger btn-sm" id="btnVaciarCarrito">
               <i class="bi bi-trash me-2"></i>
               Vaciar Carrito
@@ -88,6 +124,7 @@ export function CarritoOffcanvas() {
     </div>
   `;
 
+  
   // Esperar a que el offcanvas esté en el DOM antes de renderizar
   setTimeout(() => {
     const offcanvasElement = document.getElementById('carritoOffcanvas');
@@ -97,7 +134,7 @@ export function CarritoOffcanvas() {
         console.log('🔓 Offcanvas abierto, renderizando...');
         renderizarCarrito();
       });
-      
+
       // Renderizar inmediatamente si ya está visible
       renderizarCarrito();
       setupEventListeners();
@@ -166,7 +203,7 @@ function renderizarCarrito() {
 
 function crearItemHTML(item) {
   const subtotal = calcularSubtotal(item);
-  
+
   return `
     <div class="card mb-3 shadow-sm item-carrito" data-id="${item.id}">
       <div class="card-body p-2">
@@ -275,7 +312,7 @@ function agregarEventListenersItems() {
     btn.addEventListener('click', (e) => {
       const platoId = parseInt(e.currentTarget.dataset.id);
       const item = obtenerCarrito().find(i => i.id === platoId);
-      
+
       if (confirm(`¿Eliminar "${item?.nombre}" del carrito?`)) {
         eliminarDelCarrito(platoId);
       }
@@ -296,19 +333,19 @@ function handleVaciarCarrito() {
 
 function handleProcederPago() {
   const carrito = obtenerCarrito();
-  
+
   if (carritoEstaVacio()) {
     mostrarToast('Tu carrito está vacío', 'warning');
     return;
   }
 
   console.log('🛒 Procediendo al pago con:', carrito);
-  
+
   // Aquí puedes redirigir a la página de pago
   // Por ejemplo: router.navigate('/checkout');
-  
+
   mostrarToast('Funcionalidad de pago - Próximamente', 'info');
-  
+
   // Cerrar el offcanvas
   const offcanvasElement = document.getElementById('carritoOffcanvas');
   const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
