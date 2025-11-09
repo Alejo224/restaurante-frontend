@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Pedidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3 fw-bold">Mis Pedidos</h1>
+                <p class="text-muted">Gestiona tus pedidos y realiza pagos pendientes</p>
+            </div>
+        </div>
+
+        <!-- Filtros de Estado -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary btn-sm active" data-filter="all">
+                        Todos <span class="badge bg-primary ms-1" id="count-all">0</span>
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm" data-filter="BORRADOR">
+                        Por Pagar <span class="badge bg-warning ms-1" id="count-borrador">0</span>
+                    </button>
+                    <button class="btn btn-outline-info btn-sm" data-filter="PENDIENTE">
+                        Pendientes <span class="badge bg-info ms-1" id="count-pendiente">0</span>
+                    </button>
+                    <button class="btn btn-outline-success btn-sm" data-filter="COMPLETADO">
+                        Completados <span class="badge bg-success ms-1" id="count-completado">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Componente Lista de Pedidos -->
+        <div id="lista-pedidos-container">
+            <!-- El componente se cargará aquí -->
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2 text-muted">Cargando tus pedidos...</p>
+        </div>
+
+        <!-- Mensaje sin pedidos -->
+        <div id="sin-pedidos" class="text-center d-none">
+            <div class="card border-dashed">
+                <div class="card-body py-5">
+                    <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No tienes pedidos aún</h5>
+                    <p class="text-muted">Realiza tu primer pedido desde el carrito</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ TEMPLATE MOVIDO AQUÍ - Debe estar en el mismo archivo -->
+    <template id="pedido-template">
+        <div class="card pedido-card mb-3" data-estado="{estado}">
+            <div class="card-body">
+                <!-- Header del Pedido -->
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="card-title mb-1">Pedido #{id}</h5>
+                        <span class="badge {estado-badge}">{estado-texto}</span>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold text-primary">{total}</div>
+                        <small class="text-muted">{fecha}</small>
+                    </div>
+                </div>
+
+                <!-- Información del Servicio -->
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <small class="text-muted">
+                            <i class="{tipo-icono} me-1"></i>{tipo-servicio}
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Información Específica según Tipo -->
+                <div class="pedido-info mb-3">
+                    {info-especifica}
+                </div>
+
+                <!-- Productos del Pedido -->
+                <div class="pedido-productos mb-3">
+                    <h6 class="fw-semibold">Productos ({cantidad-productos})</h6>
+                    {lista-productos}
+                </div>
+
+                <!-- Notas -->
+                {notas-section}
+
+                <!-- Botones de Acción -->
+                <div class="d-flex gap-2">
+                    <button class="btn {btn-pagar-class} btn-sm" {btn-pagar-disabled} onclick="pagarPedido({id})">
+                        <i class="fas fa-credit-card me-1"></i>Pagar Pedido
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="verDetallePedido({id})">
+                        <i class="fas fa-eye me-1"></i>Ver Detalle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="./services/pedidos-service.js"></script>
+    <script src="./services/historial-pedidos.js"></script>
+</body>
+
+</html>
