@@ -11,47 +11,7 @@ import {
   vaciarCarrito,
   carritoEstaVacio
 } from '../carritoService.js';
-// Estoy lo hizo kevin
-// Funciones públicas para abrir / cerrar el panel del carrito (módulo-scope)
-export function abrirCarritoPanel() {
-  const offcanvasEl = document.getElementById('carritoOffcanvas');
-  if (!offcanvasEl) return;
 
-  // Intentar renderizar antes de mostrar (si la función existe)
-  try {
-    if (typeof renderizarCarrito === 'function') renderizarCarrito();
-  } catch (e) {
-    console.warn('No se pudo renderizar antes de abrir:', e);
-  }
-
-  // Usar la API correcta de Bootstrap
-  if (window.bootstrap && bootstrap.Offcanvas) {
-    const instance = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
-    instance.show();
-
-    offcanvasEl.addEventListener('shown.bs.offcanvas', () => {
-      const primerControl = offcanvasEl.querySelector('#btnProcederPago, #btnTipoServicio, .btn-incrementar, .btn-decrementar, .btn-eliminar');
-      if (primerControl) primerControl.focus();
-    }, { once: true });
-  } else {
-    // Fallback: disparar evento global para que quien maneje el DOM lo abra
-    window.dispatchEvent(new Event('abrirCarrito'));
-  }
-}
-
-export function cerrarCarritoPanel() {
-  const offcanvasEl = document.getElementById('carritoOffcanvas');
-  if (!offcanvasEl) return;
-
-  if (window.bootstrap && bootstrap.Offcanvas) {
-    const instance = bootstrap.Offcanvas.getInstance(offcanvasEl) || bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
-    if (instance) instance.hide();
-  } else {
-    // Fallback: disparar evento global si no hay bootstrap
-    window.dispatchEvent(new Event('cerrarCarrito'));
-  }
-}
-// hasta aca
 export function CarritoOffcanvas() {
   const offcanvas = document.createElement('div');
 
@@ -106,14 +66,18 @@ export function CarritoOffcanvas() {
 
           <!-- Boton tipo de servicio-->
           <div class="d-grid mb-3">
-             <a class="btn btn-success btn-lg" id="btnTipoServicio" href="src/modules/tipo servicio/tipo.html">
+             <a class="btn btn-primary" id="btnTipoServicio" href="src/modules/tipo-servicio/tipo.html">
              <i class="bi bi-credit-card me-2"></i>
-             Proceder al Pago
+              Tipo de servicio
              </a>
           </div> 
 
           <!-- Botones de acción -->
           <div class="d-grid gap-2">
+          <button class="btn btn-success btn-lg" id="btnVaciarCarrito">
+              <i class="bi bi-credit-card me-2"></i>
+              Proceder al Pago
+            </button> 
             <button class="btn btn-outline-danger btn-sm" id="btnVaciarCarrito">
               <i class="bi bi-trash me-2"></i>
               Vaciar Carrito
