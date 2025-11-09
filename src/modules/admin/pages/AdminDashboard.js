@@ -446,8 +446,82 @@ export function AdminDashboard() {
 
   // Botón Crear Mesa (placeholder para tu compañero)
   crearMesaBtn.addEventListener('click', () => {
-    alert('Funcionalidad de crear mesa - Hola mundo');
+    // Crear modal/formulario
+  const seccionMesas = page.querySelector('#seccionMesas');
+
+  const formHTML = `
+    <div id="crearMesaForm" class="card p-3 mb-3">
+      <h5>Registrar Nueva Mesa</h5>
+      <div class="mb-2">
+        <label for="nombreMesaInput" class="form-label">Nombre / Número de Mesa</label>
+        <input type="text" id="nombreMesaInput" class="form-control" />
+      </div>
+      <div class="mb-2">
+        <label for="capacidadInput" class="form-label">Capacidad</label>
+        <input type="number" id="capacidadInput" class="form-control" min="1" />
+      </div>
+      <button id="guardarMesaBtn" class="btn btn-success">Guardar Mesa</button>
+      <button id="cancelarMesaBtn" class="btn btn-secondary ms-2">Cancelar</button>
+    </div>
+  `;
+
+  // Agregar el formulario al inicio de la sección
+  seccionMesas.insertAdjacentHTML('afterbegin', formHTML);
+
+  // Event listener para cancelar
+  seccionMesas.querySelector('#cancelarMesaBtn').addEventListener('click', () => {
+    const form = seccionMesas.querySelector('#crearMesaForm');
+    form.remove();
   });
+
+  // Event listener para guardar
+  seccionMesas.querySelector('#guardarMesaBtn').addEventListener('click', async () => {
+    const nombreMesa = seccionMesas.querySelector('#nombreMesaInput').value.trim();
+    const capacidad = parseInt(seccionMesas.querySelector('#capacidadInput').value);
+
+    if (!nombreMesa || isNaN(capacidad) || capacidad <= 0) {
+      alert('Por favor completa todos los campos correctamente.');
+      return;
+    }
+
+    try {
+      // Llamada a la API
+      const token = localStorage.getItem('token'); // o donde tengas el JWT
+      const res = await fetch('http://localhost:8080/api/mesas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nombreMesa,
+          capacidad,
+          estado: "DISPONIBLE" // estado inicial
+        })
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error al registrar la mesa');
+      }
+
+      const nuevaMesa = await res.json();
+      alert(`Mesa "${nuevaMesa.nombreMesa}" registrada correctamente!`);
+
+      // Limpiar formulario
+      seccionMesas.querySelector('#crearMesaForm').remove();
+
+      // Aquí puedes actualizar la lista de mesas (si tienes un componente MesasList.js)
+      if (typeof actualizarMesas === 'function') {
+        actualizarMesas();
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert('Ocurrió un error: ' + error.message);
+    }
+  });
+});
 
   // Logout
   page.querySelector('#logoutBtn').addEventListener('click', async () => {
@@ -463,5 +537,4 @@ export function AdminDashboard() {
   });
 
   return page;
-}
-
+};
