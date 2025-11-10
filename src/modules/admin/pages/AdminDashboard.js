@@ -474,7 +474,7 @@ export function AdminDashboard() {
   });
 
   // Botón Crear Mesa (placeholder para tu compañero)
-  crearMesaBtn.addEventListener('click', () => {
+  /*crearMesaBtn.addEventListener('click', () => {
    // Verificar si ya existe un modal abierto
   if (document.querySelector('#modalFondo')) return;
 
@@ -603,7 +603,7 @@ export function AdminDashboard() {
       alert('Ocurrió un error: ' + error.message);
     }
   });
-});
+});*/
 
   // Logout
   page.querySelector('#logoutBtn').addEventListener('click', async () => {
