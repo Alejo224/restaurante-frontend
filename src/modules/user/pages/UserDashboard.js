@@ -243,8 +243,8 @@ export function UserDashboard() {
 
   // Card: Historial de Pedidos
   page.querySelector('#cardHistorial').addEventListener('click', () => {
-    console.log('🔄 Abriendo página historial de pedido...');
-    window.open(' /restaurante-frontend/src/modules/pedidos/historial-pedidos.html', '_blank');
+  
+    router.navigate('/historial-pedidos');
   });
 
   return page;
