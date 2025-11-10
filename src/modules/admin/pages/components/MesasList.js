@@ -31,8 +31,10 @@ export async function MesasList() {
     </div>
   `;
 
-  const crearMesaBtn = container.querySelector('#crearMesaBtn');
+  const crearMesaBtn = document.getElementById('crearMesaBtn');
+if (crearMesaBtn) {
   crearMesaBtn.addEventListener('click', () => CrearMesaModal());
+}
 
   const refreshBtn = container.querySelector('#refreshBtn');
   refreshBtn.addEventListener('click', () => loadMesas(container));

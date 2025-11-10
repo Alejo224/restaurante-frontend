@@ -14,10 +14,11 @@ async function fetchWithAuth(url, options = {}) {
   }
 
   const headers = {
-  'Authorization': `Bearer ${token}`,
-  ...options.headers
+    'Authorization': `Bearer ${token}`,
+    ...options.headers
   };
 
+  // Si no se envía FormData, agregamos Content-Type JSON
   if (!(options.body instanceof FormData)) {
     headers['Content-Type'] = 'application/json';
   }
@@ -53,4 +54,49 @@ export async function obtenerMesas() {
     console.error('❌ Error al obtener las mesas:', error);
     throw error;
   }
+}
+
+/**
+ * ➕ Crear una nueva mesa
+ */
+export async function crearMesa(nuevaMesa) {
+  try {
+    console.log('📤 Enviando nueva mesa al backend:', nuevaMesa);
+
+    const response = await fetchWithAuth(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(nuevaMesa),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al crear la mesa: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('✅ Mesa creada exitosamente:', data);
+    return data;
+  } catch (error) {
+    console.error('❌ Error al crear la mesa:', error);
+    throw error;
+  }
+}
+
+/**
+ * 🗑 Eliminar una mesa por ID (opcional)
+ */
+export async function eliminarMesa(id) {
+  try {
+    const response = await fetchWithAuth(`${API_URL}/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al eliminar la mesa: ${response.status}`);
+    }
+
+    console.log(`🧹 Mesa con ID ${id} eliminada correctamente`);
+  } catch (error) {
+    console.error('❌ Error al eliminar la mesa:', error);
+    throw error;
+  }
 }
