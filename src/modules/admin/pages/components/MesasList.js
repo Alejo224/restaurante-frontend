@@ -1,7 +1,7 @@
 // src/modules/admin/components/MesasList.js
 export function MesasList() {
     const listaMesas = document.getElementById("listaMesas");
-    const crearMesaBtn = document.getElementById("crearMesaBtn");
+    //const crearMesaBtn = document.getElementById("crearMesaBtn");
 
     // Colores y clases de Bootstrap según estado (MANTENEMOS ESTA FUNCIÓN)
     function getClaseEstado(estado) {
