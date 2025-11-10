@@ -339,18 +339,16 @@ export function AdminDashboard() {
   }, 100);
 
   // ========================================
-// CARGAR COMPONENTE DE MESAS
-// ========================================
-const mesasContainer = page.querySelector('#seccionMesas'); // Aquí seleccionamos la sección completa
+  // CARGAR COMPONENTE DE MESAS
+  // ========================================
+const mesasContainer = page.querySelector('#mesas-list-container'); // solo el contenedor interno
 if (mesasContainer) {
-  // Limpiamos el contenido previo
-  mesasContainer.innerHTML = '';
-
-  // Cargamos el componente MesasList
+  mesasContainer.innerHTML = ''; // limpio solo el contenedor de la lista
   MesasList().then(container => {
     mesasContainer.appendChild(container);
   });
 }
+
 
   // ========================================
   // EVENT LISTENERS
