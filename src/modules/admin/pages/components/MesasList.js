@@ -82,11 +82,11 @@ export function MesasList() {
     // --- Fin de cargarMesas()
 
     // Eventos de botones (mantienen la misma lógica)
-    /*if (crearMesaBtn) {
+    if (crearMesaBtn) {
         crearMesaBtn.addEventListener("click", () => {
             alert("Aquí puedes abrir tu formulario para crear una nueva mesa");
         });
-    }*/
+    }
 
     if (actualizarMesasBtn) {
         actualizarMesasBtn.addEventListener("click", cargarMesas);
