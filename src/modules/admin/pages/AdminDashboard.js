@@ -144,7 +144,7 @@ export function AdminDashboard() {
 
           <!-- Cards principales de gestión -->
           <div class="dashboard-cards" role="list" aria-label="Opciones de gestión">
-            
+               
             <!-- Card: Gestionar Menú -->
             <article class="dashboard-card" data-navigate="menu" role="listitem" tabindex="0">
               <div class="dashboard-card-icon primary" aria-hidden="true">
