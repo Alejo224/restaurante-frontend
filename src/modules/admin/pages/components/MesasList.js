@@ -1,5 +1,6 @@
 // src/modules/admin/pages/components/MesasList.js
-import { obtenerMesas } from '../../../Mesa/mesaService.js';
+import { obtenerMesas } from '../../../../Mesa/mesaService.js';
+import { CrearMesaModal } from '../../../crear-mesa/CrearMesaModal.js';
 
 export async function MesasList() {
   const container = document.createElement('div');
@@ -9,10 +10,9 @@ export async function MesasList() {
         <i class="bi bi-table me-2"></i>
         Listado de Mesas
       </h4>
-      <div>
-    <button class="btn btn-success btn-sm me-2" id="crearMesaBtn">
-      <i class="bi bi-plus-circle me-1"></i> Crear Mesa
-    </button>
+      <button class="btn btn-success btn-sm" id="crearMesaBtn">
+        <i class="bi bi-plus-circle me-1"></i> Crear Mesa
+      </button>
       <button class="btn btn-primary btn-sm" id="refreshBtn">
         <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
       </button>
@@ -32,13 +32,10 @@ export async function MesasList() {
   `;
 
   const crearMesaBtn = container.querySelector('#crearMesaBtn');
-  crearMesaBtn.addEventListener('click', () => {
-  // Aquí va tu código del modal (el que ya tenías)
-  });
+  crearMesaBtn.addEventListener('click', () => CrearMesaModal());
 
-  container.querySelector('#refreshBtn').addEventListener('click', () => {
-    loadMesas(container);
-  });
+  const refreshBtn = container.querySelector('#refreshBtn');
+  refreshBtn.addEventListener('click', () => loadMesas(container));
 
   await loadMesas(container);
 
@@ -64,34 +61,23 @@ async function loadMesas(container) {
           <p class="mt-3">No hay mesas registradas.</p>
         </div>`;
     } else {
-      
       mesasContainer.innerHTML = mesas.map(mesa => `
         <div class="col-md-4 mb-3">
           <div class="card border-0 shadow-sm p-3">
             <h5 class="fw-bold text-primary">Mesa #${mesa.id}</h5>
-             
             <p><strong>Capacidad:</strong> ${mesa.capacidad || 'N/A'}</p>
             <p><strong>Estado:</strong> ${mesa.estado || 'False'}</p>
           </div>
         </div>
       `).join('');
-
-
-  
-
     }
 
     loading.style.display = 'none';
     mesasContainer.style.display = 'flex';
-   
-
-
-
-
   } catch (error) {
     console.error('❌ Error al cargar mesas:', error);
     loading.style.display = 'none';
     errorState.style.display = 'block';
     errorState.querySelector('#errorMessage').textContent = error.message;
-  }
+  }
 }

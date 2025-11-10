@@ -3,6 +3,7 @@ import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
 import { MesasList } from './components/MesasList.js';
+import { CrearMesaModal } from '../../../crear-mesa/CrearMesaModal.js';
 
 
 export function AdminDashboard() {
@@ -144,7 +145,7 @@ export function AdminDashboard() {
 
           <!-- Cards principales de gestión -->
           <div class="dashboard-cards" role="list" aria-label="Opciones de gestión">
-               
+            
             <!-- Card: Gestionar Menú -->
             <article class="dashboard-card" data-navigate="menu" role="listitem" tabindex="0">
               <div class="dashboard-card-icon primary" aria-hidden="true">
@@ -289,43 +290,18 @@ export function AdminDashboard() {
         </section>
 
         <!-- SECCIÓN GESTIONAR MESAS -->
-<section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
-    <!-- ENCABEZADO -->
-    <header class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 id="mesas-heading" class="fw-bold mb-1">
+        <section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
+          <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h2 id="mesas-heading" class="fw-bold mb-1">
                 <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
                 Gestión de Mesas
-            </h2>
-            <p class="text-muted mb-0">Administra las mesas del restaurante</p>
-        </div>
-        <!-- Botón Crear Mesa funcional (solo uno) -->
-        <button id="crearMesaBtn" class="btn btn-success btn-sm d-inline-flex align-items-center">
-            <i class="bi bi-plus-circle me-1"></i>
-            Crear Mesa
-        </button>
-    </header>
+              </h2>
+              <p class="text-muted mb-0">Administra las mesas del restaurante</p>
+            </div>
+          </header>
 
-    <!-- Listado de Mesas y Botón Actualizar -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0 fw-normal">
-            <i class="bi bi-grid-3x3 me-2" aria-hidden="true"></i>
-            Listado de Mesas
-        </h4>
-
-        <!-- Botón Actualizar -->
-        <button id="actualizarMesasBtn" class="btn btn-primary btn-sm d-inline-flex align-items-center">
-            <i class="bi bi-arrow-clockwise me-1"></i>
-            Actualizar
-        </button>
-    </div>
-
-    <!-- Contenedor de la cuadrícula de mesas -->
-    <div id="listaMesas" class="row g-4" role="list" aria-label="Lista de mesas del restaurante">
-        <div class="col-12 text-center text-muted">Cargando mesas...</div>
-    </div>
-</section>
-
+          <div id="mesas-list-container"></div>
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
         <section id="seccionReservas" class="content-section" style="display: none;" aria-labelledby="reservas-heading">
@@ -361,6 +337,20 @@ export function AdminDashboard() {
       platoContainer.appendChild(PlatoList(true)); // true = modo admin con CRUD
     }
   }, 100);
+
+  // ========================================
+// CARGAR COMPONENTE DE MESAS
+// ========================================
+const mesasContainer = page.querySelector('#seccionMesas'); // Aquí seleccionamos la sección completa
+if (mesasContainer) {
+  // Limpiamos el contenido previo
+  mesasContainer.innerHTML = '';
+
+  // Cargamos el componente MesasList
+  MesasList().then(container => {
+    mesasContainer.appendChild(container);
+  });
+}
 
   // ========================================
   // EVENT LISTENERS
@@ -425,16 +415,10 @@ export function AdminDashboard() {
         break;
       
       case 'mesas':
-    pageTitle.textContent = 'Gestionar Mesas';
-    crearPlatoBtn.classList.add('d-none');
-    crearMesaBtn.classList.remove('d-none');
-
-    // Inicializar MesasList cuando se muestra la sección
-    if (sections.mesas) {
-        MesasList(); // tu función que carga la lista de mesas
-    }
-    break;
-
+        pageTitle.textContent = 'Gestionar Mesas';
+        crearPlatoBtn.classList.add('d-none');
+        crearMesaBtn.classList.remove('d-none');
+        break;
       
       case 'reservas':
         pageTitle.textContent = 'Gestionar Reservas';
@@ -474,136 +458,11 @@ export function AdminDashboard() {
   });
 
   // Botón Crear Mesa (placeholder para tu compañero)
-  /*crearMesaBtn.addEventListener('click', () => {
-   // Verificar si ya existe un modal abierto
-  if (document.querySelector('#modalFondo')) return;
+  crearMesaBtn.addEventListener('click', () => {
 
-  const modalHTML = `
-    <div id="modalFondo" style="
-      position: fixed; 
-      top: 0; left: 0; 
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 1000;
-    ">
-      <div id="crearMesaForm" style="
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        padding: 25px;
-        width: 360px;
-        animation: aparecer 0.3s ease-out;
-      ">
-        <h4 style="text-align:center; margin-bottom:15px; color:#333;">🪑 Registrar Nueva Mesa</h4>
-        <div class="form-group mb-3">
-          <label for="nombreMesaInput" style="font-weight:500;">Nombre / Número</label>
-          <input type="text" id="nombreMesaInput" class="form-control" placeholder="Ej: Mesa 4" style="
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-top: 5px;
-          "/>
-        </div>
-        <div class="form-group mb-3">
-          <label for="capacidadInput" style="font-weight:500;">Capacidad</label>
-          <input type="number" id="capacidadInput" class="form-control" placeholder="Ej: 4 personas" min="1" style="
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-top: 5px;
-          "/>
-        </div>
-        <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
-          <button id="guardarMesaBtn" style="
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: 0.2s;
-          ">💾 Guardar</button>
-          <button id="cancelarMesaBtn" style="
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: 0.2s;
-          ">✖ Cancelar</button>
-        </div>
-      </div>
-    </div>
+    CrearMesaModal();
 
-    <style>
-      @keyframes aparecer {
-        from { transform: scale(0.8); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
-      }
-    </style>
-  `;
-
-  document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-  const modalFondo = document.querySelector('#modalFondo');
-
-  // Cerrar modal al hacer clic fuera del cuadro
-  modalFondo.addEventListener('click', (e) => {
-    if (e.target.id === 'modalFondo') modalFondo.remove();
   });
-
-  // Botón cancelar
-  document.querySelector('#cancelarMesaBtn').addEventListener('click', () => {
-    modalFondo.remove();
-  });
-
-  // Botón guardar
-  document.querySelector('#guardarMesaBtn').addEventListener('click', async () => {
-    const nombreMesa = document.querySelector('#nombreMesaInput').value.trim();
-    const capacidad = parseInt(document.querySelector('#capacidadInput').value);
-
-    if (!nombreMesa || isNaN(capacidad) || capacidad <= 0) {
-      alert('Por favor completa todos los campos correctamente.');
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('token'); 
-      const res = await fetch('http://localhost:8080/api/mesas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          nombreMesa,
-          capacidad,
-          estado: true // estado inicial disponible
-        })
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Error al registrar la mesa');
-      }
-
-      const nuevaMesa = await res.json();
-      alert(`✅ Mesa "${nuevaMesa.nombreMesa}" registrada correctamente!`);
-      modalFondo.remove();
-
-      if (typeof actualizarMesas === 'function') {
-        actualizarMesas();
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Ocurrió un error: ' + error.message);
-    }
-  });
-});*/
 
   // Logout
   page.querySelector('#logoutBtn').addEventListener('click', async () => {
@@ -619,4 +478,4 @@ export function AdminDashboard() {
   });
 
   return page;
-};
+}
