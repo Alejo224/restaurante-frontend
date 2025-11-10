@@ -74,7 +74,7 @@ export function CarritoOffcanvas() {
 
           <!-- Botones de acción -->
           <div class="d-grid gap-2">
-          <button class="btn btn-success btn-lg" id="btnVaciarCarrito">
+          <button class="btn btn-success btn-lg" id="btnProcederPago">
               <i class="bi bi-credit-card me-2"></i>
               Proceder al Pago
             </button> 
