@@ -116,10 +116,12 @@ export function AdminDashboard() {
               <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
               Crear Plato
             </button>
-            <button class="btn btn-success d-none" id="crearMesaBtn" aria-label="Crear nueva mesa">
-              <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
-              Crear Mesa
-            </button>
+           <!--
+<button class="btn btn-success d-none" id="crearMesaBtn" aria-label="Crear nueva mesa">
+  <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+  Crear Mesa
+</button>
+-->
             <span class="text-muted small d-none d-md-inline" aria-label="Usuario conectado">
               <i class="bi bi-person-circle me-1" aria-hidden="true"></i>
               ${userName}
