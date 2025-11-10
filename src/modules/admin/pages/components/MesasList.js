@@ -1,110 +1,74 @@
 // src/modules/admin/components/MesasList.js
 export function MesasList() {
     const listaMesas = document.getElementById("listaMesas");
-    //const crearMesaBtn = document.getElementById("crearMesaBtn");
+    const crearMesaBtn = document.getElementById("crearMesaBtn");
+    // Agregamos el botón de Actualizar que definimos en el HTML
+    const actualizarMesasBtn = document.getElementById("actualizarMesasBtn"); 
 
-    // Colores y clases de Bootstrap según estado (MANTENEMOS ESTA FUNCIÓN)
+    // Función para obtener la capacidad y estado, si son booleanos o números
+    function formatBoolean(value) {
+        // En la imagen, el estado se ve como 'true' o 'False' (texto plano)
+        return value ? "true" : "False";
+    }
+
+    // Omitimos getClaseEstado ya que la tarjeta es muy simple, pero la mantenemos por si el backend aún usa estados de texto
     function getClaseEstado(estado) {
         switch (estado.toUpperCase()) {
-            case "DISPONIBLE": return "bg-success text-white";
-            case "OCUPADA": return "bg-danger text-white";
-            case "RESERVADA": return "bg-warning text-dark";
-            case "FUERA_DE_SERVICIO": return "bg-secondary text-white";
-            default: return "bg-light text-dark";
+            case "DISPONIBLE": return "text-success"; // Color de texto ligero
+            case "OCUPADA": return "text-danger";
+            case "RESERVADA": return "text-warning";
+            case "FUERA_DE_SERVICIO": return "text-secondary";
+            default: return "text-dark";
         }
     }
 
-    // Cargar mesas desde el backend (FUNCIÓN MODIFICADA)
+    // --- Cargar mesas desde el backend (FUNCIÓN MODIFICADA)
     async function cargarMesas() {
         try {
+            // ... (Lógica de fetch se mantiene igual)
             const token = localStorage.getItem("token");
             const res = await fetch("http://localhost:8080/api/mesas", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const mesas = await res.json();
+            
+            // Si el backend devuelve estados como strings ("DISPONIBLE", "OCUPADA", etc.), 
+            // simulamos el true/false de la imagen con la lógica que ya tienes:
+            const mesasConEstadoSimple = mesas.map(mesa => ({
+                ...mesa,
+                // Simulación del booleano para el texto "Estado"
+                estadoSimple: mesa.estado === "DISPONIBLE" || mesa.estado === "RESERVADA" 
+                    ? "true" 
+                    : "False", // Ocupada o fuera de servicio = False
+                
+                // Determinamos el color de borde (azul brillante para "true", gris/claro para "false")
+                cardColorClass: mesa.estado === "DISPONIBLE" || mesa.estado === "RESERVADA" 
+                    ? "border-primary bg-light" // Color de borde/fondo similar a las "activas" en la imagen
+                    : "border-light bg-light" // Color de borde/fondo para las "inactivas"
+            }));
 
             listaMesas.innerHTML = "";
-            listaMesas.className = "row g-4"; // Añadimos clases de Bootstrap para la cuadrícula
+            listaMesas.className = "row g-4"; // Clases para la cuadrícula
 
-            mesas.forEach(mesa => {
-                // Creamos el div que será la tarjeta de la mesa
+            mesasConEstadoSimple.forEach(mesa => {
                 const colDiv = document.createElement("div");
-                colDiv.className = "col-12 col-sm-6 col-md-4 col-lg-3"; // Define el tamaño de la tarjeta en la cuadrícula
+                // Ajustamos el tamaño para que se parezcan más a la imagen
+                colDiv.className = "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"; 
 
-                // Definimos el texto del botón según el estado
-                let btnText = "Cambiar Estado";
-                if (mesa.estado === "DISPONIBLE") {
-                    btnText = "Ocupar Mesa";
-                } else if (mesa.estado === "OCUPADA") {
-                    btnText = "Liberar Mesa";
-                }
-
-                // Usamos el estado para darle un color de borde a la tarjeta (CUSTOM CSS NECESARIO)
-                const cardBorderClass = mesa.estado === "DISPONIBLE" ? "border-success" : (mesa.estado === "OCUPADA" ? "border-danger" : "border-warning");
-
-                // Generamos el HTML de la tarjeta con clases de Bootstrap (card)
+                // --- Generamos el HTML de la tarjeta SIMPLE
                 colDiv.innerHTML = `
-                    <div class="card h-100 shadow-sm **${cardBorderClass}** border-2" style="border-left-width: 5px !important;">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="card-title mb-0">**${mesa.nombreMesa}**</h5>
-                                <span class="badge ${getClaseEstado(mesa.estado)} fs-6 p-2">${mesa.estado}</span>
-                            </div>
-                            <p class="card-text text-muted">Capacidad: **${mesa.capacidad || 'N/A'}** personas</p>
-                        </div>
-                        <div class="card-footer bg-white border-0 pt-0">
-                            <select class="form-select form-select-sm" data-mesa-id="${mesa.id}">
-                                <option value="" disabled>Cambiar a...</option>
-                                <option value="DISPONIBLE" ${mesa.estado === "DISPONIBLE" ? "selected" : ""}>Disponible</option>
-                                <option value="OCUPADA" ${mesa.estado === "OCUPADA" ? "selected" : ""}>Ocupada</option>
-                                <option value="RESERVADA" ${mesa.estado === "RESERVADA" ? "selected" : ""}>Reservada</option>
-                                <option value="FUERA_DE_SERVICIO" ${mesa.estado === "FUERA_DE_SERVICIO" ? "selected" : ""}>Fuera de servicio</option>
-                            </select>
-                        </div>
+                    <div class="p-3 border rounded-3 h-100 shadow-sm **${mesa.cardColorClass}**">
+                        <h4 class="text-primary mb-1">${mesa.nombreMesa || `Mesa #${mesa.id}`}</h4>
+                        <p class="mb-1">Capacidad: **${mesa.capacidad || 'N/A'}**</p>
+                        <p class="mb-0">Estado: **${mesa.estadoSimple}**</p>
                     </div>
                 `;
-
-                // Agregamos el event listener al nuevo select (el mismo código que ya tenías)
-                const select = colDiv.querySelector("select");
-                select.addEventListener("change", async () => {
-                    try {
-                        const nuevoEstado = select.value;
-                        const respuesta = await fetch(`http://localhost:8080/api/mesas/${mesa.id}/estado`, {
-                            method: "PUT",
-                            headers: { 
-                                "Content-Type": "application/json",
-                                "Authorization": `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ estado: nuevoEstado })
-                        });
-
-                        if (!respuesta.ok) throw new Error("Error al actualizar");
-
-                        // 1. Encuentra la insignia de estado y la tarjeta
-                        const badge = colDiv.querySelector(".badge");
-                        const card = colDiv.querySelector(".card");
-
-                        // 2. Actualiza el texto y las clases de la insignia
-                        badge.textContent = nuevoEstado;
-                        badge.className = `badge ${getClaseEstado(nuevoEstado)} fs-6 p-2`;
-                        
-                        // 3. Actualiza la clase de borde de la tarjeta
-                        card.classList.remove("border-success", "border-danger", "border-warning");
-                        const newCardBorderClass = nuevoEstado === "DISPONIBLE" ? "border-success" : (nuevoEstado === "OCUPADA" ? "border-danger" : "border-warning");
-                        card.classList.add(newCardBorderClass);
-                        
-                    } catch (err) {
-                        console.error(err);
-                        alert("No se pudo actualizar el estado");
-                    }
-                });
 
                 listaMesas.appendChild(colDiv);
             });
 
         } catch (err) {
             console.error(err);
-            // Mensaje de error mejorado para el nuevo layout
             listaMesas.innerHTML = `
                 <div class="col-12">
                     <div class="alert alert-danger text-center" role="alert">
@@ -112,14 +76,25 @@ export function MesasList() {
                     </div>
                 </div>
             `;
-            listaMesas.className = "row g-4"; // Aseguramos que mantenga la clase de fila
+            listaMesas.className = "row g-4";
         }
     }
+    // --- Fin de cargarMesas()
 
-    // ... (El resto de tu código de inicialización se mantiene igual)
-    crearMesaBtn.addEventListener("click", () => {
-        alert("Aquí puedes abrir tu formulario para crear una nueva mesa");
-    });
+    // Eventos de botones (mantienen la misma lógica)
+    if (crearMesaBtn) {
+        crearMesaBtn.addEventListener("click", () => {
+            alert("Aquí puedes abrir tu formulario para crear una nueva mesa");
+        });
+    }
 
+    if (actualizarMesasBtn) {
+        actualizarMesasBtn.addEventListener("click", cargarMesas);
+    }
+
+    // Carga inicial
     cargarMesas();
+    
+    // Si necesitas exponer cargarMesas para que el HTML la use directamente:
+    // return { cargarMesas: cargarMesas }; 
 }
