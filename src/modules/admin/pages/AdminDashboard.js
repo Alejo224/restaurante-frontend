@@ -305,11 +305,7 @@ export function AdminDashboard() {
             <i class="bi bi-grid-3x3 me-2" aria-hidden="true"></i>
             Listado de Mesas
         </h4>
-        <!-- Botón Crear Mesa funcional -->
-        <button id="crearMesaBtn" class="btn btn-success btn-sm d-inline-flex align-items-center">
-            <i class="bi bi-plus-circle me-1"></i>
-            Crear Mesa
-        </button>
+        
         <!-- Botón Actualizar -->
         <button id="actualizarMesasBtn" class="btn btn-primary btn-sm d-inline-flex align-items-center">
             <i class="bi bi-arrow-clockwise me-1"></i>
