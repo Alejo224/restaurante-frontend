@@ -116,12 +116,10 @@ export function AdminDashboard() {
               <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
               Crear Plato
             </button>
-           <!--
-<button class="btn btn-success d-none" id="crearMesaBtn" aria-label="Crear nueva mesa">
-  <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
-  Crear Mesa
-</button>
--->
+            <button class="btn btn-success d-none" id="crearMesaBtn" aria-label="Crear nueva mesa">
+              <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+              Crear Mesa
+            </button>
             <span class="text-muted small d-none d-md-inline" aria-label="Usuario conectado">
               <i class="bi bi-person-circle me-1" aria-hidden="true"></i>
               ${userName}
@@ -291,35 +289,25 @@ export function AdminDashboard() {
         </section>
 
         <!-- SECCIÓN GESTIONAR MESAS -->
-<section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
-  <header class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 id="mesas-heading" class="fw-bold mb-1">
-        <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
-        Gestión de Mesas
-      </h2>
-      <p class="text-muted mb-0">Administra las mesas del restaurante</p>
+        <section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
+          <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h2 id="mesas-heading" class="fw-bold mb-1">
+                <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
+                Gestión de Mesas
+              </h2>
+              <p class="text-muted mb-0">Administra las mesas del restaurante</p>
+            </div>
+          </header>
+
+  <!-- Contenedor de la cuadrícula de tarjetas (NO ES UNA TABLA) -->
+  <!-- Usamos row-cols-* de Bootstrap para que sea responsivo: 1 columna en móvil, 2 en sm, 3 en lg, 4 en xl -->
+  <div id="listaMesas" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4" role="grid" aria-label="Listado de mesas del restaurante">
+    <!-- Este es el mensaje inicial, se reemplazará con las tarjetas generadas por JS -->
+    <div class="col text-center text-muted py-5" style="width: 100%;">
+        Cargando mesas...
     </div>
-  </header>
-
-  <button id="crearMesaBtn" class="btn btn-success mb-3">
-    <i class="bi bi-plus-circle me-1"></i> Crear Mesa
-  </button>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Número / Nombre</th>
-        <th>Estado</th>
-        <th>Cambiar Estado</th>
-      </tr>
-    </thead>
-    <tbody id="listaMesas">
-      <tr>
-        <td colspan="3" class="text-center text-muted">Cargando mesas...</td>
-      </tr>
-    </tbody>
-  </table>
+  </div>
 </section>
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
