@@ -486,19 +486,20 @@ export function AdminDashboard() {
 
     try {
       // Llamada a la API
-      const token = localStorage.getItem('token'); // o donde tengas el JWT
+      const token = localStorage.getItem('token');
       const res = await fetch('http://localhost:8080/api/mesas', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-          // 'Authorization': `Bearer ${token}`  👈 comenta esto temporalmente
-          },
-          body: JSON.stringify({
-            nombreMesa,
-            capacidad,
-            estado: "DISPONIBLE"
-          })
-        });
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nombreMesa,
+          capacidad,
+          estado: "DISPONIBLE"
+        })
+      });
+
         // Validar antes de intentar leer JSON
         if (!res.ok) {
           const text = await res.text(); // leer texto por si la respuesta no es JSON
