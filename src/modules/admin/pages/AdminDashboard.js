@@ -490,20 +490,20 @@ export function AdminDashboard() {
       const res = await fetch('http://localhost:8080/api/mesas', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          nombreMesa,
-          capacidad,
-          estado: "DISPONIBLE" // estado inicial
-        })
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Error al registrar la mesa');
-      }
+          'Content-Type': 'application/json'
+          // 'Authorization': `Bearer ${token}`  👈 comenta esto temporalmente
+          },
+          body: JSON.stringify({
+            nombreMesa,
+            capacidad,
+            estado: "DISPONIBLE"
+          })
+        });
+        // Validar antes de intentar leer JSON
+        if (!res.ok) {
+          const text = await res.text(); // leer texto por si la respuesta no es JSON
+          throw new Error(`Error ${res.status}: ${text || 'Error al registrar la mesa'}`);
+        }
 
       const nuevaMesa = await res.json();
       alert(`Mesa "${nuevaMesa.nombreMesa}" registrada correctamente!`);
