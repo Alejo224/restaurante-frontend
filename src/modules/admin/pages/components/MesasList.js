@@ -1,5 +1,5 @@
-// src/modules/Mesa/components/MesaList.js
-import { obtenerMesas } from './mesaService.js';
+// src/modules/admin/pages/components/MesasList.js
+import { obtenerMesas } from '../../../Mesa/mesaService.js';
 
 export async function MesasList() {
   const container = document.createElement('div');
