@@ -446,38 +446,96 @@ export function AdminDashboard() {
 
   // Botón Crear Mesa (placeholder para tu compañero)
   crearMesaBtn.addEventListener('click', () => {
-    // Crear modal/formulario
-  const seccionMesas = page.querySelector('#seccionMesas');
+   // Verificar si ya existe un modal abierto
+  if (document.querySelector('#modalFondo')) return;
 
-  const formHTML = `
-    <div id="crearMesaForm" class="card p-3 mb-3">
-      <h5>Registrar Nueva Mesa</h5>
-      <div class="mb-2">
-        <label for="nombreMesaInput" class="form-label">Nombre / Número de Mesa</label>
-        <input type="text" id="nombreMesaInput" class="form-control" />
+  const modalHTML = `
+    <div id="modalFondo" style="
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 1000;
+    ">
+      <div id="crearMesaForm" style="
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        padding: 25px;
+        width: 360px;
+        animation: aparecer 0.3s ease-out;
+      ">
+        <h4 style="text-align:center; margin-bottom:15px; color:#333;">🪑 Registrar Nueva Mesa</h4>
+        <div class="form-group mb-3">
+          <label for="nombreMesaInput" style="font-weight:500;">Nombre / Número</label>
+          <input type="text" id="nombreMesaInput" class="form-control" placeholder="Ej: Mesa 4" style="
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 5px;
+          "/>
+        </div>
+        <div class="form-group mb-3">
+          <label for="capacidadInput" style="font-weight:500;">Capacidad</label>
+          <input type="number" id="capacidadInput" class="form-control" placeholder="Ej: 4 personas" min="1" style="
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 5px;
+          "/>
+        </div>
+        <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+          <button id="guardarMesaBtn" style="
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+          ">💾 Guardar</button>
+          <button id="cancelarMesaBtn" style="
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+          ">✖ Cancelar</button>
+        </div>
       </div>
-      <div class="mb-2">
-        <label for="capacidadInput" class="form-label">Capacidad</label>
-        <input type="number" id="capacidadInput" class="form-control" min="1" />
-      </div>
-      <button id="guardarMesaBtn" class="btn btn-success">Guardar Mesa</button>
-      <button id="cancelarMesaBtn" class="btn btn-secondary ms-2">Cancelar</button>
     </div>
+
+    <style>
+      @keyframes aparecer {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+    </style>
   `;
 
-  // Agregar el formulario al inicio de la sección
-  seccionMesas.insertAdjacentHTML('afterbegin', formHTML);
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-  // Event listener para cancelar
-  seccionMesas.querySelector('#cancelarMesaBtn').addEventListener('click', () => {
-    const form = seccionMesas.querySelector('#crearMesaForm');
-    form.remove();
+  const modalFondo = document.querySelector('#modalFondo');
+
+  // Cerrar modal al hacer clic fuera del cuadro
+  modalFondo.addEventListener('click', (e) => {
+    if (e.target.id === 'modalFondo') modalFondo.remove();
   });
 
-  // Event listener para guardar
-  seccionMesas.querySelector('#guardarMesaBtn').addEventListener('click', async () => {
-    const nombreMesa = seccionMesas.querySelector('#nombreMesaInput').value.trim();
-    const capacidad = parseInt(seccionMesas.querySelector('#capacidadInput').value);
+  // Botón cancelar
+  document.querySelector('#cancelarMesaBtn').addEventListener('click', () => {
+    modalFondo.remove();
+  });
+
+  // Botón guardar
+  document.querySelector('#guardarMesaBtn').addEventListener('click', async () => {
+    const nombreMesa = document.querySelector('#nombreMesaInput').value.trim();
+    const capacidad = parseInt(document.querySelector('#capacidadInput').value);
 
     if (!nombreMesa || isNaN(capacidad) || capacidad <= 0) {
       alert('Por favor completa todos los campos correctamente.');
@@ -485,8 +543,7 @@ export function AdminDashboard() {
     }
 
     try {
-      // Llamada a la API
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token'); 
       const res = await fetch('http://localhost:8080/api/mesas', {
         method: 'POST',
         headers: {
@@ -496,27 +553,22 @@ export function AdminDashboard() {
         body: JSON.stringify({
           nombreMesa,
           capacidad,
-          estado: "DISPONIBLE"
+          estado: true // estado inicial disponible
         })
       });
 
-        // Validar antes de intentar leer JSON
-        if (!res.ok) {
-          const text = await res.text(); // leer texto por si la respuesta no es JSON
-          throw new Error(`Error ${res.status}: ${text || 'Error al registrar la mesa'}`);
-        }
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error al registrar la mesa');
+      }
 
       const nuevaMesa = await res.json();
-      alert(`Mesa "${nuevaMesa.nombreMesa}" registrada correctamente!`);
+      alert(`✅ Mesa "${nuevaMesa.nombreMesa}" registrada correctamente!`);
+      modalFondo.remove();
 
-      // Limpiar formulario
-      seccionMesas.querySelector('#crearMesaForm').remove();
-
-      // Aquí puedes actualizar la lista de mesas (si tienes un componente MesasList.js)
       if (typeof actualizarMesas === 'function') {
         actualizarMesas();
       }
-
     } catch (error) {
       console.error(error);
       alert('Ocurrió un error: ' + error.message);
