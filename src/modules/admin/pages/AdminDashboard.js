@@ -290,6 +290,7 @@ export function AdminDashboard() {
 
         <!-- SECCIÓN GESTIONAR MESAS -->
 <section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
+    <!-- ENCABEZADO -->
     <header class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 id="mesas-heading" class="fw-bold mb-1">
@@ -298,14 +299,20 @@ export function AdminDashboard() {
             </h2>
             <p class="text-muted mb-0">Administra las mesas del restaurante</p>
         </div>
+        <!-- Botón Crear Mesa funcional (solo uno) -->
+        <button id="crearMesaBtn" class="btn btn-success btn-sm d-inline-flex align-items-center">
+            <i class="bi bi-plus-circle me-1"></i>
+            Crear Mesa
+        </button>
     </header>
 
+    <!-- Listado de Mesas y Botón Actualizar -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0 fw-normal">
             <i class="bi bi-grid-3x3 me-2" aria-hidden="true"></i>
             Listado de Mesas
         </h4>
-        
+
         <!-- Botón Actualizar -->
         <button id="actualizarMesasBtn" class="btn btn-primary btn-sm d-inline-flex align-items-center">
             <i class="bi bi-arrow-clockwise me-1"></i>
@@ -313,10 +320,12 @@ export function AdminDashboard() {
         </button>
     </div>
 
+    <!-- Contenedor de la cuadrícula de mesas -->
     <div id="listaMesas" class="row g-4" role="list" aria-label="Lista de mesas del restaurante">
         <div class="col-12 text-center text-muted">Cargando mesas...</div>
     </div>
 </section>
+
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
         <section id="seccionReservas" class="content-section" style="display: none;" aria-labelledby="reservas-heading">
