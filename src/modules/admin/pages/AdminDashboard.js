@@ -3,7 +3,7 @@ import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
 import { MesasList } from './components/MesasList.js';
-import { CrearMesaModal } from '../../../crear-mesa/CrearMesaModal.js';
+import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
 
 
 export function AdminDashboard() {
