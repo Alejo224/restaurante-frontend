@@ -2,6 +2,8 @@
 import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
+import { MesasList } from './components/MesasList.js';
+
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -287,22 +289,36 @@ export function AdminDashboard() {
         </section>
 
         <!-- SECCIÓN GESTIONAR MESAS -->
-        <section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
-          <header class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h2 id="mesas-heading" class="fw-bold mb-1">
-                <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
-                Gestión de Mesas
-              </h2>
-              <p class="text-muted mb-0">Administra las mesas del restaurante</p>
-            </div>
-          </header>
+<section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
+  <header class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 id="mesas-heading" class="fw-bold mb-1">
+        <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
+        Gestión de Mesas
+      </h2>
+      <p class="text-muted mb-0">Administra las mesas del restaurante</p>
+    </div>
+  </header>
 
-          <div class="alert alert-info" role="status">
-            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
-            <strong>Esperando:</strong> Aquí va el componente de gestión de mesas (MesasList.js)
-          </div>
-        </section>
+  <button id="crearMesaBtn" class="btn btn-success mb-3">
+    <i class="bi bi-plus-circle me-1"></i> Crear Mesa
+  </button>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Número / Nombre</th>
+        <th>Estado</th>
+        <th>Cambiar Estado</th>
+      </tr>
+    </thead>
+    <tbody id="listaMesas">
+      <tr>
+        <td colspan="3" class="text-center text-muted">Cargando mesas...</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
         <section id="seccionReservas" class="content-section" style="display: none;" aria-labelledby="reservas-heading">
@@ -402,10 +418,16 @@ export function AdminDashboard() {
         break;
       
       case 'mesas':
-        pageTitle.textContent = 'Gestionar Mesas';
-        crearPlatoBtn.classList.add('d-none');
-        crearMesaBtn.classList.remove('d-none');
-        break;
+    pageTitle.textContent = 'Gestionar Mesas';
+    crearPlatoBtn.classList.add('d-none');
+    crearMesaBtn.classList.remove('d-none');
+
+    // Inicializar MesasList cuando se muestra la sección
+    if (sections.mesas) {
+        MesasList(); // tu función que carga la lista de mesas
+    }
+    break;
+
       
       case 'reservas':
         pageTitle.textContent = 'Gestionar Reservas';
