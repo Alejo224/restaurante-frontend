@@ -20,7 +20,8 @@ class Router {
     this.routes[path] = {
       component,
       requiresAuth: options.requiresAuth || false,
-      requiresRole: options.requiresRole || null
+      requiresRole: options.requiresRole || null,
+      afterRender: options.afterRender || null // ✅ NUEVO: Soporte para afterRender
     };
   }
 
@@ -28,7 +29,7 @@ class Router {
    * Navega a una ruta específica
    * @param {string} path - Ruta destino
    */
-  navigate(path) {
+  async navigate(path) { // ✅ CAMBIAR a async
     const route = this.routes[path];
 
     // Si la ruta no existe, redirigir al home
@@ -68,14 +69,14 @@ class Router {
 
     // 3. Si pasa todas las validaciones, renderizar la ruta
     this.currentRoute = path;
-    this.render();
+    await this.render(); // ✅ CAMBIAR a await
     window.location.hash = path;
   }
 
   /**
    * Renderiza el componente de la ruta actual
    */
-  render() {
+  async render() { // ✅ CAMBIAR a async
     const app = document.getElementById('app');
     app.innerHTML = '';
 
@@ -90,6 +91,12 @@ class Router {
       } else {
         // Si es un string HTML, lo insertamos como innerHTML
         app.innerHTML = componentElement;
+      }
+
+      // ✅ NUEVO: Ejecutar afterRender si existe
+      if (route.afterRender && typeof route.afterRender === 'function') {
+        console.log('🚀 Ejecutando afterRender para:', this.currentRoute);
+        await route.afterRender();
       }
     } else {
       // Ruta no encontrada
