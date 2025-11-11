@@ -690,3 +690,29 @@ body {
   justify-content: center;
   font-size: 1.25rem;
 }
+
+/* ==========================
+   Estilos para las Mesas
+========================== */
+
+/* ==========================
+   Estilos para las Mesas
+========================== */
+
+ /* --- Estilos de estado de mesas --- */ 
+ 
+ .estado-Disponible {
+   color: green;
+   font-weight: bold;
+   }
+
+  .estado-No-Disponible { 
+    color: red; 
+    font-weight: bold; 
+  }
+   /* Opcional: agrega un icono visual */ 
+  .estado-Disponible::before {
+   content: "🟢 "; }
+  
+  .estado-No-.estado-No-Disponible {
+  content: "🔴 "; }

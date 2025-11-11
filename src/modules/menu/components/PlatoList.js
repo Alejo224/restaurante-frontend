@@ -269,7 +269,7 @@ function editarPlato(plato) {
   
   if (plato && plato.id) {
     // Redirección directa al archivo HTML de actualización
-    window.location.href = `src/modules/admin/actualizar-plato/index.html?id=${plato.id}`;
+    window.location.href = `/restaurante-frontend/src/modules/admin/actualizar-plato/index.html?id=${plato.id}`;
   } else {
     alert('❌ Error: No se puede editar el plato. ID no disponible.');
   }

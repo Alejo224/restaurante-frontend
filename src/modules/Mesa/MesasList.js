@@ -63,7 +63,17 @@ async function loadMesas(container) {
             <h5 class="fw-bold text-primary">Mesa #${mesa.id}</h5>
              
             <p><strong>Capacidad:</strong> ${mesa.capacidad || 'N/A'}</p>
-            <p><strong>Estado:</strong> ${mesa.estado || 'False'}</p>
+           <!-- <p><strong>Estado:</strong> ${mesa.estado || 'False'}</p> -->
+           
+            <p><strong>Estado:</strong>
+            <span class="${mesa.estado ?
+              'estado-Disponible' : 'estado-No-Disponible'}">
+              ${mesa.estado ? 'Disponible' :
+              'No Disponible' }
+              </span>
+              </p>
+            
+
           </div>
         </div>
       `).join('');
