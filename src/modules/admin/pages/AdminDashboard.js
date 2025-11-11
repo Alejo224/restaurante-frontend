@@ -441,7 +441,7 @@ export function AdminDashboard() {
   // Botón Crear Plato
   crearPlatoBtn.addEventListener('click', () => {
     console.log('Abriendo página de crear plato...');
-    window.open('src/modules/admin/crear-plato/index.html', '_blank');
+    window.open('/restaurante-frontend/src/modules/admin/crear-plato/index.html', '_blank');
   });
 
   // Botón Crear Mesa (placeholder para tu compañero)
