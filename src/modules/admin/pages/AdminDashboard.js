@@ -457,10 +457,16 @@ if (mesasContainer) {
 
   // Botón Crear Mesa (placeholder para tu compañero)
   crearMesaBtn.addEventListener('click', () => {
+  console.log('🟢 Botón Crear Mesa presionado');
 
+  // Verificamos que el modal se cargue correctamente
+  try {
     CrearMesaModal();
-
-  });
+  } catch (error) {
+    console.error('❌ Error al abrir el modal de mesa:', error);
+    alert('Ocurrió un error al abrir el formulario de crear mesa.');
+  }
+});
 
   // Logout
   page.querySelector('#logoutBtn').addEventListener('click', async () => {

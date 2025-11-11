@@ -31,10 +31,10 @@ export async function MesasList() {
     </div>
   `;
 
-  const crearMesaBtn = document.getElementById('crearMesaBtn');
+  /*const crearMesaBtn = container.querySelector('#crearMesaBtn');
 if (crearMesaBtn) {
   crearMesaBtn.addEventListener('click', () => CrearMesaModal());
-}
+}*/
 
   const refreshBtn = container.querySelector('#refreshBtn');
   refreshBtn.addEventListener('click', () => loadMesas(container));

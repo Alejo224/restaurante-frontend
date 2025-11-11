@@ -1,5 +1,5 @@
 // src/modules/Mesa/mesaService.js
-import { getToken, isAuthenticated } from '../auth/userService.js';
+import { getToken, isAuthenticated, isAdmin, canCreate, canUpdate, canDelete } from '../auth/userService.js';
 
 const API_URL = "http://localhost:8080/api/mesas";
 
@@ -59,13 +59,17 @@ export async function obtenerMesas() {
 /**
  * ➕ Crear una nueva mesa
  */
-export async function crearMesa(nuevaMesa) {
+export async function crearMesa(mesaData) {
   try {
-    console.log('📤 Enviando nueva mesa al backend:', nuevaMesa);
+    const token = getToken();
 
-    const response = await fetchWithAuth(API_URL, {
+    const response = await fetch('http://localhost:8080/api/mesas', {
       method: 'POST',
-      body: JSON.stringify(nuevaMesa),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(mesaData)
     });
 
     if (!response.ok) {
@@ -73,12 +77,12 @@ export async function crearMesa(nuevaMesa) {
     }
 
     const data = await response.json();
-    console.log('✅ Mesa creada exitosamente:', data);
+    console.log('✅ Mesa creada:', data);
     return data;
   } catch (error) {
-    console.error('❌ Error al crear la mesa:', error);
-    throw error;
-  }
+    console.error('❌ Error al crear mesa:', error);
+    throw error;
+  }
 }
 
 /**
