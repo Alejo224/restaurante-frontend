@@ -2,8 +2,8 @@
 import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
-import { MesasList } from './components/MesasList.js';
 import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
+
 
 
 export function AdminDashboard() {
@@ -301,7 +301,11 @@ export function AdminDashboard() {
             </div>
           </header>
 
-          <div id="mesas-list-container"></div>
+          <div class="alert alert-info" role="status">
+            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+            <strong>Esperando:</strong> Aquí va el componente de gestión de mesas (MesasList.js)
+          </div>
+        </section>
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
         <section id="seccionReservas" class="content-section" style="display: none;" aria-labelledby="reservas-heading">
@@ -337,18 +341,6 @@ export function AdminDashboard() {
       platoContainer.appendChild(PlatoList(true)); // true = modo admin con CRUD
     }
   }, 100);
-
-  // ========================================
-  // CARGAR COMPONENTE DE MESAS
-  // ========================================
-const mesasContainer = page.querySelector('#mesas-list-container'); // solo el contenedor interno
-if (mesasContainer) {
-  mesasContainer.innerHTML = ''; // limpio solo el contenedor de la lista
-  MesasList().then(container => {
-    mesasContainer.appendChild(container);
-  });
-}
-
 
   // ========================================
   // EVENT LISTENERS
@@ -452,20 +444,12 @@ if (mesasContainer) {
   // Botón Crear Plato
   crearPlatoBtn.addEventListener('click', () => {
     console.log('Abriendo página de crear plato...');
-    window.open('src/modules/admin/crear-plato/index.html', '_blank');
+    window.open('/restaurante-frontend/src/modules/admin/crear-plato/index.html', '_blank');
   });
 
   // Botón Crear Mesa (placeholder para tu compañero)
   crearMesaBtn.addEventListener('click', () => {
-  console.log('🟢 Botón Crear Mesa presionado');
-
-  // Verificamos que el modal se cargue correctamente
-  try {
-    CrearMesaModal();
-  } catch (error) {
-    console.error('❌ Error al abrir el modal de mesa:', error);
-    alert('Ocurrió un error al abrir el formulario de crear mesa.');
-  }
+  CrearMesaModal();
 });
 
   // Logout
