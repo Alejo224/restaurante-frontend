@@ -65,33 +65,6 @@ export function UserDashboard() {
             </div>
           </article>
 
-          <!-- Card: Hacer Reserva -->
-          <article class="col-md-6 col-lg-3" role="listitem">
-            <div class="user-action-card" id="cardReserva" tabindex="0" role="button" aria-labelledby="reserva-title reserva-desc">
-              <div class="user-action-icon bg-primary bg-opacity-10" aria-hidden="true">
-                <i class="bi bi-calendar-check text-primary"></i>
-              </div>
-              <h3 id="reserva-title" class="user-action-title h5">Hacer Reserva</h3>
-              <p id="reserva-desc" class="user-action-description">Reserva tu mesa favorita</p>
-              <div class="user-action-arrow" aria-hidden="true">
-                <i class="bi bi-arrow-right"></i>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card: Mis Reservas -->
-          <article class="col-md-6 col-lg-3" role="listitem">
-            <div class="user-action-card" id="cardMisReservas" tabindex="0" role="button" aria-labelledby="misreservas-title misreservas-desc">
-              <div class="user-action-icon bg-success bg-opacity-10" aria-hidden="true">
-                <i class="bi bi-clock-history text-success"></i>
-              </div>
-              <h3 id="misreservas-title" class="user-action-title h5">Mis Reservas</h3>
-              <p id="misreservas-desc" class="user-action-description">Gestiona tus reservas activas</p>
-              <div class="user-action-arrow" aria-hidden="true">
-                <i class="bi bi-arrow-right"></i>
-              </div>
-            </div>
-          </article>
 
           <!-- Card: Historial de Pedidos -->
           <article class="col-md-6 col-lg-3" role="listitem">
@@ -228,6 +201,7 @@ export function UserDashboard() {
     router.navigate('/menu');
   });
 
+  /*
   // Card: Hacer Reserva
   page.querySelector('#cardReserva').addEventListener('click', () => {
     // Aquí irá la funcionalidad de reserva de tu compañero
@@ -235,12 +209,14 @@ export function UserDashboard() {
     // router.navigate('/reservar');
   });
 
+  
   // Card: Mis Reservas
   page.querySelector('#cardMisReservas').addEventListener('click', () => {
     alert('Mis Reservas - Próximamente');
     // router.navigate('/mis-reservas');
   });
 
+  */
   // Card: Historial de Pedidos
   page.querySelector('#cardHistorial').addEventListener('click', () => {
   

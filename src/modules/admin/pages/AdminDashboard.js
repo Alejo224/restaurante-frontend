@@ -54,15 +54,15 @@ export function AdminDashboard() {
             </a>
           </li>
 
+          <li role="separator"><hr class="border-secondary my-2"></li>
+
           <!-- Gestión de Reservas -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link" id="navReservas" data-section="reservas" role="menuitem">
+            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem">
               <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
               <span>Gestionar Reservas</span>
             </a>
           </li>
-
-          <li role="separator"><hr class="border-secondary my-2"></li>
 
           <!-- Pedidos (próximamente) -->
           <li class="nav-item" role="none">
@@ -176,100 +176,7 @@ export function AdminDashboard() {
                 <i class="bi bi-arrow-right" aria-hidden="true"></i>
               </div>
             </article>
-
-            <!-- Card: Gestionar Reservas -->
-            <article class="dashboard-card" data-navigate="reservas" role="listitem" tabindex="0">
-              <div class="dashboard-card-icon warning" aria-hidden="true">
-                <i class="bi bi-calendar-check"></i>
-              </div>
-              <div class="dashboard-card-title">GESTIÓN</div>
-              <h4 class="dashboard-card-content">Gestionar Reservas</h4>
-              <p class="text-muted small mb-0 mt-2">
-                Ver y administrar reservas
-              </p>
-              <div class="dashboard-card-action">
-                Ver más
-                <i class="bi bi-arrow-right" aria-hidden="true"></i>
-              </div>
-            </article>
-
-            <!-- Card: Facturación (próximamente) -->
-            <article class="dashboard-card" style="opacity: 0.6;" role="listitem" aria-disabled="true">
-              <div class="dashboard-card-icon info" aria-hidden="true">
-                <i class="bi bi-receipt-cutoff"></i>
-              </div>
-              <div class="dashboard-card-title">GESTIÓN</div>
-              <h4 class="dashboard-card-content">Facturación</h4>
-              <p class="text-muted small mb-0 mt-2">
-                Generar y gestionar facturas
-              </p>
-              <span class="badge bg-secondary mt-2">Próximamente</span>
-            </article>
-          </div>
-
-          <!-- Estadísticas rápidas -->
-          <section aria-labelledby="estadisticas-heading">
-            <header class="row mt-4">
-              <div class="col-12">
-                <h5 id="estadisticas-heading" class="fw-bold mb-3">Estadísticas de Hoy</h5>
-              </div>
-            </header>
-
-            <div class="stats-grid" role="list" aria-label="Estadísticas del día">
-              
-              <!-- Reservas Hoy -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Reservas Hoy</div>
-                    <div class="stat-value" aria-live="polite">12</div>
-                  </div>
-                  <div class="stat-icon bg-primary bg-opacity-10 text-primary" aria-hidden="true">
-                    <i class="bi bi-calendar"></i>
-                  </div>
-                </div>
-              </article>
-
-              <!-- Mesas Ocupadas -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Mesas Ocupadas</div>
-                    <div class="stat-value" aria-live="polite">8/15</div>
-                  </div>
-                  <div class="stat-icon bg-success bg-opacity-10 text-success" aria-hidden="true">
-                    <i class="bi bi-table"></i>
-                  </div>
-                </div>
-              </article>
-
-              <!-- Ingresos Hoy -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Ingresos Hoy</div>
-                    <div class="stat-value" aria-live="polite">$1,234</div>
-                  </div>
-                  <div class="stat-icon bg-warning bg-opacity-10 text-warning" aria-hidden="true">
-                    <i class="bi bi-cash-stack"></i>
-                  </div>
-                </div>
-              </article>
-
-              <!-- Platos Disponibles -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Platos Activos</div>
-                    <div class="stat-value" aria-live="polite">45</div>
-                  </div>
-                  <div class="stat-icon bg-info bg-opacity-10 text-info" aria-hidden="true">
-                    <i class="bi bi-menu-button"></i>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </section>
+           
         </section>
 
         <!-- SECCIÓN GESTIONAR MENÚ -->
@@ -409,7 +316,7 @@ setTimeout(async () => {
     dashboard: page.querySelector('#seccionDashboard'),
     menu: page.querySelector('#seccionMenu'),
     mesas: page.querySelector('#seccionMesas'),
-    reservas: page.querySelector('#seccionReservas')
+    // reservas: page.querySelector('#seccionReservas')
   };
 
   // Botones de acción dinámicos
@@ -450,11 +357,7 @@ setTimeout(async () => {
         crearMesaBtn.classList.remove('d-none');
         break;
       
-      case 'reservas':
-        pageTitle.textContent = 'Gestionar Reservas';
-        crearPlatoBtn.classList.add('d-none');
-        crearMesaBtn.classList.add('d-none');
-        break;
+  
     }
 
     // Cerrar sidebar en móvil
