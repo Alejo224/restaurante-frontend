@@ -3,6 +3,7 @@ import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
 import { MesasList } from '../../Mesa/MesasList.js';
+import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -488,8 +489,8 @@ setTimeout(async () => {
 
   // Botón Crear Mesa (placeholder para tu compañero)
   crearMesaBtn.addEventListener('click', () => {
-    alert('Funcionalidad de crear mesa - Próximamente');
-  });
+  CrearMesaModal();
+});
 
   // Logout
   page.querySelector('#logoutBtn').addEventListener('click', async () => {
