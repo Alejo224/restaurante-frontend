@@ -409,9 +409,8 @@ export function HomePage() {
             <h5>Horario</h5>
             <dl class="text-muted text-footer">
               <dt class="visually-hidden">Días de semana</dt>
-              <dd class="mb-1">Lunes a Viernes: 12:00 - 23:00</dd>
-              <dt class="visually-hidden">Fines de semana</dt>
-              <dd>Sábados y Domingos: 11:00 - 00:00</dd>
+              <dd class="mb-1">Lunes a Domingos: 12:00 - 23:30</dd>
+            
             </dl>
           </div>
           
@@ -420,7 +419,7 @@ export function HomePage() {
             <h5>Contacto</h5>
             <p class="text-muted mb-1 text-footer">
               <i class="bi bi-telephone me-2" aria-hidden="true"></i> 
-              <a href="tel:+573224356789" class="text-muted text-decoration-none">(57) 322 43567898</a>
+              <a href="tel:+573224356789" class="text-muted text-decoration-none text-footer">(57) 322 43567898</a>
             </p>
             <p class="text-muted text-footer">
               <i class="bi bi-geo-alt me-2" aria-hidden="true"></i> 
@@ -487,7 +486,7 @@ export function HomePage() {
   const myOrdersBtn = page.querySelector('#myOrdersBtn');
   if (myOrdersBtn) {
     myOrdersBtn.addEventListener('click', () => {
-      router.navigate('/orders');
+      router.navigate('/historial-pedidos');
     });
   }
 
