@@ -16,7 +16,7 @@ import { AdminDashboard } from "./modules/admin/pages/AdminDashboard.js";
 
 // Páginas de usuarios (cliente)
 import { UserDashboard } from "./modules/user/pages/UserDashboard.js";
-
+import { HistorialPedidosPage, afterRenderHistorialPedidos } from './modules/pedidos/pages/HistorialPedidosPage.js';
 // ========================================
 // 🌐 RUTAS PÚBLICAS (sin autenticación)
 // ========================================
@@ -35,6 +35,12 @@ router.addRoute("/login", LoginPage, {
 
 router.addRoute("/menu", MenuPublicPage, {
   requiresAuth: false, // Menú público visible para todos
+});
+
+router.addRoute("/historial-pedidos", HistorialPedidosPage, {
+  requiresAuth: true,
+  requiresRole: "USER",
+  afterRender: afterRenderHistorialPedidos
 });
 
 // ========================================

@@ -243,8 +243,8 @@ export function UserDashboard() {
 
   // Card: Historial de Pedidos
   page.querySelector('#cardHistorial').addEventListener('click', () => {
-    alert('Historial de Pedidos - Próximamente');
-    // router.navigate('/historial');
+  
+    router.navigate('/historial-pedidos');
   });
 
   return page;

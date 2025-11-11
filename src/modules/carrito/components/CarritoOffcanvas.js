@@ -66,7 +66,7 @@ export function CarritoOffcanvas() {
 
           <!-- Boton tipo de servicio-->
           <div class="d-grid mb-3">
-             <a class="btn btn-primary" id="btnTipoServicio" href="src/modules/tipo-servicio/tipo.html">
+             <a class="btn btn-primary" id="btnTipoServicio" href="/restaurante-frontend/src/modules/tipo-servicio/tipo.html">
              <i class="bi bi-credit-card me-2"></i>
               Tipo de servicio
              </a>
