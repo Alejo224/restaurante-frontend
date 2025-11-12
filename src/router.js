@@ -1,6 +1,7 @@
 // src/router.js
 // Router con protección de rutas basado en JWT
 import { isAuthenticated, isAdmin, getCurrentUser } from './modules/auth/userService.js';
+import { ReservaMesaPagina } from './modules/reservas-mesas/HacerReservaPage.js'
 
 class Router {
   constructor() {
