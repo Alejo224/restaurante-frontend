@@ -17,6 +17,8 @@ import { AdminDashboard } from "./modules/admin/pages/AdminDashboard.js";
 // Páginas de usuarios (cliente)
 import { UserDashboard } from "./modules/user/pages/UserDashboard.js";
 import { HistorialPedidosPage, afterRenderHistorialPedidos } from './modules/pedidos/pages/HistorialPedidosPage.js';
+import { ReservaMesaPagina } from "./modules/reservas-mesas/HacerReservaPage.js";
+
 // ========================================
 // 🌐 RUTAS PÚBLICAS (sin autenticación)
 // ========================================
@@ -43,6 +45,7 @@ router.addRoute("/historial-pedidos", HistorialPedidosPage, {
   afterRender: afterRenderHistorialPedidos
 });
 
+
 // ========================================
 // 🔒 RUTAS PROTEGIDAS - SOLO USUARIOS AUTENTICADOS
 // ========================================
@@ -54,6 +57,11 @@ router.addRoute("/historial-pedidos", HistorialPedidosPage, {
 
 // Dashboard del usuario
 router.addRoute("/dashboard", UserDashboard, {
+  requiresAuth: true,
+  requiresRole: "USER",
+});
+// Página para hacer una reserva
+router.addRoute("/reservar", ReservaMesaPagina, {
   requiresAuth: true,
   requiresRole: "USER",
 });

@@ -2,6 +2,7 @@
 import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 
+
 export function UserDashboard() {
   const page = document.createElement('div');
   const user = getCurrentUser();
@@ -231,8 +232,7 @@ export function UserDashboard() {
   // Card: Hacer Reserva
   page.querySelector('#cardReserva').addEventListener('click', () => {
     // Aquí irá la funcionalidad de reserva de tu compañero
-    alert('Funcionalidad de reserva - Próximamente');
-    // router.navigate('/reservar');
+    router.navigate('/reservar')
   });
 
   // Card: Mis Reservas
