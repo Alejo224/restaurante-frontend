@@ -64,20 +64,16 @@ export function CarritoOffcanvas() {
             </div>
           </div>
 
-          <!-- Boton tipo de servicio-->
+          <!-- Botón Tipo de Servicio -->
           <div class="d-grid mb-3">
-             <a class="btn btn-primary" id="btnTipoServicio" href="/restaurante-frontend/src/modules/tipo-servicio/tipo.html">
-             <i class="bi bi-credit-card me-2"></i>
-              Tipo de servicio
-             </a>
+            <a class="btn btn-primary" id="btnTipoServicio" href="/restaurante-frontend/src/modules/tipo-servicio/tipo.html">
+              <i class="bi bi-truck me-2"></i>
+              Tipo de Servicio
+            </a>
           </div> 
 
-          <!-- Botones de acción -->
-          <div class="d-grid gap-2">
-          <button class="btn btn-success btn-lg" id="btnProcederPago">
-              <i class="bi bi-credit-card me-2"></i>
-              Proceder al Pago
-            </button> 
+          <!-- Botón Vaciar Carrito -->
+          <div class="d-grid">
             <button class="btn btn-outline-danger btn-sm" id="btnVaciarCarrito">
               <i class="bi bi-trash me-2"></i>
               Vaciar Carrito
@@ -247,10 +243,10 @@ function setupEventListeners() {
     btnVaciar.addEventListener('click', handleVaciarCarrito);
   }
 
-  // Botón de proceder al pago
-  const btnPago = document.getElementById('btnProcederPago');
-  if (btnPago) {
-    btnPago.addEventListener('click', handleProcederPago);
+  // Botón de tipo de servicio
+  const btnTipoServicio = document.getElementById('btnTipoServicio');
+  if (btnTipoServicio) {
+    btnTipoServicio.addEventListener('click', handleTipoServicio);
   }
 }
 
@@ -295,25 +291,24 @@ function handleVaciarCarrito() {
   }
 }
 
-function handleProcederPago() {
+function handleTipoServicio(e) {
   const carrito = obtenerCarrito();
 
   if (carritoEstaVacio()) {
+    e.preventDefault();
     mostrarToast('Tu carrito está vacío', 'warning');
     return;
   }
 
-  console.log('🛒 Procediendo al pago con:', carrito);
+  console.log('🛒 Redirigiendo a tipo de servicio con:', carrito.length, 'items');
 
-  // Aquí puedes redirigir a la página de pago
-  // Por ejemplo: router.navigate('/checkout');
-
-  mostrarToast('Funcionalidad de pago - Próximamente', 'info');
-
-  // Cerrar el offcanvas
+  // Cerrar el offcanvas antes de redirigir
   const offcanvasElement = document.getElementById('carritoOffcanvas');
   const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
   if (offcanvas) offcanvas.hide();
+
+  // Mostrar mensaje de confirmación
+  mostrarToast('Redirigiendo a tipo de servicio...', 'info');
 }
 
 function mostrarToast(mensaje, tipo = 'success') {

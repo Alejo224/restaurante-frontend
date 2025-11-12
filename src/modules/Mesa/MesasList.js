@@ -60,7 +60,7 @@ async function loadMesas(container) {
       mesasContainer.innerHTML = mesas.map(mesa => `
         <div class="col-md-4 mb-3">
           <div class="card border-0 shadow-sm p-3">
-            <h5 class="fw-bold text-primary">Mesa #${mesa.id}</h5>
+            <h5 class="fw-bold text-primary">${mesa.nombreMesa}</h5>
              
             <p><strong>Capacidad:</strong> ${mesa.capacidad || 'N/A'}</p>
            <!-- <p><strong>Estado:</strong> ${mesa.estado || 'False'}</p> -->
