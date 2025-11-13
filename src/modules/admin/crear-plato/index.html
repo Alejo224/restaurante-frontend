@@ -1,57 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Crear Plato - Administrador</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Plato - Administrador</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div class="container">
-        <h1>Crear Nuevo Plato</h1>
-        <!-- este es el contenedor principal -->
-        <div class="main-content">
-            <!-- este es el contenedor de los botones -->
-            <div class="grupotsBotns">
-                <button id="btn-creacion-plato" type="submit"> Crear Plato </button>
-                <button id="btn-volver-menu" type="submit"> ← Volver al Menú </button>
-            </div>
+  <main class="container" role="main">
+    <header>
+      <h1>Crear Nuevo Plato</h1>
+    </header>
 
-            <!-- este es el contenedor de todo el lado derecho-->
-            <div class="content_Derecho">
-                <!-- este es  la seccion del crear un plato -->
-                <div id="creacion-plato" class="content_section">
-                    <h2>Crear Plato</h2>
-                    <div class="content_plato">
-                        <div class="data_plato">
-                            <label for="nombre-plato">Nombre del plato</label>
-                            <input type="text" id="nombre-plato" placeholder="Nombre del plato" required>
+    <div class="main-content">
+      <nav class="grupotsBotns" aria-label="Acciones principales">
+        <button id="btn-creacion-plato" type="button" aria-label="Ir a crear plato">🍽 Crear Plato</button>
+        <button id="btn-volver-menu" type="button" aria-label="Volver al menú principal">← Volver al Menú</button>
+      </nav>
 
-                            <label for="imagen-plato">Imagen del plato</label>
-                            <input type="file" id="imagen-plato" accept=".jpg, .jpeg, .png" required>
+      <section class="content_Derecho" aria-labelledby="titulo-formulario">
+        <h2 id="titulo-formulario">Formulario de creación</h2>
 
-                            <label for="descripcion-plato">Descripcion del plato</label>
-                            <input type="text" id="descripcion-plato" placeholder="Descripcion" required>
+        <form id="form-crear-plato" class="content_plato" aria-describedby="instrucciones-form">
+          <p id="instrucciones-form" class="form-info">
+            Completa los siguientes campos para registrar un nuevo plato en el sistema.
+          </p>
 
-                            <label for="precio-plato">Precio</label>
-                            <input type="number" id="precio-plato" placeholder="Precio" required>
+          <fieldset class="data_plato">
+            <legend>Datos del plato</legend>
 
-                            <h3>Categoria</h3>
-                            <select id="categoria-plato" required>
-                                <option value="">Cargando categorías...</option>
-                            </select>
+            <label for="nombre-plato">Nombre del plato</label>
+            <input type="text" id="nombre-plato" name="nombre" placeholder="Ejemplo: Lasaña Boloñesa" required aria-required="true">
 
-                            <button id="btn-guardar" type="submit">Guardar Plato</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <label for="imagen-plato">Imagen del plato</label>
+            <input type="file" id="imagen-plato" name="imagen" accept=".jpg,.jpeg,.png" aria-required="true" required>
+
+            <label for="descripcion-plato">Descripción</label>
+            <textarea id="descripcion-plato" name="descripcion" placeholder="Breve descripción del plato" required aria-required="true"></textarea>
+
+            <label for="precio-plato">Precio ($)</label>
+            <input type="number" id="precio-plato" name="precio" placeholder="Ejemplo: 25000" min="0" required aria-required="true">
+
+            <label for="categoria-plato">Categoría</label>
+            <select id="categoria-plato" name="categoria" required aria-required="true">
+              <option value="" disabled selected>Selecciona una categoría</option>
+              <option value="entrada">Entrada</option>
+              <option value="plato-fuerte">Plato Fuerte</option>
+              <option value="postre">Postre</option>
+              <option value="bebida">Bebida</option>
+            </select>
+
+            <button id="btn-guardar" type="submit">💾 Guardar Plato</button>
+          </fieldset>
+        </form>
+      </section>
     </div>
+  </main>
 
-    <script type="module" src="index.js"></script>
+  <script type="module" src="index.js"></script>
 </body>
-
 </html>
