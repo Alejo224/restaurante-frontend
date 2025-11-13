@@ -12,13 +12,6 @@ body {
     min-height: 100vh;
 
 }
-.reserva-container {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
     
 form {
     width: 600px;
@@ -86,7 +79,7 @@ legend {
     align-self: center;
 }
 
-.grupo-navegacion i:hover {
+.grupo-navegacion i:hover { 
     cursor: pointer;
     color: #084298;
 }
@@ -133,3 +126,4 @@ button:hover {
     /* azul Bootstrap */
 
 }
+

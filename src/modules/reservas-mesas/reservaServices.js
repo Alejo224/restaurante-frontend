@@ -1,10 +1,15 @@
 
 import { obtenerMesas } from "/src/modules/Mesa/mesaService.js";
 
-async function cargarMesas() {
-    const contenedor = document.getElementById("mesas-container");
-    contenedor.innerHTML = `<p>Cargando mesas...</p>`;
 
+export async function cargarMesas(contenedor) {
+    
+
+    if(!contenedor){
+        console.error('El contenedor de mesas no fue encontrado. ')
+        return
+    }
+    contenedor.innerHTML = `<p>Cargando mesas...</p>`;
     try {
         const mesas = await obtenerMesas();
 
@@ -28,4 +33,4 @@ async function cargarMesas() {
     }
 }
 
-cargarMesas();
+
