@@ -1,5 +1,6 @@
 import { router } from "../../router.js"
 import {cargarMesas} from "../reservas-mesas/reservaServices.js"
+import { ObtenerHorarios } from "../reservas-mesas/reservaServices.js";
 
 export function ReservaMesaPagina() {
 
@@ -17,8 +18,10 @@ export function ReservaMesaPagina() {
                         <input id="fecha" type="date" required>
                     </div>
                     <div class="DatosContacto">
-                        <label for="hora">Hora:</label>
-                        <input id="hora" type="time" required>
+                        <label for="hora-select">Hora:</label>
+                        <select id="hora-select" class="form-select form-select-sm" aria-label="Small select example" required> 
+                            <option value="" disabled selected>Selecciona una hora</option>
+                        </select>
                     </div>
                     <div class="mesas-outer-wrapper">
                         <!-- Contenedor donde se cargan las mesas dinámicamente -->
@@ -39,6 +42,8 @@ export function ReservaMesaPagina() {
     const contenedorMesas = reservaPage.querySelector('#mesas-container');
     cargarMesas(contenedorMesas);
 
+    const selectHora = reservaPage.querySelector('#hora-select')
+    ObtenerHorarios(selectHora);
 
     reservaPage.querySelector('#icono-volver').addEventListener('click', () => {
         router.navigate('/dashboard');
