@@ -4,6 +4,8 @@ import { router } from '../../router.js';
 
 export function LoginForm() {
   const container = document.createElement('div');
+  container.setAttribute('role', 'main');
+  container.setAttribute('aria-label', 'Formulario de inicio de sesión');
 
   container.innerHTML = `
     <form id="loginForm" class="p-4 shadow-lg rounded-4 bg-white form-card-hover" 
@@ -74,7 +76,7 @@ export function LoginForm() {
         <div class="invalid-feedback" id="passwordError" role="alert" aria-live="polite"></div>
       </div>
 
-      <!-- Recordar sesión -->
+      <!-- Recordar sesión y olvidé contraseña -->
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <div class="form-check">
           <input 
@@ -92,7 +94,10 @@ export function LoginForm() {
         </div>
         
         <!-- Enlace para recuperar contraseña -->
-        
+        <a href="#" id="forgotPasswordLink" class="text-primary text-decoration-none small" 
+           aria-label="¿Olvidaste tu contraseña? Recuperar acceso">
+          ¿Olvidaste tu contraseña?
+        </a>
       </div>
 
       <!-- Botón de login -->
@@ -169,6 +174,10 @@ export function LoginForm() {
         .btn {
           border: 2px solid currentColor;
         }
+        
+        .text-muted {
+          color: #000 !important;
+        }
       }
       
       /* Movimiento reducido */
@@ -180,17 +189,22 @@ export function LoginForm() {
     </style>
   `;
 
-  // JavaScript para funcionalidad de accesibilidad
-  setTimeout(() => {
+  const form = container.querySelector('#loginForm');
+  const submitBtn = container.querySelector('#submitBtn');
+  const messageContainer = container.querySelector('#messageContainer');
+  const formStatus = container.querySelector('#formStatus');
+
+  // Inicializar funcionalidad de accesibilidad
+  function initializeAccessibility() {
     // Enfocar el primer campo al cargar
-    const emailInput = document.getElementById('email');
+    const emailInput = container.querySelector('#email');
     if (emailInput) {
-      emailInput.focus();
+      setTimeout(() => emailInput.focus(), 100);
     }
     
     // Toggle de visibilidad de contraseña
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
+    const togglePassword = container.querySelector('#togglePassword');
+    const passwordInput = container.querySelector('#password');
     
     if (togglePassword && passwordInput) {
       togglePassword.addEventListener('click', function() {
@@ -205,6 +219,7 @@ export function LoginForm() {
         const icon = this.querySelector('i');
         if (icon) {
           icon.className = isPressed ? 'bi bi-eye-slash' : 'bi bi-eye';
+          icon.setAttribute('aria-hidden', 'true');
         }
       });
       
@@ -216,76 +231,14 @@ export function LoginForm() {
         }
       });
     }
-    
-    // Manejo de validación del formulario
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-      loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Limpiar estados previos
-        const fields = ['email', 'password'];
-        fields.forEach(field => {
-          const input = document.getElementById(field);
-          const error = document.getElementById(field + 'Error');
-          if (input && error) {
-            input.classList.remove('is-invalid');
-            error.textContent = '';
-          }
-        });
-        
-        // Validación básica
-        let isValid = true;
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-        
-        if (!email.value || !email.validity.valid) {
-          email.classList.add('is-invalid');
-          document.getElementById('emailError').textContent = 'Por favor ingresa un correo electrónico válido';
-          isValid = false;
-        }
-        
-        if (!password.value) {
-          password.classList.add('is-invalid');
-          document.getElementById('passwordError').textContent = 'Por favor ingresa tu contraseña';
-          isValid = false;
-        }
-        
-        if (isValid) {
-          // Simular envío exitoso
-          const messageContainer = document.getElementById('messageContainer');
-          const formStatus = document.getElementById('formStatus');
-          
-          if (messageContainer) {
-            messageContainer.innerHTML = `
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2" aria-hidden="true"></i>
-                Iniciando sesión... Por favor espera.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar mensaje"></button>
-              </div>
-            `;
-          }
-          
-          if (formStatus) {
-            formStatus.textContent = 'Formulario enviado correctamente. Procesando inicio de sesión...';
-          }
-          
-          // Aquí iría la lógica real de autenticación
-          console.log('Formulario válido, procesando login...');
-        } else {
-          // Anunciar errores
-          const formStatus = document.getElementById('formStatus');
-          if (formStatus) {
-            formStatus.textContent = 'Por favor corrige los errores en el formulario antes de enviar.';
-          }
-        }
-      });
-    }
-  }, 100);
+  }
 
-  const form = container.querySelector('#loginForm');
-  const submitBtn = container.querySelector('#submitBtn');
-  const messageContainer = container.querySelector('#messageContainer');
+  // Función para anunciar estado del formulario
+  function announceFormStatus(message) {
+    if (formStatus) {
+      formStatus.textContent = message;
+    }
+  }
 
   // Función para limpiar errores
   function clearErrors() {
@@ -299,6 +252,7 @@ export function LoginForm() {
       }
     });
     messageContainer.innerHTML = '';
+    announceFormStatus('Errores limpiados');
   }
 
   // Función para mostrar error en campo
@@ -309,41 +263,64 @@ export function LoginForm() {
     if (field && errorElement) {
       field.classList.add('is-invalid');
       errorElement.textContent = message;
+      announceFormStatus(`Error en ${fieldId}: ${message}`);
     }
   }
 
   // Función para mostrar mensaje general
   function showMessage(message, type = 'info') {
+    const alertType = type === 'error' ? 'danger' : type;
+    
     messageContainer.innerHTML = `
-      <div class="alert alert-${type} alert-dismissible fade show">
+      <div class="alert alert-${alertType} alert-dismissible fade show" role="alert">
+        <i class="bi bi-${getAlertIcon(type)} me-2" aria-hidden="true"></i>
         ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" 
+                aria-label="Cerrar mensaje"></button>
       </div>
     `;
+    
+    announceFormStatus(message);
+  }
+
+  // Función para obtener icono según tipo de alerta
+  function getAlertIcon(type) {
+    const icons = {
+      success: 'check-circle',
+      danger: 'exclamation-triangle',
+      warning: 'exclamation-circle',
+      info: 'info-circle'
+    };
+    return icons[type] || 'info-circle';
   }
 
   // Función para loading
   function setLoading(loading) {
     if (loading) {
       submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-busy', 'true');
       submitBtn.innerHTML = `
-        <span class="spinner-border spinner-border-sm" role="status"></span>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         Iniciando sesión...
       `;
+      announceFormStatus('Procesando inicio de sesión, por favor espere...');
     } else {
       submitBtn.disabled = false;
+      submitBtn.setAttribute('aria-busy', 'false');
       submitBtn.innerHTML = `
-        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+        <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>
+        Iniciar Sesión
       `;
     }
   }
 
-  // Función para edirigir según el rol
+  // Función para redirigir según el rol
   function redirectByRole() {
     const user = getCurrentUser();
     
     if (!user) {
       console.warn('⚠️ No se pudo obtener usuario después del login');
+      announceFormStatus('No se pudo obtener información del usuario, redirigiendo al menú');
       router.navigate('/menu');
       return;
     }
@@ -353,6 +330,9 @@ export function LoginForm() {
       roles: user.roles,
       permissions: user.permissions
     });
+
+    // Anunciar redirección
+    announceFormStatus(`Usuario autenticado como ${user.email}, redirigiendo...`);
 
     // Redirigir según rol
     if (isAdmin()) {
@@ -367,12 +347,30 @@ export function LoginForm() {
     }
   }
 
+  // Validación del formulario
+  function validateForm(credentials) {
+    let isValid = true;
+    
+    if (!credentials.email || !credentials.email.includes('@')) {
+      showFieldError('email', 'Por favor ingresa un correo electrónico válido');
+      isValid = false;
+    }
+    
+    if (!credentials.password) {
+      showFieldError('password', 'Por favor ingresa tu contraseña');
+      isValid = false;
+    }
+    
+    return isValid;
+  }
+
   // Evento del formulario
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     console.log('📤 Iniciando proceso de login...');
     clearErrors();
+    announceFormStatus('Validando formulario de inicio de sesión');
 
     const credentials = {
       email: form.email.value.trim(),
@@ -380,8 +378,8 @@ export function LoginForm() {
     };
 
     // Validación básica
-    if (!credentials.email || !credentials.password) {
-      showMessage('Por favor completa todos los campos', 'warning');
+    if (!validateForm(credentials)) {
+      announceFormStatus('Errores de validación encontrados. Por favor corrige los campos marcados.');
       return;
     }
 
@@ -389,20 +387,20 @@ export function LoginForm() {
 
     try {
       console.log('🔄 Enviando credenciales...');
+      announceFormStatus('Verificando credenciales...');
       
-      // ✅ loginUser ahora devuelve { email, message, jwt, status }
       const response = await loginUser(credentials);
       
       console.log('✅ Login exitoso:', response);
+      announceFormStatus('Inicio de sesión exitoso');
       
-      // ✅ Obtener el usuario del localStorage (ya guardado por loginUser)
       const user = getCurrentUser();
       
       // Mostrar mensaje de bienvenida
       const displayName = user?.email.split('@')[0] || 'Usuario';
       showMessage(`¡Bienvenido ${displayName}!`, 'success');
       
-      // ✅ Redirigir después de 1 segundo
+      // Redirigir después de 1 segundo
       setTimeout(() => {
         redirectByRole();
       }, 1000);
@@ -412,6 +410,7 @@ export function LoginForm() {
       
       // Mostrar error específico
       const errorMessage = error.message || 'Error al iniciar sesión';
+      announceFormStatus(`Error: ${errorMessage}`);
       
       // Detectar tipo de error
       if (errorMessage.toLowerCase().includes('credenciales') || 
@@ -439,15 +438,19 @@ export function LoginForm() {
   // Event listeners para navegación
   container.querySelector('#registerLink').addEventListener('click', (e) => {
     e.preventDefault();
+    announceFormStatus('Navegando al formulario de registro');
     router.navigate('/register');
   });
 
-  /* Eent listeneres para recuperacion de constraseña (funcionalidad no terminada)
-  container.querySelector('#forgotPassword').addEventListener('click', (e) => {
+  // Event listener para recuperación de contraseña
+  container.querySelector('#forgotPasswordLink').addEventListener('click', (e) => {
     e.preventDefault();
     showMessage('Funcionalidad de recuperación de contraseña - Próximamente', 'info');
+    announceFormStatus('Funcionalidad de recuperación de contraseña no disponible aún');
   });
-  */
+
+  // Inicializar accesibilidad después de que el DOM esté listo
+  setTimeout(initializeAccessibility, 0);
 
   return container;
 }
