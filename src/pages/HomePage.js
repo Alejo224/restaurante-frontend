@@ -11,11 +11,17 @@ export function HomePage() {
   const isAdminUser = isAdmin();
   
   page.innerHTML = `
+    <!-- Enlace para saltar navegación (Accesibilidad) -->
+    <a href="#main-content" class="btn btn-primary visually-hidden-focusable position-absolute top-0 start-0 m-2" 
+       style="z-index: 9999;" tabindex="0">
+      Saltar al contenido principal
+    </a>
+
     <!-- Header de Navegación Principal -->
     <header role="banner" class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <!-- Logo/Marca -->
-        <a class="navbar-brand fw-bold" href="#" aria-label="Sabores & Delicias - Página de inicio">
+        <a class="navbar-brand fw-bold" href="#" tabindex="0" aria-label="Sabores & Delicias - Página de inicio">
           <i class="bi bi-egg-fried me-2" aria-hidden="true"></i>
           Sabores & Delicias
         </a>
@@ -24,7 +30,7 @@ export function HomePage() {
         <nav class="navbar-nav ms-auto" aria-label="Navegación de usuario">
           ${authenticated ? `
             <!-- Usuario autenticado -->
-            <div class="d-flex align-items-center" role="group" aria-label="Controles de usuario autenticado">
+            <div class="d-flex align-items-center">
               <span class="navbar-text text-light me-3" aria-label="Usuario: ${userName}">
                 <i class="bi bi-person-circle me-1" aria-hidden="true"></i>
                 ¡Hola, ${userName}!
@@ -33,19 +39,19 @@ export function HomePage() {
                   ''
                 }
               </span>
-              <button class="btn btn-outline-warning" id="logoutBtn" aria-label="Cerrar sesión">
+              <button class="btn btn-outline-warning" id="logoutBtn" tabindex="0" aria-label="Cerrar sesión">
                 <i class="bi bi-box-arrow-right me-1" aria-hidden="true"></i>
                 Cerrar Sesión
               </button>
             </div>
           ` : `
             <!-- Usuario NO autenticado -->
-            <div class="d-flex align-items-center" role="group" aria-label="Opciones de acceso">
-              <button class="btn btn-outline-light me-2" id="loginBtn" aria-label="Iniciar sesión">
+            <div class="d-flex align-items-center">
+              <button class="btn btn-outline-light me-2" id="loginBtn" tabindex="0" aria-label="Iniciar sesión">
                 <i class="bi bi-box-arrow-in-right me-1" aria-hidden="true"></i>
                 Iniciar Sesión
               </button>
-              <button class="btn btn-primary" id="registerBtn" aria-label="Crear cuenta nueva">
+              <button class="btn btn-primary" id="registerBtn" tabindex="0" aria-label="Crear cuenta nueva">
                 <i class="bi bi-person-plus me-1" aria-hidden="true"></i>
                 Crear Cuenta
               </button>
@@ -56,9 +62,9 @@ export function HomePage() {
     </header>
 
     <!-- Sección Hero Principal -->
-    <section class="hero-section py-5" 
+    <section id="main-content" class="hero-section py-5" 
             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh; display: flex; align-items: center;" 
-            aria-labelledby="hero-heading">
+            aria-labelledby="hero-heading" tabindex="-1">
       <div class="container">
         <div class="row align-items-center">
           <!-- Contenido Textual -->
@@ -79,31 +85,31 @@ export function HomePage() {
             </header>
             
             <!-- Botones de Acción Principal -->
-            <div class="d-flex gap-3 flex-wrap" role="group" aria-label="Acciones principales">
+            <div class="d-flex gap-3 flex-wrap">
               ${authenticated ? `
                 <!-- Botones para usuario autenticado -->
-                <button class="btn btn-warning btn-lg px-4 fw-bold" id="viewMenuBtn" style="min-width: 200px;" aria-label="Ver menú completo">
+                <button class="btn btn-warning btn-lg px-4 fw-bold" id="viewMenuBtn" style="min-width: 200px;" aria-label="Ver menú completo" tabindex="0">
                   <i class="bi bi-card-list me-2" aria-hidden="true"></i>
                   Ver Menú Completo
                 </button>
                 ${isAdminUser ? `
-                  <button class="btn btn-outline-light btn-lg px-4" id="adminPanelBtn" style="min-width: 200px;" aria-label="Acceder al panel de administración">
+                  <button class="btn btn-outline-light btn-lg px-4" id="adminPanelBtn" style="min-width: 200px;" aria-label="Acceder al panel de administración" tabindex="0">
                     <i class="bi bi-speedometer2 me-2" aria-hidden="true"></i>
                     Panel Admin
                   </button>
                 ` : `
-                  <button class="btn btn-outline-light btn-lg px-4" id="myOrdersBtn" style="min-width: 200px;" aria-label="Ver mis pedidos anteriores">
+                  <button class="btn btn-outline-light btn-lg px-4" id="myOrdersBtn" style="min-width: 200px;" aria-label="Ver mis pedidos anteriores" tabindex="0">
                     <i class="bi bi-bag-check me-2" aria-hidden="true"></i>
                     Mis Pedidos
                   </button>
                 `}
               ` : `
                 <!-- Botones para usuario NO autenticado -->
-                <button class="btn btn-warning btn-lg px-4 fw-bold" id="heroRegisterBtn" style="min-width: 200px;" aria-label="Descubrir menú completo registrándose">
+                <button class="btn btn-warning btn-lg px-4 fw-bold" id="heroRegisterBtn" style="min-width: 200px;" aria-label="Descubrir menú completo registrándose" tabindex="0">
                   <i class="bi bi-rocket-takeoff me-2" aria-hidden="true"></i>
                   Descubrir Menú
                 </button>
-                <button class="btn btn-outline-light btn-lg px-4" id="learnMoreBtn" style="min-width: 200px;" aria-label="Más información sobre el restaurante">
+                <button class="btn btn-outline-light btn-lg px-4" id="learnMoreBtn" style="min-width: 200px;" aria-label="Más información sobre el restaurante" tabindex="0">
                   <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
                   Conocer Más
                 </button>
@@ -119,10 +125,12 @@ export function HomePage() {
                   <i class="bi bi-check-circle display-1 text-success mb-3" aria-hidden="true"></i>
                   <h3 class="text-white mt-3" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Acceso Completo</h3>
                   <p class="text-light">Disfruta de todas nuestras funcionalidades</p>
+                  <span class="visually-hidden">Estado: Usuario autenticado con acceso completo</span>
                 ` : `
                   <i class="bi bi-lock display-1 text-warning mb-3" aria-hidden="true"></i>
                   <h3 class="text-white mt-3" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Acceso Exclusivo</h3>
                   <p class="text-light">Regístrate para desbloquear todas las funcionalidades</p>
+                  <span class="visually-hidden">Estado: Acceso limitado, registro requerido para funcionalidades completas</span>
                 `}
               </div>
             </aside>
@@ -138,16 +146,17 @@ export function HomePage() {
           <h2 id="benefits-heading" class="h1">
             ${authenticated ? 'Tus beneficios activos' : 'Desbloquea estas ventajas al registrarte'}
           </h2>
+          <p class="lead text-muted">${authenticated ? 'Todos tus beneficios están activos y disponibles' : 'Crea tu cuenta para acceder a estos beneficios exclusivos'}</p>
         </header>
         
-        <div class="row text-center" role="list" aria-label="Lista de beneficios">
+        <div class="row text-center">
           <!-- Beneficio 1: Menú Completo -->
-          <article class="col-md-4 mb-4" role="listitem">
-            <div class="card border-0 h-100 shadow-sm ${authenticated ? 'border-success' : ''}">
+          <div class="col-md-4 mb-4">
+            <div class="card border-0 h-100 shadow-sm ${authenticated ? 'border-success' : 'border-light'}">
               <div class="card-body">
                 ${authenticated ? 
-                  '<i class="bi bi-check-circle-fill text-success position-absolute top-0 end-0 m-3" aria-label="Beneficio activo" aria-hidden="true"></i>' : 
-                  ''
+                  '<div class="position-absolute top-0 end-0 m-3"><i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i><span class="visually-hidden">Beneficio activo</span></div>' : 
+                  '<div class="position-absolute top-0 end-0 m-3"><i class="bi bi-lock text-muted" aria-hidden="true"></i><span class="visually-hidden">Beneficio bloqueado - requiere registro</span></div>'
                 }
                 <i class="bi bi-book display-4 text-primary mb-3" aria-hidden="true"></i>
                 <h3 class="card-title h5 text-dark">Menú Completo</h3>
@@ -157,17 +166,18 @@ export function HomePage() {
                     : 'Accede a nuestra carta completa con fotos, descripciones y precios'
                   }
                 </p>
+                ${!authenticated ? '<span class="visually-hidden">Requiere registro para activar este beneficio</span>' : ''}
               </div>
             </div>
-          </article>
+          </div>
 
           <!-- Beneficio 2: Reservas Online -->
-          <article class="col-md-4 mb-4" role="listitem">
-            <div class="card border-0 h-100 shadow-sm ${authenticated ? 'border-success' : ''}">
+          <div class="col-md-4 mb-4">
+            <div class="card border-0 h-100 shadow-sm ${authenticated ? 'border-success' : 'border-light'}">
               <div class="card-body">
                 ${authenticated ? 
-                  '<i class="bi bi-check-circle-fill text-success position-absolute top-0 end-0 m-3" aria-label="Beneficio activo" aria-hidden="true"></i>' : 
-                  ''
+                  '<div class="position-absolute top-0 end-0 m-3"><i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i><span class="visually-hidden">Beneficio activo</span></div>' : 
+                  '<div class="position-absolute top-0 end-0 m-3"><i class="bi bi-lock text-muted" aria-hidden="true"></i><span class="visually-hidden">Beneficio bloqueado - requiere registro</span></div>'
                 }
                 <i class="bi bi-calendar-check display-4 text-success mb-3" aria-hidden="true"></i>
                 <h3 class="card-title h5 text-dark">Reservas Online</h3>
@@ -177,17 +187,18 @@ export function HomePage() {
                     : 'Reserva tu mesa favorita en segundos, sin llamadas'
                   }
                 </p>
+                ${!authenticated ? '<span class="visually-hidden">Requiere registro para activar este beneficio</span>' : ''}
               </div>
             </div>
-          </article>
+          </div>
 
           <!-- Beneficio 3: Beneficios Exclusivos -->
-          <article class="col-md-4 mb-4" role="listitem">
-            <div class="card border-0 h-100 shadow-sm ${authenticated ? 'border-success' : ''}">
+          <div class="col-md-4 mb-4">
+            <div class="card border-0 h-100 shadow-sm ${authenticated ? 'border-success' : 'border-light'}">
               <div class="card-body">
                 ${authenticated ? 
-                  '<i class="bi bi-check-circle-fill text-success position-absolute top-0 end-0 m-3" aria-label="Beneficio activo" aria-hidden="true"></i>' : 
-                  ''
+                  '<div class="position-absolute top-0 end-0 m-3"><i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i><span class="visually-hidden">Beneficio activo</span></div>' : 
+                  '<div class="position-absolute top-0 end-0 m-3"><i class="bi bi-lock text-muted" aria-hidden="true"></i><span class="visually-hidden">Beneficio bloqueado - requiere registro</span></div>'
                 }
                 <i class="bi bi-gift display-4 text-warning mb-3" aria-hidden="true"></i>
                 <h3 class="card-title h5 text-dark">Beneficios Exclusivos</h3>
@@ -197,9 +208,10 @@ export function HomePage() {
                     : 'Descuentos, promociones especiales y acumulación de puntos'
                   }
                 </p>
+                ${!authenticated ? '<span class="visually-hidden">Requiere registro para activar este beneficio</span>' : ''}
               </div>
             </div>
-          </article>
+          </div>
         </div>
       </div>
     </section>
@@ -213,9 +225,10 @@ export function HomePage() {
             <div class="col-lg-6">
               <header>
                 <h2 id="preview-heading" class="fw-bold mb-4">Una muestra de lo que te espera</h2>
+                <p class="text-muted mb-4">Descubre algunas de nuestras características principales</p>
               </header>
               
-              <div class="preview-item mb-4 p-3 bg-white rounded shadow-sm" role="listitem">
+              <div class="preview-item mb-4 p-3 bg-white rounded shadow-sm">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-egg-fried text-warning display-6 me-3" aria-hidden="true"></i>
                   <div>
@@ -225,7 +238,7 @@ export function HomePage() {
                 </div>
               </div>
               
-              <div class="preview-item mb-4 p-3 bg-white rounded shadow-sm" role="listitem">
+              <div class="preview-item mb-4 p-3 bg-white rounded shadow-sm">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-cup-straw text-success display-6 me-3" aria-hidden="true"></i>
                   <div>
@@ -235,7 +248,7 @@ export function HomePage() {
                 </div>
               </div>
               
-              <div class="preview-item mb-4 p-3 bg-white rounded shadow-sm" role="listitem">
+              <div class="preview-item mb-4 p-3 bg-white rounded shadow-sm">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-basket text-primary display-6 me-3" aria-hidden="true"></i>
                   <div>
@@ -253,12 +266,12 @@ export function HomePage() {
                   <i class="bi bi-lock-fill display-1 text-warning mb-3" aria-hidden="true"></i>
                   <h3 class="mb-3 h4">Contenido Exclusivo</h3>
                   <p class="mb-4">Regístrate o inicia sesión para desbloquear el menú completo y todas las funcionalidades</p>
-                  <div class="d-grid gap-2" role="group" aria-label="Opciones de acceso">
-                    <button class="btn btn-warning btn-lg" id="previewRegisterBtn" aria-label="Crear cuenta gratuita">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-warning btn-lg" id="previewRegisterBtn" aria-label="Crear cuenta gratuita" tabindex="0">
                       <i class="bi bi-person-plus me-2" aria-hidden="true"></i>
                       Crear Cuenta Gratis
                     </button>
-                    <button class="btn btn-outline-light" id="previewLoginBtn" aria-label="Iniciar sesión con cuenta existente">
+                    <button class="btn btn-outline-light" id="previewLoginBtn" aria-label="Iniciar sesión con cuenta existente" tabindex="0">
                       ¿Ya tienes cuenta? Inicia Sesión
                     </button>
                   </div>
@@ -275,77 +288,87 @@ export function HomePage() {
       <div class="container">
         <header class="text-center mb-5">
           <h2 id="testimonials-heading" class="h1">Lo que dicen nuestros clientes</h2>
+          <p class="lead text-light">Experiencias reales de nuestros clientes registrados</p>
         </header>
         
-        <div class="row" role="list" aria-label="Testimonios de clientes">
+        <div class="row">
           <!-- Testimonio 1 -->
-          <article class="col-md-4 mb-4" role="listitem">
-            <div class="card bg-secondary border-0 h-100">
+          <div class="col-md-4 mb-4" itemscope itemtype="https://schema.org/Review">
+            <div class="card testimonial-card bg-light text-dark border-0 h-100">
               <div class="card-body">
-                <div class="text-warning mb-3" aria-label="5 estrellas de 5">
+                <div class="text-warning mb-3" aria-label="Calificación: 5 estrellas de 5" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                  <meta itemprop="ratingValue" content="5">
+                  <meta itemprop="bestRating" content="5">
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
+                  <span class="visually-hidden">5 estrellas de 5</span>
                 </div>
-                <blockquote class="card-text">
+                <blockquote class="card-text testimonial-text" itemprop="reviewBody">
                   "Una vez que te registras, descubres un mundo de opciones increíbles. Vale totalmente la pena."
                 </blockquote>
                 <footer class="mt-3">
-                  <cite class="text-light">
-                    <strong>María González</strong>
+                  <cite class="text-muted" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <strong itemprop="name">María González</strong>
                   </cite>
                 </footer>
               </div>
             </div>
-          </article>
+          </div>
 
           <!-- Testimonio 2 -->
-          <article class="col-md-4 mb-4" role="listitem">
-            <div class="card bg-secondary border-0 h-100">
+          <div class="col-md-4 mb-4" itemscope itemtype="https://schema.org/Review">
+            <div class="card testimonial-card bg-light text-dark border-0 h-100">
               <div class="card-body">
-                <div class="text-warning mb-3" aria-label="4.5 estrellas de 5">
+                <div class="text-warning mb-3" aria-label="Calificación: 4.5 estrellas de 5" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                  <meta itemprop="ratingValue" content="4.5">
+                  <meta itemprop="bestRating" content="5">
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-half" aria-hidden="true"></i>
+                  <span class="visually-hidden">4.5 estrellas de 5</span>
                 </div>
-                <blockquote class="card-text">
+                <blockquote class="card-text testimonial-text" itemprop="reviewBody">
                   "El sistema de reservas online es super práctico. Crear la cuenta fue rápido y ahora reservo en segundos."
                 </blockquote>
                 <footer class="mt-3">
-                  <cite class="text-light">
-                    <strong>Carlos Rodríguez</strong>
+                  <cite class="text-muted" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <strong itemprop="name">Carlos Rodríguez</strong>
                   </cite>
                 </footer>
               </div>
             </div>
-          </article>
+          </div>
 
           <!-- Testimonio 3 -->
-          <article class="col-md-4 mb-4" role="listitem">
-            <div class="card bg-secondary border-0 h-100">
+          <div class="col-md-4 mb-4" itemscope itemtype="https://schema.org/Review">
+            <div class="card testimonial-card bg-light text-dark border-0 h-100">
               <div class="card-body">
-                <div class="text-warning mb-3" aria-label="5 estrellas de 5">
+                <div class="text-warning mb-3" aria-label="Calificación: 5 estrellas de 5" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                  <meta itemprop="ratingValue" content="5">
+                  <meta itemprop="bestRating" content="5">
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
                   <i class="bi bi-star-fill" aria-hidden="true"></i>
+                  <span class="visually-hidden">5 estrellas de 5</span>
                 </div>
-                <blockquote class="card-text">
+                <blockquote class="card-text testimonial-text" itemprop="reviewBody">
                   "Los beneficios para clientes registrados son geniales. Descuentos y promociones que no encuentras en otro lugar."
                 </blockquote>
                 <footer class="mt-3">
-                  <cite class="text-light">
-                    <strong>Ana Martínez</strong>
+                  <cite class="text-muted" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <strong itemprop="name">Ana Martínez</strong>
                   </cite>
                 </footer>
               </div>
             </div>
-          </article>
+          </div>
         </div>
       </div>
     </section>
@@ -365,87 +388,158 @@ export function HomePage() {
           </p>
         </header>
         
-        <div class="d-flex gap-3 justify-content-center flex-wrap" role="group" aria-label="Acciones finales">
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
           ${authenticated ? `
-            <button class="btn btn-dark btn-lg px-5" id="finalMenuBtn" style="min-width: 220px;" aria-label="Ver menú completo">
+            <button class="btn btn-dark btn-lg px-5" id="finalMenuBtn" style="min-width: 220px;" aria-label="Ver menú completo" tabindex="0">
               <i class="bi bi-card-list me-2" aria-hidden="true"></i>
               Ver Menú
             </button>
             ${isAdminUser ? `
-              <button class="btn btn-outline-dark btn-lg px-5" id="finalAdminBtn" style="min-width: 220px;" aria-label="Acceder al panel administrativo">
+              <button class="btn btn-outline-dark btn-lg px-5" id="finalAdminBtn" style="min-width: 220px;" aria-label="Acceder al panel administrativo" tabindex="0">
                 <i class="bi bi-speedometer2 me-2" aria-hidden="true"></i>
                 Panel Admin
               </button>
-            ` : ''}
+            ` : `
+              <button class="btn btn-outline-dark btn-lg px-5" id="finalOrdersBtn" style="min-width: 220px;" aria-label="Ver historial de pedidos" tabindex="0">
+                <i class="bi bi-bag-check me-2" aria-hidden="true"></i>
+                Mis Pedidos
+              </button>
+            `}
           ` : `
-            <button class="btn btn-dark btn-lg px-5" id="finalRegisterBtn" style="min-width: 220px;" aria-label="Crear cuenta gratuita">
+            <button class="btn btn-dark btn-lg px-5" id="finalRegisterBtn" style="min-width: 220px;" aria-label="Crear cuenta gratuita" tabindex="0">
               <i class="bi bi-person-plus me-2" aria-hidden="true"></i>
               Crear Cuenta Gratis
             </button>
-            <button class="btn btn-outline-dark btn-lg px-5" id="finalLoginBtn" style="min-width: 220px;" aria-label="Iniciar sesión">
+            <button class="btn btn-outline-dark btn-lg px-5" id="finalLoginBtn" style="min-width: 220px;" aria-label="Iniciar sesión" tabindex="0">
               <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>
               Iniciar Sesión
             </button>
           `}
         </div>
-        <p class="text-muted mt-3 small" aria-live="polite">
+        <p class="text-dark mt-3 small" aria-live="polite">
           ${authenticated ? 'Token válido por 30 minutos' : 'Registro rápido - Solo toma 1 minuto'}
         </p>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-darker text-light py-4" role="contentinfo">
+    <footer class="bg-darker text-light py-4" role="contentinfo" aria-label="Información del sitio">
       <div class="container">
         <div class="row">
           <!-- Información del Restaurante -->
-          <address class="col-md-4 mb-3">
+          <address class="col-md-4 mb-3" aria-label="Información del restaurante">
             <h5><i class="bi bi-egg-fried me-2" aria-hidden="true"></i>Sabores & Delicias</h5>
-            <p class="text-muted text-footer">Donde cada comida es una experiencia memorable.</p>
+            <p class="text-light text-footer">Donde cada comida es una experiencia memorable.</p>
           </address>
           
           <!-- Horario -->
           <div class="col-md-4 mb-3">
             <h5>Horario</h5>
-            <dl class="text-muted text-footer">
+            <dl class="text-light text-footer">
               <dt class="visually-hidden">Días de semana</dt>
               <dd class="mb-1">Lunes a Domingos: 12:00 - 23:30</dd>
-            
             </dl>
           </div>
           
           <!-- Contacto -->
           <address class="col-md-4 mb-3">
             <h5>Contacto</h5>
-            <p class="text-muted mb-1 text-footer">
+            <p class="text-light mb-1 text-footer">
               <i class="bi bi-telephone me-2" aria-hidden="true"></i> 
-              <a href="tel:+573224356789" class="text-muted text-decoration-none text-footer">(57) 322 43567898</a>
+              <a href="tel:+573224356789" class="text-light text-decoration-none text-footer">(57) 322 43567898</a>
             </p>
-            <p class="text-muted text-footer">
+            <p class="text-light text-footer">
               <i class="bi bi-geo-alt me-2" aria-hidden="true"></i> 
               Cra 45 #123-45, Tuluá
             </p>
           </address>
         </div>
         
-        <hr class="my-4" aria-hidden="true">
+        <hr class="my-4 bg-light" aria-hidden="true">
         
         <div class="text-center">
-          <p class="mb-0">&copy; 2024 Sabores & Delicias. Todos los derechos reservados.</p>
+          <p class="mb-0 text-light">&copy; 2024 Sabores & Delicias. Todos los derechos reservados.</p>
+          <p class="text-light small mt-2">Sitio web optimizado para accesibilidad</p>
         </div>
       </div>
     </footer>
 
-    <!-- Navegación de Accesibilidad (Oculta) -->
-    <nav class="visually-hidden" aria-label="Navegación de accesibilidad">
-      <h2>Enlaces de Accesibilidad</h2>
-      <ul>
-        <li><a href="#main-content">Saltar al contenido principal</a></li>
-        <li><a href="#benefits-heading">Ir a beneficios</a></li>
-        <li><a href="#testimonials-heading">Ir a testimonios</a></li>
-        <li><a href="#cta-heading">Ir a acciones finales</a></li>
-      </ul>
-    </nav>
+    <!-- CSS para mejoras de accesibilidad -->
+    <style>
+      .visually-hidden-focusable:not(:focus):not(:focus-within) {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
+
+      .visually-hidden-focusable:focus {
+        position: fixed !important;
+        top: 10px;
+        left: 10px;
+        z-index: 9999;
+        width: auto !important;
+        height: auto !important;
+        padding: 0.5rem 1rem !important;
+        background: #0d6efd !important;
+        color: white !important;
+        text-decoration: none !important;
+      }
+
+      .btn:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #0d6efd;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      }
+
+      .text-footer {
+        color: #e2e8f0 !important;
+      }
+
+      /* Mejorar contraste en testimonios */
+      .testimonial-card {
+        background-color: #ffffff !important;
+        color: #2d3748 !important;
+      }
+
+      .testimonial-text {
+        color: #4a5568 !important;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      @media (prefers-contrast: high) {
+        .text-muted {
+          color: #000 !important;
+        }
+        
+        .bg-light {
+          background-color: #fff !important;
+        }
+        
+        .card {
+          border: 2px solid #000 !important;
+        }
+        
+        .text-light {
+          color: #fff !important;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
   `;
 
   // ========================================
