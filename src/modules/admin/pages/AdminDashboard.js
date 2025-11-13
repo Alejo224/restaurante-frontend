@@ -7,22 +7,32 @@ import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
+  page.setAttribute('role', 'application');
+  page.setAttribute('aria-label', 'Panel de Administración del Restaurante');
+  
   const user = getCurrentUser();
   const userName = user?.email?.split('@')[0] || 'Administrador';
+  const displayName = userName.charAt(0).toUpperCase() + userName.slice(1);
 
   page.innerHTML = `
   <!-- Layout con Sidebar -->
-  <div class="admin-layout" role="main">
+  <div class="admin-layout">
     
+    <!-- Enlace para saltar navegación -->
+    <a href="#main-content" class="btn btn-primary visually-hidden-focusable position-absolute top-0 start-0 m-2" 
+       style="z-index: 9999;" tabindex="0">
+      Saltar al contenido principal
+    </a>
+
     <!-- Sidebar - Navegación principal -->
-    <aside class="admin-sidebar" id="adminSidebar" aria-label="Navegación principal">
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Navegación principal del panel administrativo">
       <!-- Header del Sidebar -->
       <header class="sidebar-header" role="banner">
         <div class="d-flex align-items-center">
           <i class="bi bi-egg-fried fs-3 me-2 text-warning" aria-hidden="true"></i>
           <div>
             <h1 class="h5 mb-0 fw-bold text-white">Panel Administrativo</h1>
-            <small class="text-panel" aria-label="Usuario actual">${userName}</small>
+            <small class="text-panel" aria-label="Usuario actual: ${displayName}">${displayName}</small>
           </div>
         </div>
       </header>
@@ -32,7 +42,8 @@ export function AdminDashboard() {
         <ul class="nav flex-column" role="menubar">
           <!-- Dashboard -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link active" id="navDashboard" data-section="dashboard" role="menuitem" aria-current="page">
+            <a href="#" class="nav-link active" id="navDashboard" data-section="dashboard" role="menuitem" 
+               aria-current="page" aria-label="Ir al dashboard principal">
               <i class="bi bi-speedometer2 me-2" aria-hidden="true"></i>
               <span>Dashboard</span>
             </a>
@@ -40,7 +51,8 @@ export function AdminDashboard() {
 
           <!-- Gestión de Menú -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link" id="navMenu" data-section="menu" role="menuitem">
+            <a href="#" class="nav-link" id="navMenu" data-section="menu" role="menuitem" 
+               aria-label="Gestionar menú del restaurante">
               <i class="bi bi-menu-button-wide me-2" aria-hidden="true"></i>
               <span>Gestionar Menú</span>
             </a>
@@ -48,7 +60,8 @@ export function AdminDashboard() {
 
           <!-- Gestión de Mesas -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link" id="navMesas" data-section="mesas" role="menuitem">
+            <a href="#" class="nav-link" id="navMesas" data-section="mesas" role="menuitem" 
+               aria-label="Gestionar mesas del restaurante">
               <i class="bi bi-table me-2" aria-hidden="true"></i>
               <span>Gestionar Mesas</span>
             </a>
@@ -56,7 +69,8 @@ export function AdminDashboard() {
 
           <!-- Gestión de Reservas -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link" id="navReservas" data-section="reservas" role="menuitem">
+            <a href="#" class="nav-link" id="navReservas" data-section="reservas" role="menuitem" 
+               aria-label="Gestionar reservas de clientes">
               <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
               <span>Gestionar Reservas</span>
             </a>
@@ -66,7 +80,8 @@ export function AdminDashboard() {
 
           <!-- Pedidos (próximamente) -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem">
+            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem" 
+               aria-label="Gestión de pedidos - Próximamente">
               <i class="bi bi-receipt me-2" aria-hidden="true"></i>
               <span>Pedidos</span>
               <span class="badge bg-secondary ms-auto">Próximo</span>
@@ -75,7 +90,8 @@ export function AdminDashboard() {
 
           <!-- Facturación (próximamente) -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem">
+            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem" 
+               aria-label="Facturación - Próximamente">
               <i class="bi bi-receipt-cutoff me-2" aria-hidden="true"></i>
               <span>Facturación</span>
               <span class="badge bg-secondary ms-auto">Próximo</span>
@@ -86,7 +102,8 @@ export function AdminDashboard() {
 
       <!-- Footer del Sidebar -->
       <footer class="sidebar-footer">
-        <button class="btn btn-outline-danger w-100" id="logoutBtn" aria-label="Cerrar sesión">
+        <button class="btn btn-outline-danger w-100" id="logoutBtn" 
+                aria-label="Cerrar sesión del panel administrativo">
           <i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>
           Cerrar Sesión
         </button>
@@ -94,7 +111,7 @@ export function AdminDashboard() {
     </aside>
 
     <!-- Contenido Principal -->
-    <main class="admin-content" id="main-content" tabindex="-1">
+    <main class="admin-content" id="main-content" tabindex="-1" role="main">
       
       <!-- Navbar Superior -->
       <header class="navbar navbar-light bg-white border-bottom sticky-top shadow-sm" role="banner">
@@ -112,17 +129,19 @@ export function AdminDashboard() {
 
           <!-- Botones de acción dinámicos -->
           <div class="d-flex align-items-center gap-3" role="toolbar" aria-label="Acciones rápidas">
-            <button class="btn btn-primary d-none" id="crearPlatoBtn" aria-label="Crear nuevo plato">
+            <button class="btn btn-primary d-none" id="crearPlatoBtn" 
+                    aria-label="Crear nuevo plato en el menú">
               <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
               Crear Plato
             </button>
-            <button class="btn btn-success d-none" id="crearMesaBtn" aria-label="Crear nueva mesa">
+            <button class="btn btn-success d-none" id="crearMesaBtn" 
+                    aria-label="Crear nueva mesa en el restaurante">
               <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
               Crear Mesa
             </button>
-            <span class="text-muted small d-none d-md-inline" aria-label="Usuario conectado">
+            <span class="text-muted small d-none d-md-inline" aria-label="Usuario conectado: ${displayName}">
               <i class="bi bi-person-circle me-1" aria-hidden="true"></i>
-              ${userName}
+              ${displayName}
             </span>
           </div>
         </div>
@@ -134,24 +153,25 @@ export function AdminDashboard() {
         <!-- SECCIÓN DASHBOARD -->
         <section id="seccionDashboard" class="content-section" aria-labelledby="dashboard-heading">
           <header class="dashboard-welcome">
-            <h3 id="dashboard-heading" class="fw-bold mb-2">
-              Bienvenido al Panel de Administración, ${userName}
-            </h3>
+            <h1 id="dashboard-heading" class="fw-bold mb-2">
+              Bienvenido al Panel de Administración, ${displayName}
+            </h1>
             <p class="mb-0 opacity-75">
               Gestiona tu restaurante desde este panel de control
             </p>
           </header>
 
           <!-- Cards principales de gestión -->
-          <div class="dashboard-cards" role="list" aria-label="Opciones de gestión">
+          <div class="dashboard-cards" role="list" aria-label="Opciones de gestión del restaurante">
             
             <!-- Card: Gestionar Menú -->
-            <article class="dashboard-card" data-navigate="menu" role="listitem" tabindex="0">
+            <article class="dashboard-card" data-navigate="menu" role="listitem" tabindex="0"
+                     aria-label="Gestionar menú del restaurante - Actualizar platos y precios">
               <div class="dashboard-card-icon primary" aria-hidden="true">
                 <i class="bi bi-menu-button-wide"></i>
               </div>
               <div class="dashboard-card-title">GESTIÓN</div>
-              <h4 class="dashboard-card-content">Gestionar Menú</h4>
+              <h3 class="dashboard-card-content h4">Gestionar Menú</h3>
               <p class="text-muted small mb-0 mt-2">
                 Actualizar platos y precios
               </p>
@@ -162,12 +182,13 @@ export function AdminDashboard() {
             </article>
 
             <!-- Card: Gestionar Mesas -->
-            <article class="dashboard-card" data-navigate="mesas" role="listitem" tabindex="0">
+            <article class="dashboard-card" data-navigate="mesas" role="listitem" tabindex="0"
+                     aria-label="Gestionar mesas del restaurante - Confirmar y organizar mesas">
               <div class="dashboard-card-icon success" aria-hidden="true">
                 <i class="bi bi-table"></i>
               </div>
               <div class="dashboard-card-title">GESTIÓN</div>
-              <h4 class="dashboard-card-content">Gestionar Mesas</h4>
+              <h3 class="dashboard-card-content h4">Gestionar Mesas</h3>
               <p class="text-muted small mb-0 mt-2">
                 Confirmar y organizar mesas
               </p>
@@ -178,12 +199,13 @@ export function AdminDashboard() {
             </article>
 
             <!-- Card: Gestionar Reservas -->
-            <article class="dashboard-card" data-navigate="reservas" role="listitem" tabindex="0">
+            <article class="dashboard-card" data-navigate="reservas" role="listitem" tabindex="0"
+                     aria-label="Gestionar reservas - Ver y administrar reservas de clientes">
               <div class="dashboard-card-icon warning" aria-hidden="true">
                 <i class="bi bi-calendar-check"></i>
               </div>
               <div class="dashboard-card-title">GESTIÓN</div>
-              <h4 class="dashboard-card-content">Gestionar Reservas</h4>
+              <h3 class="dashboard-card-content h4">Gestionar Reservas</h3>
               <p class="text-muted small mb-0 mt-2">
                 Ver y administrar reservas
               </p>
@@ -194,12 +216,13 @@ export function AdminDashboard() {
             </article>
 
             <!-- Card: Facturación (próximamente) -->
-            <article class="dashboard-card" style="opacity: 0.6;" role="listitem" aria-disabled="true">
+            <article class="dashboard-card" style="opacity: 0.6;" role="listitem" aria-disabled="true"
+                     aria-label="Facturación - Próximamente - Generar y gestionar facturas">
               <div class="dashboard-card-icon info" aria-hidden="true">
                 <i class="bi bi-receipt-cutoff"></i>
               </div>
               <div class="dashboard-card-title">GESTIÓN</div>
-              <h4 class="dashboard-card-content">Facturación</h4>
+              <h3 class="dashboard-card-content h4">Facturación</h3>
               <p class="text-muted small mb-0 mt-2">
                 Generar y gestionar facturas
               </p>
@@ -211,11 +234,11 @@ export function AdminDashboard() {
           <section aria-labelledby="estadisticas-heading">
             <header class="row mt-4">
               <div class="col-12">
-                <h5 id="estadisticas-heading" class="fw-bold mb-3">Estadísticas de Hoy</h5>
+                <h2 id="estadisticas-heading" class="h5 fw-bold mb-3">Estadísticas de Hoy</h2>
               </div>
             </header>
 
-            <div class="stats-grid" role="list" aria-label="Estadísticas del día">
+            <div class="stats-grid" role="list" aria-label="Estadísticas del día actual">
               
               <!-- Reservas Hoy -->
               <article class="stat-card" role="listitem">
@@ -276,51 +299,47 @@ export function AdminDashboard() {
         <section id="seccionMenu" class="content-section" style="display: none;" aria-labelledby="menu-heading">
           <header class="d-flex justify-content-between align-items-center mb-4">
             <div>
-              <h2 id="menu-heading" class="fw-bold mb-1">
+              <h1 id="menu-heading" class="fw-bold mb-1">
                 <i class="bi bi-menu-button-wide me-2 text-primary" aria-hidden="true"></i>
                 Gestión de Menú
-              </h2>
+              </h1>
               <p class="text-muted mb-0">Administra los platos del restaurante</p>
             </div>
           </header>
           
           <!-- Componente de lista de platos -->
-          <div id="plato-list-container" role="region" aria-label="Lista de platos"></div>
+          <div id="plato-list-container" role="region" aria-label="Lista de platos del menú"></div>
         </section>
 
+        <!-- SECCIÓN GESTIONAR MESAS -->
+        <section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
+          <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h1 id="mesas-heading" class="fw-bold mb-1">
+                <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
+                Gestión de Mesas
+              </h1>
+              <p class="text-muted mb-0">Administra las mesas del restaurante</p>
+            </div>
+          </header>
 
-
-         <!-- SECCIÓN GESTIONAR MESAS -->
-<section id="seccionMesas" class="content-section" style="display: none;" aria-labelledby="mesas-heading">
-  <header class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 id="mesas-heading" class="fw-bold mb-1">
-        <i class="bi bi-table me-2 text-success" aria-hidden="true"></i>
-        Gestión de Mesas
-      </h2>
-      <p class="text-muted mb-0">Administra las mesas del restaurante</p>
-    </div>
-  </header>
-
-  <!-- Aquí se mostrará la lista de mesas -->
-  <div id="mesa-list-container" class="mt-3"></div>
-</section>
-
-
+          <!-- Aquí se mostrará la lista de mesas -->
+          <div id="mesa-list-container" class="mt-3" role="region" aria-label="Lista de mesas del restaurante"></div>
+        </section>
 
         <!-- SECCIÓN GESTIONAR RESERVAS -->
         <section id="seccionReservas" class="content-section" style="display: none;" aria-labelledby="reservas-heading">
           <header class="d-flex justify-content-between align-items-center mb-4">
             <div>
-              <h2 id="reservas-heading" class="fw-bold mb-1">
+              <h1 id="reservas-heading" class="fw-bold mb-1">
                 <i class="bi bi-calendar-check me-2 text-warning" aria-hidden="true"></i>
                 Gestión de Reservas
-              </h2>
+              </h1>
               <p class="text-muted mb-0">Ver y administrar reservas de clientes</p>
             </div>
           </header>
 
-          <div class="alert alert-warning" role="status">
+          <div class="alert alert-warning" role="status" aria-live="polite">
             <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
             <strong>Próximamente:</strong> Aquí verás las reservas realizadas por los clientes
           </div>
@@ -331,181 +350,332 @@ export function AdminDashboard() {
 
   <!-- Overlay para móvil -->
   <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+  <!-- Área de anuncios para accesibilidad -->
+  <div class="visually-hidden" aria-live="polite" aria-atomic="true">
+    <div id="ariaAnnouncer"></div>
+  </div>
+
+  <!-- CSS para mejoras de accesibilidad -->
+  <style>
+    .visually-hidden-focusable:not(:focus):not(:focus-within) {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .visually-hidden-focusable:focus {
+      position: fixed !important;
+      top: 10px;
+      left: 10px;
+      z-index: 9999;
+      width: auto !important;
+      height: auto !important;
+      padding: 0.5rem 1rem !important;
+      background: #0d6efd !important;
+      color: white !important;
+      text-decoration: none !important;
+    }
+
+    .btn:focus-visible,
+    .nav-link:focus-visible,
+    .dashboard-card:focus-visible {
+      outline: 3px solid #0d6efd;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+
+    .dashboard-card:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Alto contraste */
+    @media (prefers-contrast: high) {
+      .card {
+        border: 2px solid #000 !important;
+      }
+      
+      .btn-outline-primary {
+        border-color: #000;
+        color: #000;
+      }
+      
+      .nav-link {
+        border: 1px solid transparent;
+      }
+      
+      .nav-link.active {
+        border-color: #000;
+      }
+    }
+
+    /* Movimiento reducido */
+    @media (prefers-reduced-motion: reduce) {
+      .dashboard-card {
+        transition: none;
+      }
+      
+      .dashboard-card:focus-within {
+        transform: none;
+      }
+    }
+
+    /* Mejoras de enfoque para sidebar */
+    .admin-sidebar .btn:focus-visible,
+    .admin-sidebar .nav-link:focus-visible {
+      outline-color: #fff;
+    }
+  </style>
 `;
 
   // ========================================
-  // CARGAR COMPONENTE DE PLATOS
+  // INICIALIZACIÓN Y CONFIGURACIÓN
   // ========================================
+
+  // Función para anuncios de screen reader
+  function announceToScreenReader(message) {
+    const announcer = page.querySelector('#ariaAnnouncer');
+    if (announcer) {
+      announcer.textContent = message;
+    }
+  }
+
+  // Cargar componentes de forma asíncrona
   setTimeout(() => {
+    initializeComponents();
+    setupEventListeners();
+    announceToScreenReader('Panel de administración cargado correctamente');
+  }, 100);
+
+  function initializeComponents() {
+    // Cargar componente de platos
     const platoContainer = page.querySelector('#plato-list-container');
     if (platoContainer) {
       platoContainer.appendChild(PlatoList(true)); // true = modo admin con CRUD
     }
-  }, 100);
 
-
-   
-// CARGAR COMPONENTE DE MESAS
-// ========================================
- //setTimeout(async() => {
-  //const mesaContainer = page.querySelector("#mesa-list-container");
-  //if (mesaContainer) {
-  //const mesasComponent = await
-  //MesasList();
-
-  
-     
-   // mesaContainer.appendChild(MesasList(mesasComponent));
-  //}
-  //},300);
-
-  // CARGAR COMPONENTE DE MESAS
-// ========================================
-setTimeout(async () => {
-  const mesaContainer = page.querySelector("#mesa-list-container");
-  if (mesaContainer) {
-    // Esperamos a que MesasList devuelva un elemento DOM
-    const mesasComponent = await MesasList();
-
-    // Aseguramos que sea un nodo HTML antes de agregarlo
-    if (mesasComponent instanceof Node) {
-      mesaContainer.appendChild(mesasComponent);
-    } else {
-      console.warn("⚠️ MesasList no devolvió un nodo válido");
+    // Cargar componente de mesas
+    const mesaContainer = page.querySelector("#mesa-list-container");
+    if (mesaContainer) {
+      MesasList().then(mesasComponent => {
+        if (mesasComponent instanceof Node) {
+          mesaContainer.appendChild(mesasComponent);
+        } else {
+          console.warn("⚠️ MesasList no devolvió un nodo válido");
+        }
+      }).catch(error => {
+        console.error("❌ Error cargando componente de mesas:", error);
+      });
     }
   }
-}, 300);
 
+  function setupEventListeners() {
+    setupSidebarNavigation();
+    setupActionButtons();
+    setupDashboardCards();
+  }
 
-   
- 
+  function setupSidebarNavigation() {
+    const sidebar = page.querySelector('#adminSidebar');
+    const overlay = page.querySelector('#sidebarOverlay');
+    const toggleBtn = page.querySelector('#toggleSidebar');
 
+    // Toggle Sidebar (móvil)
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const isExpanded = sidebar.classList.toggle('show');
+        overlay.classList.toggle('show');
+        toggleBtn.setAttribute('aria-expanded', isExpanded.toString());
+        announceToScreenReader(isExpanded ? 'Menú de navegación abierto' : 'Menú de navegación cerrado');
+      });
+    }
 
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.remove('show');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      announceToScreenReader('Menú de navegación cerrado');
+    });
 
-  // ========================================
-  // EVENT LISTENERS
-  // ========================================
+    // Navegación entre secciones
+    const navLinks = page.querySelectorAll('.sidebar-nav .nav-link:not(.disabled)');
+    const sections = {
+      dashboard: page.querySelector('#seccionDashboard'),
+      menu: page.querySelector('#seccionMenu'),
+      mesas: page.querySelector('#seccionMesas'),
+      reservas: page.querySelector('#seccionReservas')
+    };
 
-  // Toggle Sidebar (móvil)
-  const sidebar = page.querySelector('#adminSidebar');
-  const overlay = page.querySelector('#sidebarOverlay');
-  const toggleBtn = page.querySelector('#toggleSidebar');
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const section = link.dataset.section;
+        if (section) navigateToSection(section);
+      });
 
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('show');
-      overlay.classList.toggle('show');
+      // Soporte para teclado
+      link.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const section = link.dataset.section;
+          if (section) navigateToSection(section);
+        }
+      });
     });
   }
 
-  overlay.addEventListener('click', () => {
-    sidebar.classList.remove('show');
-    overlay.classList.remove('show');
-  });
+  function setupActionButtons() {
+    // Botones de acción dinámicos
+    const crearPlatoBtn = page.querySelector('#crearPlatoBtn');
+    const crearMesaBtn = page.querySelector('#crearMesaBtn');
+    const logoutBtn = page.querySelector('#logoutBtn');
 
-  // Navegación entre secciones
-  const navLinks = page.querySelectorAll('.sidebar-nav .nav-link:not(.disabled)');
-  const sections = {
-    dashboard: page.querySelector('#seccionDashboard'),
-    menu: page.querySelector('#seccionMenu'),
-    mesas: page.querySelector('#seccionMesas'),
-    reservas: page.querySelector('#seccionReservas')
-  };
+    // Botón Crear Plato
+    if (crearPlatoBtn) {
+      crearPlatoBtn.addEventListener('click', () => {
+        announceToScreenReader('Abriendo página para crear nuevo plato');
+        console.log('Abriendo página de crear plato...');
+        window.open('/restaurante-frontend/src/modules/admin/crear-plato/index.html', '_blank');
+      });
+    }
 
-  // Botones de acción dinámicos
-  const crearPlatoBtn = page.querySelector('#crearPlatoBtn');
-  const crearMesaBtn = page.querySelector('#crearMesaBtn');
+    // Botón Crear Mesa
+    if (crearMesaBtn) {
+      crearMesaBtn.addEventListener('click', () => {
+        announceToScreenReader('Abriendo modal para crear nueva mesa');
+        CrearMesaModal();
+      });
+    }
+
+    // Logout
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        if (confirm('¿Estás seguro de que quieres cerrar sesión del panel administrativo?')) {
+          announceToScreenReader('Cerrando sesión del panel administrativo...');
+          try {
+            await logout();
+            announceToScreenReader('Sesión cerrada correctamente');
+          } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+            announceToScreenReader('Error al cerrar sesión');
+            localStorage.clear();
+            router.navigate('/login');
+          }
+        } else {
+          announceToScreenReader('Cierre de sesión cancelado');
+        }
+      });
+    }
+  }
+
+  function setupDashboardCards() {
+    // Click en dashboard cards
+    page.querySelectorAll('.dashboard-card[data-navigate]').forEach(card => {
+      card.addEventListener('click', () => {
+        const section = card.dataset.navigate;
+        if (section) navigateToSection(section);
+      });
+
+      // Soporte para teclado
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const section = card.dataset.navigate;
+          if (section) navigateToSection(section);
+        }
+      });
+    });
+  }
 
   function navigateToSection(sectionName) {
     // Actualizar nav links
-    navLinks.forEach(l => l.classList.remove('active'));
+    const navLinks = page.querySelectorAll('.sidebar-nav .nav-link:not(.disabled)');
+    navLinks.forEach(l => {
+      l.classList.remove('active');
+      l.removeAttribute('aria-current');
+    });
+    
     const activeLink = page.querySelector(`[data-section="${sectionName}"]`);
-    if (activeLink) activeLink.classList.add('active');
+    if (activeLink) {
+      activeLink.classList.add('active');
+      activeLink.setAttribute('aria-current', 'page');
+    }
 
     // Mostrar sección
-    Object.values(sections).forEach(s => s.style.display = 'none');
+    const sections = {
+      dashboard: page.querySelector('#seccionDashboard'),
+      menu: page.querySelector('#seccionMenu'),
+      mesas: page.querySelector('#seccionMesas'),
+      reservas: page.querySelector('#seccionReservas')
+    };
+
+    Object.values(sections).forEach(s => {
+      if (s) s.style.display = 'none';
+    });
+    
     if (sections[sectionName]) {
       sections[sectionName].style.display = 'block';
     }
 
     // Actualizar título y botones según la sección
     const pageTitle = page.querySelector('#pageTitle');
+    const crearPlatoBtn = page.querySelector('#crearPlatoBtn');
+    const crearMesaBtn = page.querySelector('#crearMesaBtn');
     
-    switch(sectionName) {
-      case 'dashboard':
-        pageTitle.textContent = 'Dashboard';
-        crearPlatoBtn.classList.add('d-none');
-        crearMesaBtn.classList.add('d-none');
-        break;
-      
-      case 'menu':
-        pageTitle.textContent = 'Gestionar Menú';
-        crearPlatoBtn.classList.remove('d-none');
-        crearMesaBtn.classList.add('d-none');
-        break;
-      
-      case 'mesas':
-        pageTitle.textContent = 'Gestionar Mesas';
-        crearPlatoBtn.classList.add('d-none');
-        crearMesaBtn.classList.remove('d-none');
-        break;
-      
-      case 'reservas':
-        pageTitle.textContent = 'Gestionar Reservas';
-        crearPlatoBtn.classList.add('d-none');
-        crearMesaBtn.classList.add('d-none');
-        break;
+    const sectionTitles = {
+      dashboard: 'Dashboard',
+      menu: 'Gestionar Menú',
+      mesas: 'Gestionar Mesas',
+      reservas: 'Gestionar Reservas'
+    };
+
+    if (pageTitle) {
+      pageTitle.textContent = sectionTitles[sectionName] || 'Dashboard';
     }
+
+    // Mostrar/ocultar botones de acción
+    if (crearPlatoBtn && crearMesaBtn) {
+      crearPlatoBtn.classList.add('d-none');
+      crearMesaBtn.classList.add('d-none');
+
+      switch(sectionName) {
+        case 'menu':
+          crearPlatoBtn.classList.remove('d-none');
+          break;
+        case 'mesas':
+          crearMesaBtn.classList.remove('d-none');
+          break;
+      }
+    }
+
+    // Anunciar cambio de sección
+    const sectionNames = {
+      dashboard: 'Dashboard principal',
+      menu: 'Gestión de menú',
+      mesas: 'Gestión de mesas',
+      reservas: 'Gestión de reservas'
+    };
+
+    announceToScreenReader(`Navegando a ${sectionNames[sectionName] || 'sección'}`);
 
     // Cerrar sidebar en móvil
     if (window.innerWidth < 992) {
-      sidebar.classList.remove('show');
-      overlay.classList.remove('show');
+      const sidebar = page.querySelector('#adminSidebar');
+      const overlay = page.querySelector('#sidebarOverlay');
+      const toggleBtn = page.querySelector('#toggleSidebar');
+      
+      if (sidebar) sidebar.classList.remove('show');
+      if (overlay) overlay.classList.remove('show');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
     }
   }
-
-  // Click en nav links del sidebar
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const section = link.dataset.section;
-      if (section) navigateToSection(section);
-    });
-  });
-
-  // Click en dashboard cards
-  page.querySelectorAll('.dashboard-card[data-navigate]').forEach(card => {
-    card.addEventListener('click', () => {
-      const section = card.dataset.navigate;
-      if (section) navigateToSection(section);
-    });
-  });
-
-  // Botón Crear Plato
-  crearPlatoBtn.addEventListener('click', () => {
-    console.log('Abriendo página de crear plato...');
-    window.open('/restaurante-frontend/src/modules/admin/crear-plato/index.html', '_blank');
-  });
-
-  // Botón Crear Mesa (placeholder para tu compañero)
-  crearMesaBtn.addEventListener('click', () => {
-  CrearMesaModal();
-});
-
-  // Logout
-  page.querySelector('#logoutBtn').addEventListener('click', async () => {
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      try {
-        await logout();
-      } catch (error) {
-        console.error('Error al cerrar sesión:', error);
-        localStorage.clear();
-        router.navigate('/login');
-      }
-    }
-  });
-
-
 
   return page;
 }
