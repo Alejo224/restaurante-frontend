@@ -765,7 +765,7 @@ historial pedido
 }
 
 .reserva-mesa form {
-  width: 600px;
+  min-width: 800px;
 }
 
 .reserva-mesa fieldset {
@@ -852,7 +852,7 @@ button:hover {
 
 .mesas-container {
   display: grid;
-  grid-template-columns: repeat(3, 150px);
+  grid-template-columns: repeat(5, 150px);
   /* 5 mesas por fila, cada una 80px */
   gap: 10px;
   /* espacio entre mesas */
@@ -897,4 +897,8 @@ button:hover {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+.mesa.seleccionada {
+    border: 3px solid #0d6efd; /* azul estilo bootstrap */
+    background-color: #e7f1ff;
 }

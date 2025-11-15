@@ -1,10 +1,13 @@
 
 import { obtenerMesas } from "/src/modules/Mesa/mesaService.js";
-import { obtenerHorarioDisponible } from "../reservas-mesas/reservacionServices";
+import { obtenerHorarioDisponible } from "./reservacionServices";
+import { crearReserva } from "./reservacionServices";
 
 
 
-export async function cargarMesas(contenedor) {
+
+
+export async function cargarMesas(contenedor, fecha, hora) {
 
 
     if (!contenedor) {
@@ -29,12 +32,13 @@ export async function cargarMesas(contenedor) {
                         </span>
                     </div>
                 `)
-            .join("");
+            .join("");      
     } catch (err) {
         contenedor.innerHTML = `<p style="color:red">Error cargando mesas</p>`;
         console.error(err);
     }
 }
+
 
 export async function ObtenerHorarios(selectElemento) {
 
@@ -54,6 +58,28 @@ export async function ObtenerHorarios(selectElemento) {
         opcion.textContent = horario.hora;
         selectElemento.appendChild(opcion);
     });
+
+}
+
+export async function crearReservaCliente({ fechaReserva, horaReserva, mesaId, nota }) {
+    const reservaData = {
+        fechaReserva, horaReserva, mesaId, nota
+    }
+
+
+
+    if (!fechaReserva || !horaReserva || !mesaId) {
+        alert("Todos los campos son obligatorios");
+        return null;
+    }
+    try {
+        const reservaCreada = await crearReserva(reservaData);
+        return reservaCreada;
+
+    } catch (error) {
+        console.error("Error al crear la reserva:", error);
+        throw error;
+    }
 
 }
 
