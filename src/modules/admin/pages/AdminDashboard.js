@@ -4,6 +4,7 @@ import { logout, getCurrentUser } from '../../auth/userService.js';
 import { PlatoList } from '../../menu/components/PlatoList.js';
 import { MesasList } from '../../Mesa/MesasList.js';
 import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
+import { HistorialPedidosAdminComponent } from '../../pedidos/components/HistorialPedidosAdminComponent.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -76,17 +77,16 @@ export function AdminDashboard() {
             </a>
           </li>
 
-          <li role="separator"><hr class="border-secondary my-2"></li>
-
-          <!-- Pedidos (próximamente) -->
+          <!-- Gestión de Pedidos -->
           <li class="nav-item" role="none">
-            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem" 
-               aria-label="Gestión de pedidos - Próximamente">
+            <a href="#" class="nav-link" id="navPedidos" data-section="pedidos" role="menuitem" 
+               aria-label="Gestión de pedidos de clientes">
               <i class="bi bi-receipt me-2" aria-hidden="true"></i>
-              <span>Pedidos</span>
-              <span class="badge bg-secondary ms-auto">Próximo</span>
+              <span>Gestión de Pedidos</span>
             </a>
           </li>
+
+          <li role="separator"><hr class="border-secondary my-2"></li>
 
           <!-- Facturación (próximamente) -->
           <li class="nav-item" role="none">
@@ -208,6 +208,23 @@ export function AdminDashboard() {
               <h3 class="dashboard-card-content h4">Gestionar Reservas</h3>
               <p class="text-muted small mb-0 mt-2">
                 Ver y administrar reservas
+              </p>
+              <div class="dashboard-card-action">
+                Ver más
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </div>
+            </article>
+
+            <!-- Card: Gestionar Pedidos -->
+            <article class="dashboard-card" data-navigate="pedidos" role="listitem" tabindex="0"
+                     aria-label="Gestionar Pedidos - Ver y administrar pedidos de clientes">
+              <div class="dashboard-card-icon warning" aria-hidden="true">
+                <i class="bi bi-receipt"></i>
+              </div>
+              <div class="dashboard-card-title">GESTIÓN</div>
+              <h3 class="dashboard-card-content h4">Gestionar Pedidos</h3>
+              <p class="text-muted small mb-0 mt-2">
+                Ver y administrar pedidos
               </p>
               <div class="dashboard-card-action">
                 Ver más
@@ -343,6 +360,21 @@ export function AdminDashboard() {
             <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
             <strong>Próximamente:</strong> Aquí verás las reservas realizadas por los clientes
           </div>
+        </section>
+
+        <!-- SECCIÓN GESTIONAR PEDIDOS -->
+        <section id="seccionPedidos" class="content-section" style="display: none;" aria-labelledby="pedidos-heading">
+          <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h1 id="pedidos-heading" class="fw-bold mb-1">
+                <i class="bi bi-receipt me-2 text-warning" aria-hidden="true"></i>
+                Gestión de Pedidos
+              </h1>
+            </div>
+          </header>
+          
+          <!-- Componente de historial de pedidos -->
+          <div id="historial-pedidos-container" role="region" aria-label="Historial completo de pedidos"></div>
         </section>
       </div>
     </main>
@@ -506,13 +538,7 @@ export function AdminDashboard() {
 
     // Navegación entre secciones
     const navLinks = page.querySelectorAll('.sidebar-nav .nav-link:not(.disabled)');
-    const sections = {
-      dashboard: page.querySelector('#seccionDashboard'),
-      menu: page.querySelector('#seccionMenu'),
-      mesas: page.querySelector('#seccionMesas'),
-      reservas: page.querySelector('#seccionReservas')
-    };
-
+    
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -613,7 +639,8 @@ export function AdminDashboard() {
       dashboard: page.querySelector('#seccionDashboard'),
       menu: page.querySelector('#seccionMenu'),
       mesas: page.querySelector('#seccionMesas'),
-      reservas: page.querySelector('#seccionReservas')
+      reservas: page.querySelector('#seccionReservas'),
+      pedidos: page.querySelector('#seccionPedidos')
     };
 
     Object.values(sections).forEach(s => {
@@ -633,7 +660,8 @@ export function AdminDashboard() {
       dashboard: 'Dashboard',
       menu: 'Gestionar Menú',
       mesas: 'Gestionar Mesas',
-      reservas: 'Gestionar Reservas'
+      reservas: 'Gestionar Reservas',
+      pedidos: 'Gestión de Pedidos'
     };
 
     if (pageTitle) {
@@ -652,7 +680,13 @@ export function AdminDashboard() {
         case 'mesas':
           crearMesaBtn.classList.remove('d-none');
           break;
+        // Para pedidos no mostramos botones de creación
       }
+    }
+
+    // Cargar componentes específicos cuando se navega a esa sección
+    if (sectionName === 'pedidos') {
+      loadPedidosComponent();
     }
 
     // Anunciar cambio de sección
@@ -660,7 +694,8 @@ export function AdminDashboard() {
       dashboard: 'Dashboard principal',
       menu: 'Gestión de menú',
       mesas: 'Gestión de mesas',
-      reservas: 'Gestión de reservas'
+      reservas: 'Gestión de reservas',
+      pedidos: 'Gestión de pedidos'
     };
 
     announceToScreenReader(`Navegando a ${sectionNames[sectionName] || 'sección'}`);
@@ -674,6 +709,27 @@ export function AdminDashboard() {
       if (sidebar) sidebar.classList.remove('show');
       if (overlay) overlay.classList.remove('show');
       if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  function loadPedidosComponent() {
+    const pedidosContainer = page.querySelector('#historial-pedidos-container');
+    if (pedidosContainer) {
+      // Limpiar contenedor
+      pedidosContainer.innerHTML = `
+        <div class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando pedidos...</span>
+          </div>
+          <p class="mt-2 text-muted">Cargando historial de pedidos...</p>
+        </div>
+      `;
+      
+      // Inicializar componente de pedidos
+      setTimeout(() => {
+        const historialComponent = new HistorialPedidosAdminComponent();
+        historialComponent.initialize();
+      }, 100);
     }
   }
 

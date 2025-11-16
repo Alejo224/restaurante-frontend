@@ -1,7 +1,7 @@
 // src/modules/pedidos/services/PedidosService.js
+const API_BASE = 'http://localhost:8080/api';
 
 export function createPedidosService() {
-  const apiUrl = "http://localhost:8080/api/pedidos";
 
   return {
     async obtenerPedidos() {
@@ -11,7 +11,7 @@ export function createPedidosService() {
         throw new Error("No hay token de autenticación");
       }
 
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${API_BASE}/pedidos`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
