@@ -1,6 +1,6 @@
 // src/modules/pedidos/pages/HistorialPedidosPage.js
 import { createPedidosService } from "../services/PedidosService.js";
-import { renderPedidoCard } from "../components/HistorialPedidosComponent.js";
+import { renderPedidoCard, mostrarModalDetalleCliente } from "../components/HistorialPedidosComponent.js";
 import { router } from "../../../router.js";
 import { logout, isAuthenticated, getCurrentUser } from '../../auth/userService.js';
 
@@ -485,63 +485,14 @@ export async function afterRenderHistorialPedidos() {
     }
   }
 
+  // FUNCIÓN - Ahora usa el modal personalizado
   function mostrarModalDetalle(pedido, service) {
-    const modalHTML = `
-      <div class="modal fade" id="detallePedidoModal" tabindex="-1" aria-labelledby="detallePedidoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 class="modal-title h5" id="detallePedidoModalLabel">Detalle del Pedido #${pedido.id}</h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar modal"></button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <p><strong>Estado:</strong> <span class="badge ${service.obtenerClaseBadgeEstado(pedido.estadoPedidoEnum)}">${service.obtenerTextoEstado(pedido.estadoPedidoEnum)}</span></p>
-                  <p><strong>Fecha:</strong> ${service.formatearFecha(pedido.fechaPedido)}</p>
-                  <p><strong>Tipo:</strong> ${service.obtenerTextoTipoServicio(pedido.tipoServicio)}</p>
-                </div>
-                <div class="col-md-6">
-                  <p><strong>Subtotal:</strong> ${service.formatearMoneda(pedido.subtotal)}</p>
-                  <p><strong>IVA:</strong> ${service.formatearMoneda(pedido.iva)}</p>
-                  <p><strong>Total:</strong> ${service.formatearMoneda(pedido.total)}</p>
-                </div>
-              </div>
-              <hr>
-              <h4 class="h6">Productos:</h4>
-              ${pedido.detalles?.map(detalle => `
-                <div class="d-flex justify-content-between border-bottom py-2">
-                  <div>
-                    <strong>${detalle.cantidad}x ${detalle.platoNombre}</strong>
-                    ${detalle.notas ? `<br><small class="text-muted">${detalle.notas}</small>` : ''}
-                  </div>
-                  <div class="text-end">
-                    <div>${service.formatearMoneda(detalle.subtotal)}</div>
-                    <small class="text-muted">${service.formatearMoneda(detalle.precioUnitario)} c/u</small>
-                  </div>
-                </div>
-              `).join('') || '<p class="text-muted">No hay productos en este pedido</p>'}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              ${pedido.estadoPedidoEnum === 'BORRADOR' ? 
-                `<button type="button" class="btn btn-primary" onclick="pagarPedido(${pedido.id})">Pagar Pedido</button>` : 
-                ''
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    console.log('🔍 Mostrando modal de detalle para pedido:', pedido.id);
     
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    const modal = new bootstrap.Modal(document.getElementById('detallePedidoModal'));
-    modal.show();
+    // Llama a la función del componente que crea el modal personalizado
+    mostrarModalDetalleCliente(pedido, service);
     
-    document.getElementById('detallePedidoModal').addEventListener('hidden.bs.modal', function () {
-      this.remove();
-      announceToScreenReader('Modal de detalles cerrado');
-    });
+    announceToScreenReader(`Abriendo detalles del pedido ${pedido.id}`);
   }
 
   function mostrarLoading(mostrar) {
