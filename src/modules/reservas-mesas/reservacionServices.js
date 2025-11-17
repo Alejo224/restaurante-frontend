@@ -43,7 +43,7 @@ export async function guardarDatos() {
 export async function crearReserva(reservaData) {
     const usuario = getCurrentUser();
     const token = usuario?.token;//Obtenemos el token 
-    console.log("Token enviado:", token); // 👈 Agrega esta línea
+   
 
     const fetchOpciones = {
         method: 'POST', //Usamos el POST como en el postman para Crear la reserva
@@ -74,3 +74,39 @@ export async function crearReserva(reservaData) {
 
 }
 
+export async function MesasOcupadas(fecha, hora) {
+    const usuario = getCurrentUser();
+    const token = usuario?.token
+
+    if(!token){
+        console.error("No hay token disponible. No se puede consultar mesas ocupadas.   ")     
+    }
+
+    if (!fecha || !hora) {
+        console.log("Fecha o hora vacía. No se puede consultar mesas ocupadas.");
+        return [];
+    }
+
+    const fetchOpciones = {
+        method: 'GET', //lo usamos para buscar como en postman
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/reserva/mesas-ocupadas?fecha=${fecha}&hora=${hora}`, fetchOpciones)
+
+        if (!response.ok) {
+            //Se maneja errores si la respuesta htpp no es exitosa (ej: 401, 404, 500)
+            throw new Error(`Error al obtener mesas ocupadas ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error en la llamda a la API  de mesas ocupadas", error);
+        return [];
+    }
+}

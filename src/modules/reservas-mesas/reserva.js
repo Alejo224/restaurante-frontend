@@ -25,6 +25,8 @@ export async function cargarMesas(contenedor, fecha, hora) {
                          data-id="${mesa.id}">
                         <span class="numero"> ${mesa.nombreMesa}</span>
                         <i class="bi bi-shop"></i>
+                        <i class = "material-symbols-outlined"></i>
+                
                         <span class="capacidad">Capacidad: ${mesa.capacidad}</span>
 
                         <span class="estado ${mesa.estado ? 'verde' : 'rojo'}">
@@ -32,7 +34,7 @@ export async function cargarMesas(contenedor, fecha, hora) {
                         </span>
                     </div>
                 `)
-            .join("");      
+            .join("");
     } catch (err) {
         contenedor.innerHTML = `<p style="color:red">Error cargando mesas</p>`;
         console.error(err);
@@ -65,8 +67,6 @@ export async function crearReservaCliente({ fechaReserva, horaReserva, mesaId, n
     const reservaData = {
         fechaReserva, horaReserva, mesaId, nota
     }
-
-
 
     if (!fechaReserva || !horaReserva || !mesaId) {
         alert("Todos los campos son obligatorios");

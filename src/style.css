@@ -899,6 +899,17 @@ button:hover {
     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
 .mesa.seleccionada {
-    border: 3px solid #0d6efd; /* azul estilo bootstrap */
+    border: 3px solid #42cb70; 
     background-color: #e7f1ff;
+}
+.mesa.ocupada {
+    background-color: #f8d7da; 
+    border-color: #dc3545; 
+    color: #721c24;
+    cursor: not-allowed; 
+}
+
+.material-symbols-outlined{
+  font-size: 10px;
+  color: #0a58ca;
 }

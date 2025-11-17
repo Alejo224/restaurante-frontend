@@ -2,6 +2,7 @@ import { router } from "../../router.js"
 import { cargarMesas } from "./reserva.js"
 import { ObtenerHorarios } from "./reserva.js";
 import { crearReservaCliente } from "./reserva.js";
+import { MesasOcupadas } from "./reservacionServices.js";
 
 let mesaSeleccionadaId = null;
 
@@ -51,18 +52,25 @@ export function ReservaMesaPagina() {
     const fechaInput = reservaPage.querySelector('#fecha');
     const notaText = reservaPage.querySelector("#nota");
     const contenedorMesas = reservaPage.querySelector('#mesas-container');
+    const selectHora = reservaPage.querySelector('#hora-select');
+    const formualrioReserva = reservaPage.querySelector('#form-reserva');
+    const horaSeleccionada = selectHora.value;
+
+    // Actualizar mesas al cambiar fecha u hora
+    fechaInput.addEventListener('change', actualizarMesa);
+    selectHora.addEventListener('change', actualizarMesa);
 
 
+
+    //cargar mesas iniciales 
     cargarMesas(contenedorMesas).then(() => {
         activarSeleccionMesas();
     });
 
-    const selectHora = reservaPage.querySelector('#hora-select')
+    //cargar horarios 
     ObtenerHorarios(selectHora);
 
-    const formualrioReserva = reservaPage.querySelector('#form-reserva');
-
-
+    // Selección de mesas
     function activarSeleccionMesas() {
         const mesas = contenedorMesas.querySelectorAll('.mesa');
 
@@ -88,12 +96,13 @@ export function ReservaMesaPagina() {
     }
 
 
+    // enviar reserva 
     formualrioReserva.addEventListener('submit', async (event) => {
         //Detenemos la accion por defecto del navegador de recargar la pagina 
         event.preventDefault();
         const fechaReserva = fechaInput.value;
         const horaDeReserva = selectHora.value;
-        console.log("⏰ Hora seleccionada:", horaDeReserva);
+        console.log(" Hora seleccionada:", horaDeReserva);
         const nota_Text = notaText.value;
 
         if (mesaSeleccionadaId == null) {
@@ -107,22 +116,74 @@ export function ReservaMesaPagina() {
             mesaId: mesaSeleccionadaId,
             nota: nota_Text
         };
-        const respuesta = await crearReservaCliente(reservaDatos);
+        try {
+            const respuesta = await crearReservaCliente(reservaDatos);
+
+            // Si el backend devuelve null o un objeto vacío, considerarlo error
+            if (!respuesta || Object.keys(respuesta).length === 0) {
+                alert("No se pudo crear la reserva.");
+                return;
+            }
+
+            alert("Reserva realizada exitosamente.");
+            router.navigate('/dashboard');
+
+        } catch (error) {
+            console.error("Error al crear la reserva:", error);
+            alert("No se pudo crear la reserva.");
+        }
+       // const respuesta = await crearReservaCliente(reservaDatos);
 
         console.log("📦 Datos enviados al backend:", reservaDatos);
         console.log("📦 JSON enviado:", JSON.stringify(reservaDatos));
 
         console.log('Datos enviados a la API');
 
-        if (respuesta) {
+      /*  if (respuesta) {
             alert("Reserva realizada exitosamente.");
             router.navigate('/dashboard');
         } else {
             alert("No se pudo crear la reserva.");
-        }
+        }*/
 
     });
 
+
+    //implementamos la funcion para cuando el usuarios escoga la fecha y la hora de una mesa ocupada
+    async function actualizarMesa() {
+        console.log("Actulizacion de mesas ocupadas...")
+        const fecha = fechaInput.value;
+
+        //verificamos que si se seleccione una fecha
+        if (!fecha) {
+            console.log("No hay fecha seleccionada, no se puede actualziar mesa .");
+            return;
+        }
+
+        const hora = selectHora.value;
+
+        const mesasOcupadas = await MesasOcupadas(fecha, hora);
+
+        const mesasDOM = contenedorMesas.querySelectorAll('.mesa');
+
+        const idOcupadas = mesasOcupadas.map(reserva => reserva.mesa.id);
+        mesasDOM.forEach(mesa => {
+            const idMesaDOM = mesa.dataset.id;
+            if (idOcupadas.includes(Number(idMesaDOM))) {
+                mesa.classList.remove('disponible');
+                mesa.classList.add('ocupada');
+                mesa.classList.remove('seleccionada');
+            } else {
+                mesa.classList.remove('ocupada');
+                mesa.classList.add('disponible');
+
+            }
+
+        });
+
+    }
+
+    //volvemos al menu de opciones
     reservaPage.querySelector('#icono-volver').addEventListener('click', () => {
         router.navigate('/dashboard');
     });
