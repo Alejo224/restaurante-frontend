@@ -852,7 +852,7 @@ button:hover {
 
 .mesas-container {
   display: grid;
-  grid-template-columns: repeat(5, 150px);
+  grid-template-columns: repeat(5, 140px);
   /* 5 mesas por fila, cada una 80px */
   gap: 10px;
   /* espacio entre mesas */
@@ -875,7 +875,6 @@ button:hover {
 .mesas-container .mesa i {
   font-size: 32px;
   color: #007bff;
-  /* azul Bootstrap */
 
 }
 
@@ -909,7 +908,3 @@ button:hover {
     cursor: not-allowed; 
 }
 
-.material-symbols-outlined{
-  font-size: 10px;
-  color: #0a58ca;
-}

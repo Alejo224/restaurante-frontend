@@ -29,8 +29,9 @@ export function ReservaMesaPagina() {
                         </div>
                         <div class="DatosContacto">
                           <label for="nota">Nota:</label>
-                          <textarea id="nota" placeholder="Alguna indicación especial"></textarea>
-                        </div>
+                         
+                          <textarea class="form-control" placeholder="Alguna indicacíon especial" id="nota"></textarea>
+                        </div>  
 
                         <div class="mesas-outer-wrapper">
                             <!-- Contenedor donde se cargan las mesas dinámicamente -->
@@ -132,7 +133,7 @@ export function ReservaMesaPagina() {
             console.error("Error al crear la reserva:", error);
             alert("No se pudo crear la reserva.");
         }
-       // const respuesta = await crearReservaCliente(reservaDatos);
+        const respuesta = await crearReservaCliente(reservaDatos);
 
         console.log("📦 Datos enviados al backend:", reservaDatos);
         console.log("📦 JSON enviado:", JSON.stringify(reservaDatos));
