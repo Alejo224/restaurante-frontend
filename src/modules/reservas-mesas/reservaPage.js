@@ -57,6 +57,30 @@ export function ReservaMesaPagina() {
     const formualrioReserva = reservaPage.querySelector('#form-reserva');
     const horaSeleccionada = selectHora.value;
 
+    // establecer fecha mínima (hoy) para evitar seleccionar días pasados
+    fechaInput.min = getTodayIso();
+
+    // Validar fecha/hora cuando cambian para dar feedback temprano
+    fechaInput.addEventListener('input', () => {
+        // limpiar selección de mesa al cambiar fecha
+        mesaSeleccionadaId = null;
+        actualizarMesa();
+    });
+    selectHora.addEventListener('change', () => {
+        // cuando cambia la hora, comprobar si coincide con el pasado
+        const fecha = fechaInput.value;
+        const hora = selectHora.value;
+        const check = validarFechaHora(fecha, hora);
+        if (!check.valido) {
+            alert(check.mensaje);
+            // opcional: resetear la hora seleccionada
+            selectHora.value = "";
+        }
+        actualizarMesa();
+    });
+
+
+
     // Actualizar mesas al cambiar fecha u hora
     fechaInput.addEventListener('change', actualizarMesa);
     selectHora.addEventListener('change', actualizarMesa);
@@ -106,6 +130,13 @@ export function ReservaMesaPagina() {
         console.log(" Hora seleccionada:", horaDeReserva);
         const nota_Text = notaText.value;
 
+        // validar fecha y hora antes de enviar
+        const validacion = validarFechaHora(fechaReserva, horaDeReserva);
+        if (!validacion.valido) {
+            alert(validacion.mensaje);
+            return;
+        }
+
         if (mesaSeleccionadaId == null) {
             alert('Por favor seleccione una mesa.');
             return;
@@ -133,22 +164,13 @@ export function ReservaMesaPagina() {
             console.error("Error al crear la reserva:", error);
             alert("No se pudo crear la reserva.");
         }
-        const respuesta = await crearReservaCliente(reservaDatos);
-
+        
         console.log("📦 Datos enviados al backend:", reservaDatos);
         console.log("📦 JSON enviado:", JSON.stringify(reservaDatos));
 
         console.log('Datos enviados a la API');
 
-      /*  if (respuesta) {
-            alert("Reserva realizada exitosamente.");
-            router.navigate('/dashboard');
-        } else {
-            alert("No se pudo crear la reserva.");
-        }*/
-
     });
-
 
     //implementamos la funcion para cuando el usuarios escoga la fecha y la hora de una mesa ocupada
     async function actualizarMesa() {
@@ -157,7 +179,7 @@ export function ReservaMesaPagina() {
 
         //verificamos que si se seleccione una fecha
         if (!fecha) {
-            console.log("No hay fecha seleccionada, no se puede actualziar mesa .");
+            console.log("Fecha u hora vacía. No consultar backend .");
             return;
         }
 
@@ -191,5 +213,36 @@ export function ReservaMesaPagina() {
 
     //  Retornamos el contenedor para que el router lo monte en la vista
     return reservaPage;
+
+    // Helper: obtiene fecha de hoy en formato YYYY-MM-DD
+    function getTodayIso() {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Helper: valida que la fecha y hora sean futuras (no en el pasado)
+    function validarFechaHora(fecha, hora) {
+        if (!fecha) return { valido: false, mensaje: "Seleccione una fecha válida." };
+        if (!hora) return { valido: false, mensaje: "Seleccione una hora válida." };
+
+        // Construir fecha completa en formato ISO local
+        // selectHora debe tener valores como "14:30"
+        const isoString = `${fecha}T${hora}:00`;
+        const reservaDate = new Date(isoString);
+        const ahora = new Date();
+
+        if (isNaN(reservaDate.getTime())) {
+            return { valido: false, mensaje: "Fecha u hora no válida." };
+        }
+
+        if (reservaDate <= ahora) {
+            return { valido: false, mensaje: "La fecha y hora seleccionadas ya pasaron. Elija una fecha/hora futuras." };
+        }
+
+        return { valido: true };
+    }
 
 }

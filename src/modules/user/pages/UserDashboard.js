@@ -237,8 +237,7 @@ export function UserDashboard() {
 
   // Card: Mis Reservas
   page.querySelector('#cardMisReservas').addEventListener('click', () => {
-    alert('Mis Reservas - Próximamente');
-    // router.navigate('/mis-reservas');
+     router.navigate('/reservar/mis-reservas');
   });
 
   // Card: Historial de Pedidos

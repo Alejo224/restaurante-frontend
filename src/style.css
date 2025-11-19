@@ -886,25 +886,91 @@ button:hover {
   border: 1px solid #ced4da;
   height: 40px;
 }
-.form-select option{
-  font-size: 1rem; 
-    /* Aumenta ligeramente el espacio vertical para que las opciones no se vean apiñadas */
-    padding-top: 5px; 
-    padding-bottom: 5px;
+
+.form-select option {
+  font-size: 1rem;
+  /* Aumenta ligeramente el espacio vertical para que las opciones no se vean apiñadas */
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
+
 .reserva-mesa .DatosContacto select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
+
 .mesa.seleccionada {
-    border: 3px solid #42cb70; 
-    background-color: #e7f1ff;
+  border: 3px solid #42cb70;
+  background-color: #e7f1ff;
 }
+
 .mesa.ocupada {
-    background-color: #f8d7da; 
-    border-color: #dc3545; 
-    color: #721c24;
-    cursor: not-allowed; 
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+  cursor: not-allowed;
+}
+
+/* Página de Mis Reservas */
+.gestion-mis-reservas {
+  padding: 20px;
+}
+.gestion-mis-reservas h2 {
+  margin-bottom: 20px;
+}
+#contenedor-mis-reservas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3 reservas por fila */
+  gap: 20px; /* espacio entre reservas */
+  padding: 10px;
+}
+
+.detalles-reservacion {
+  border: 2px solid #ffc107;
+  border-radius: 12px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.detalles-reservacion p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.detalles-reservacion .grupo-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.grupo-botones button {
+  width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.grupo-botones #modificar-reserva {
+  background: #198754;
+  color: white;
+}
+
+.grupo-botones #eliminar-reserva {
+  background: #dc3545;
+  color: white;
+}
+
+.detalles-reservacion .grupo-botones button:hover {
+  opacity: 0.8;
 }
 

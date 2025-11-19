@@ -1,4 +1,4 @@
-import { getCurrentUser } from "../auth/userService";
+import { getCurrentUser } from "../auth/userService.js";
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -43,7 +43,11 @@ export async function guardarDatos() {
 export async function crearReserva(reservaData) {
     const usuario = getCurrentUser();
     const token = usuario?.token;//Obtenemos el token 
-   
+    
+    if(!token){
+        console.log("error token invalido");
+        return[]; 
+    }
 
     const fetchOpciones = {
         method: 'POST', //Usamos el POST como en el postman para Crear la reserva
@@ -75,17 +79,20 @@ export async function crearReserva(reservaData) {
 }
 
 export async function MesasOcupadas(fecha, hora) {
-    const usuario = getCurrentUser();
-    const token = usuario?.token
-
-    if(!token){
-        console.error("No hay token disponible. No se puede consultar mesas ocupadas.   ")     
-    }
 
     if (!fecha || !hora) {
         console.log("Fecha o hora vacía. No se puede consultar mesas ocupadas.");
         return [];
     }
+    const usuario = getCurrentUser();
+    const token = usuario?.token
+
+    if (!token) {
+        console.error("No hay token disponible. No se puede consultar mesas ocupadas.   ")
+        return [];
+    }
+
+
 
     const fetchOpciones = {
         method: 'GET', //lo usamos para buscar como en postman

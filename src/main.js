@@ -17,7 +17,9 @@ import { AdminDashboard } from "./modules/admin/pages/AdminDashboard.js";
 // Páginas de usuarios (cliente)
 import { UserDashboard } from "./modules/user/pages/UserDashboard.js";
 import { HistorialPedidosPage, afterRenderHistorialPedidos } from './modules/pedidos/pages/HistorialPedidosPage.js';
-import { ReservaMesaPagina } from "./modules/reservas-mesas/HacerReservaPage.js";
+import { ReservaMesaPagina } from "./modules/reservas-mesas/reservaPage.js";
+import { seccionMisReservas } from "./modules/gestionReservasClientes/misReservas.js";
+
 
 // ========================================
 // 🌐 RUTAS PÚBLICAS (sin autenticación)
@@ -65,6 +67,14 @@ router.addRoute("/reservar", ReservaMesaPagina, {
   requiresAuth: true,
   requiresRole: "USER",
 });
+
+// página para gestionar mis reservas
+
+router.addRoute("/reservar/mis-reservas", seccionMisReservas,{
+  requiresAuth:true,
+  requiresRole: "USER",
+});
+
 
 // ========================================
 // 👨‍💼 RUTAS DE ADMINISTRADOR (requiere rol ADMIN)
