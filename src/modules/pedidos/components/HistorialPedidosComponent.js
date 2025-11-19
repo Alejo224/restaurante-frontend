@@ -78,6 +78,17 @@ export function renderPedidoCard(pedido, service) {
         </div>
       ` : ''}
 
+      <!-- Motivo de Cancelación -->
+      ${pedido.estadoPedidoEnum === 'CANCELADO' ? `
+        <div class="alert alert-danger border mb-3" role="note">
+          <small class="fw-semibold">
+            <i class="bi bi-x-circle me-1" aria-hidden="true"></i>
+            Motivo de Cancelación:
+          </small>
+          <p class="mb-0 small mt-1">${pedido.motivoCancelacion || 'No especificado'}</p>
+        </div>
+      ` : ''}
+
       <!-- Botones de Acción -->
         <div class="d-flex gap-2">
           <!-- Botón Pagar - Solo para pedidos BORRADOR -->
