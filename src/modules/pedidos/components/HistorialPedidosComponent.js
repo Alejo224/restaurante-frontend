@@ -89,12 +89,12 @@ export function renderPedidoCard(pedido, service) {
             </button>
           ` : ''}
           
-          <!-- Botón Eliminar - Solo para pedidos BORRADOR o PENDIENTE recientes -->
+          <!-- Botón Cancelar - Solo para pedidos BORRADOR o PENDIENTE recientes -->
           ${pedido.estadoPedidoEnum === 'BORRADOR' || (pedido.estadoPedidoEnum === 'PENDIENTE' && esPedidoReciente(pedido.fechaPedido)) ? `
-            <button class="btn btn-outline-danger btn-sm eliminar-btn" 
+            <button class="btn btn-outline-danger btn-sm cancelar-btn" 
                     data-pedido-id="${pedido.id}"
-                    aria-label="Eliminar pedido ${pedido.id}">
-              <i class="bi bi-trash me-1" aria-hidden="true"></i>Eliminar
+                    aria-label="Cancelar pedido ${pedido.id}">
+              <i class="bi bi-trash me-1" aria-hidden="true"></i>Cancelar
             </button>
           ` : ''}
 
