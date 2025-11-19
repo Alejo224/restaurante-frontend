@@ -557,45 +557,45 @@ export async function afterRenderHistorialPedidos() {
   }
 
   // Función mejorada con modal personalizado
-function cancelarPedido(pedidoId) {
-  console.log('❌ Cancelando pedido:', pedidoId);
-  
-  // Crear modal para motivo
-  const motivo = mostrarModalMotivoCancelacion();
-  
-  if (!motivo) {
-    announceToScreenReader('Cancelación cancelada: no se proporcionó motivo');
-    return;
+  function cancelarPedido(pedidoId) {
+    console.log('❌ Cancelando pedido:', pedidoId);
+    
+    // Crear modal para motivo
+    const motivo = mostrarModalMotivoCancelacion();
+    
+    if (!motivo) {
+      announceToScreenReader('Cancelación cancelada: no se proporcionó motivo');
+      return;
+    }
+
+    announceToScreenReader(`Cancelando pedido ${pedidoId}`);
+    
+    service.cancelarPedido(pedidoId, motivo)
+      .then((pedidoCancelado) => {
+        console.log('✅ Pedido cancelado:', pedidoCancelado);
+        announceToScreenReader('Pedido cancelado correctamente');
+        
+        // Recargar lista
+        return service.obtenerPedidos();
+      })
+      .then((nuevosPedidos) => {
+        pedidos = nuevosPedidos;
+        renderizarPedidos();
+        actualizarContadores();
+      })
+      .catch(error => {
+        console.error('❌ Error cancelando pedido:', error);
+        announceToScreenReader('Error al cancelar el pedido: ' + error.message);
+        alert('Error al cancelar el pedido: ' + error.message);
+      });
   }
 
-  announceToScreenReader(`Cancelando pedido ${pedidoId}`);
-  
-  service.cancelarPedido(pedidoId, motivo)
-    .then((pedidoCancelado) => {
-      console.log('✅ Pedido cancelado:', pedidoCancelado);
-      announceToScreenReader('Pedido cancelado correctamente');
-      
-      // Recargar lista
-      return service.obtenerPedidos();
-    })
-    .then((nuevosPedidos) => {
-      pedidos = nuevosPedidos;
-      renderizarPedidos();
-      actualizarContadores();
-    })
-    .catch(error => {
-      console.error('❌ Error cancelando pedido:', error);
-      announceToScreenReader('Error al cancelar el pedido: ' + error.message);
-      alert('Error al cancelar el pedido: ' + error.message);
-    });
-}
+  //  Función para mostrar modal de motivo
+  function mostrarModalMotivoCancelacion() {
+    return prompt('Por favor, indica el motivo de la cancelación:');
+  }
 
-// ✅ Función para mostrar modal de motivo
-function mostrarModalMotivoCancelacion() {
-  return prompt('Por favor, indica el motivo de la cancelación:');
-}
-
-// ✅ O versión más elaborada con HTML:
+//  versión más elaborada con HTML:
 function mostrarModalMotivoAvanzado() {
   return new Promise((resolve) => {
     const modalHTML = `
@@ -631,7 +631,7 @@ function mostrarModalMotivoAvanzado() {
       setTimeout(() => {
         document.getElementById('motivoCancelacionModal').remove();
       }, 500);
-      
+
       resolve(motivo);
     });
     

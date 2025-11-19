@@ -13,7 +13,8 @@ export function renderPedidoCard(pedido, service) {
   const tipoServicioTexto = service.obtenerTextoTipoServicio(pedido.tipoServicio);
   const totalFormateado = service.formatearMoneda(pedido.total);
   const fechaFormateada = service.formatearFecha(pedido.fechaPedido);
-  const usuarioNombre = pedido.usuario?.nombreCompleto || pedido.usuario?.email || 'Usuario no disponible';
+  const usuarioNombre = pedido.nombreUsuario || pedido.emailUsuario || 'Usuario no disponible';
+  const fechaCanceladaFormateada = service.formatearFecha(pedido.fechaCancelacion);
   
   card.innerHTML = `
     <div class="card-body">
@@ -86,6 +87,8 @@ export function renderPedidoCard(pedido, service) {
             Motivo de Cancelación:
           </small>
           <p class="mb-0 small mt-1">${pedido.motivoCancelacion || 'No especificado'}</p>
+
+          <small class="text-muted">${fechaCanceladaFormateada}</small>
         </div>
       ` : ''}
 

@@ -250,31 +250,13 @@ export class HistorialPedidosAdminComponent {
       });
     });
 
-    // Botón Eliminar
-    document.querySelectorAll('.eliminar-btn').forEach(btn => {
+    // Botón Cancelar
+    document.querySelectorAll('.cancelar-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
-        const pedidoId = e.target.closest('.eliminar-btn').dataset.pedidoId;
-        const pedido = this.pedidos.find(p => p.id == pedidoId);
+        const pedidoId = e.target.closest('.cancelar-btn').dataset.pedidoId;
         
-        if (pedido) {
-          let mensajeConfirmacion = `¿Estás seguro de eliminar el pedido #${pedidoId}?`;
-          let mensajeAdvertencia = '';
-          
-          if (pedido.estadoPedidoEnum === 'PENDIENTE') {
-            mensajeAdvertencia = '\n\n⚠️ Este pedido ya fue marcado como pagado. Solo elimínalo si es un error.';
-          }
-          
-          if (confirm(mensajeConfirmacion + mensajeAdvertencia)) {
-            try {
-              await this.service.eliminarPedido(pedidoId);
-              this.mostrarMensaje('Pedido eliminado correctamente', 'success');
-              await this.cargarPedidos();
-            } catch (error) {
-              console.error('Error al eliminar pedido:', error);
-              this.mostrarMensaje('Error al eliminar el pedido', 'error');
-            }
-          }
-        }
+        // Llamar al método de la clase con .bind(this) para mantener el contexto
+        this.cancelarPedido.call(this, pedidoId);
       });
     });
 
@@ -318,9 +300,44 @@ export class HistorialPedidosAdminComponent {
     });
   }
 
+  // Función mejorada con modal personalizado
+  cancelarPedido(pedidoId) {
+    console.log('❌ [ADMIN] Cancelando pedido:', pedidoId);
+    
+    // Pedir motivo de cancelación
+    const motivo = prompt('Por favor, indica el motivo de la cancelación:');
+    
+    if (!motivo || motivo.trim() === '') {
+      console.log('Cancelación cancelada: no se proporcionó motivo');
+      return;
+    }
+
+    if (confirm(`¿Estás seguro de que quieres cancelar el pedido #${pedidoId}?`)) {
+      console.log(`Cancelando pedido ${pedidoId}`);
+      
+      // ✅ Usar THIS.service (no solo service)
+      this.service.cancelarPedido(pedidoId, motivo.trim())
+        .then((pedidoCancelado) => {
+          console.log('✅ Pedido cancelado:', pedidoCancelado);
+          
+          // ✅ Recargar usando THIS.cargarPedidos()
+          return this.cargarPedidos();
+        })
+        .catch(error => {
+          console.error('❌ Error cancelando pedido:', error);
+          alert('Error al cancelar el pedido: ' + error.message);
+        });
+    }
+  }
+  //  Función para mostrar modal de motivo
+  mostrarModalMotivoCancelacion() {
+    return prompt('Por favor, indica el motivo de la cancelación:');
+  }
+
+
   generarModalDetalle(pedido) {
-    const usuarioNombre = pedido.usuario?.nombreCompleto || pedido.usuario?.email || 'No disponible';
-    const usuarioEmail = pedido.usuario?.email || 'No disponible';
+    const usuarioNombre = pedido.nombreUsuario || 'No disponible';
+    const usuarioEmail = pedido.emailUsuario || 'No disponible';
     const estadoTexto = this.service.obtenerTextoEstado(pedido.estadoPedidoEnum);
     const tipoServicioTexto = this.service.obtenerTextoTipoServicio(pedido.tipoServicio);
     
@@ -555,7 +572,7 @@ export class HistorialPedidosAdminComponent {
 }
 
   generarContenidoModalAccesible(pedido) {
-    const usuarioNombre = pedido.usuario?.nombreCompleto || pedido.usuario?.email || 'No disponible';
+    const usuarioNombre = pedido.nombreUsuario || 'No disponible';
     const estadoTexto = this.service.obtenerTextoEstado(pedido.estadoPedidoEnum);
     const tipoServicioTexto = this.service.obtenerTextoTipoServicio(pedido.tipoServicio);
     
@@ -612,6 +629,11 @@ export class HistorialPedidosAdminComponent {
               <p><strong>Estado:</strong> ${estadoTexto}</p>
               <p><strong>Tipo:</strong> ${tipoServicioTexto}</p>
               <p><strong>Fecha:</strong> ${this.service.formatearFecha(pedido.fechaPedido)}</p>
+              
+              <!-- SOLO MOSTRAR SI EL PEDIDO FUE CANCELADO -->
+              ${pedido.estadoPedidoEnum === 'CANCELADO' ? `
+                  <p><strong>Fecha de Cancelación:</strong> ${this.service.formatearFecha(pedido.fechaCancelacion)}</p>
+                ` : ''}
             </div>
           </section>
 
@@ -731,8 +753,8 @@ export class HistorialPedidosAdminComponent {
   }
 
   renderModalDetalleAdmin(pedido) {
-    const usuarioNombre = pedido.usuario?.nombreCompleto || pedido.usuario?.email || 'No disponible';
-    const usuarioEmail = pedido.usuario?.email || 'No disponible';
+    const usuarioNombre = pedido.nombreUsuario || 'No disponible';
+    const usuarioEmail = pedido.emailUsuario || 'No disponible';
     const estadoTexto = this.service.obtenerTextoEstado(pedido.estadoPedidoEnum);
     const tipoServicioTexto = this.service.obtenerTextoTipoServicio(pedido.tipoServicio);
     
@@ -1020,7 +1042,8 @@ export function renderPedidoAdminCard(pedido, service) {
   const tipoServicioTexto = service.obtenerTextoTipoServicio(pedido.tipoServicio);
   const totalFormateado = service.formatearMoneda(pedido.total);
   const fechaFormateada = service.formatearFecha(pedido.fechaPedido);
-  const usuarioNombre = pedido.usuario?.nombreCompleto || pedido.usuario?.email || 'Usuario no disponible';
+  const usuarioNombre = pedido.nombreUsuario || 'Usuario no disponible';
+  const fechaCanceladaFormateada = service.formatearFecha(pedido.fechaCancelacion);
   
   card.innerHTML = `
     <div class="card-body">
@@ -1082,6 +1105,19 @@ export function renderPedidoAdminCard(pedido, service) {
         </div>
       ` : ''}
 
+      <!-- Motivo de Cancelación -->
+      ${pedido.estadoPedidoEnum === 'CANCELADO' ? `
+        <div class="alert alert-danger border mb-3" role="note">
+          <small class="fw-semibold">
+            <i class="bi bi-x-circle me-1" aria-hidden="true"></i>
+            Motivo de Cancelación:
+          </small>
+          <p class="mb-0 small mt-1">${pedido.motivoCancelacion || 'No especificado'}</p>
+
+          <small class="text-muted">${fechaCanceladaFormateada}</small>
+        </div>
+      ` : ''}
+
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div class="estado-selector">
           <select class="form-select form-select-sm estado-select" 
@@ -1098,8 +1134,8 @@ export function renderPedidoAdminCard(pedido, service) {
           ` : ''}
           
           ${pedido.estadoPedidoEnum === 'BORRADOR' || (pedido.estadoPedidoEnum === 'PENDIENTE' && esPedidoReciente(pedido.fechaPedido)) ? `
-            <button class="btn btn-outline-danger btn-sm eliminar-btn" data-pedido-id="${pedido.id}">
-              <i class="bi bi-trash me-1"></i>Eliminar
+            <button class="btn btn-outline-danger btn-sm cancelar-btn" data-pedido-id="${pedido.id}">
+              <i class="bi bi-trash me-1"></i>Cancelar
             </button>
           ` : ''}
 
