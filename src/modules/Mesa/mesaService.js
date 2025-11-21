@@ -1,4 +1,4 @@
-   // src/modules/Mesa/mesaService.js
+    // src/modules/Mesa/mesaService.js
 import { getToken, isAuthenticated } from '../auth/userService.js';
 
 const API_URL = "http://localhost:8080/api/mesas";
@@ -14,11 +14,11 @@ async function fetchWithAuth(url, options = {}) {
   }
 
   const headers = {
-      'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${token}`,
     ...options.headers
   };
 
-  if (!(options.body instanceof FormData)) {
+  if (!(options.body instanceof FormData) && !options.headers?.['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
 
@@ -35,7 +35,7 @@ async function fetchWithAuth(url, options = {}) {
 }
 
 /**
- * 📋 Obtener todas las mesas (solo para usuarios autenticados)
+ * 📋 Obtener mesas
  */
 export async function obtenerMesas() {
   try {
@@ -43,7 +43,7 @@ export async function obtenerMesas() {
 
     const response = await fetchWithAuth(API_URL);
     if (!response.ok) {
-      throw new Error(`Error al obtener mesas: ${response.status}`);
+      throw new Error('Error al obtener mesas: ${response.status}');
     }
 
     const data = await response.json();
@@ -55,6 +55,44 @@ export async function obtenerMesas() {
   }
 }
 
+/**
+ * 🔄 Cambiar estado de mesa
+ */
+   
+export async function cambiarEstadoMesa(id, nuevoEstado) {
+  try {
+    const response = await fetchWithAuth(`${API_URL}/${id}`,{
+      method: "PUT",
+      body: JSON.stringify({ estado: nuevoEstado })
+    });
 
-  
-  
+    if (!response.ok) {
+      throw new Error("Error al actualizar el estado");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("❌ Error al cambiar estado:", error);
+    throw error;
+  }
+}
+
+/**
+ * 🗑️ Eliminar mesa
+ */
+export async function eliminarMesa(id) {
+  try {
+    const response = await fetchWithAuth(`${API_URL}/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar la mesa");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("❌ Error al eliminar mesa:", error);
+    throw error; 
+  }
+}
