@@ -1,4 +1,5 @@
 import { getCurrentUser } from "../auth/userService";
+
 const API_BASE_URL = 'http://localhost:8080';
 
 //Funcion para llamar la api 
@@ -7,9 +8,9 @@ export async function infoReservas() {
     const usuario = getCurrentUser();
     const token = usuario?.token;//Obtenemos el token 
 
-    if(!token){
+    if (!token) {
         alert("error token invalido");
-        return[]; 
+        return [];
     }
 
     const fetchOpciones = {
@@ -34,5 +35,35 @@ export async function infoReservas() {
 
         console.error("Error en la llamda al APi de reservas", error);
         return []; //Devolvemos la lista vacia 
+    }
+}
+
+export async function eliminarReserva() {
+    const usuario = getCurrentUser();
+    const token = usuario?.token;//Obtenemos el token
+
+    if (!token) {
+        console.log("error token invalido");
+        return [];
+    }
+
+    const fetchOpciones = {
+        method: 'DELETE', //Usamos el DELETE como en el postman para eliminar la reserva
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/reserva//{id}`, fetchOpciones)
+        if (!response.ok) {
+            throw new Error(`Error al eliminar la reserva (${response.status}-${response.statusText})`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error en la llamada al API para eliminar la reserva", error);
+        return null; // Devolvemos null en caso de error
     }
 }

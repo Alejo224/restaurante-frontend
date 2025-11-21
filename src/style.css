@@ -873,7 +873,7 @@ button:hover {
 }
 
 .mesas-container .mesa i {
-  font-size: 32px;
+  font-size: 40px;
   color: #007bff;
 
 }
@@ -913,42 +913,61 @@ button:hover {
 }
 
 /* Página de Mis Reservas */
-.gestion-mis-reservas {
-  padding: 20px;
-}
-.gestion-mis-reservas h2 {
-  margin-bottom: 20px;
-}
+
 #contenedor-mis-reservas {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 3 reservas por fila */
-  gap: 20px; /* espacio entre reservas */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));/* columnas responsivas */
+  gap: 20px;
   padding: 10px;
+  width: 100%;
 }
 
+
 .detalles-reservacion {
-  border: 2px solid #ffc107;
-  border-radius: 12px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border: 1px solid #667eea;
+  border-radius: 15px;
+  background-color: #ffffff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 250px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.detalles-reservacion p {
-  font-size: 1rem;
-  margin: 5px 0;
+.detalles-reservacion:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  border-color: #764ba2;
 }
 
-.detalles-reservacion .grupo-botones {
+.info-reserva {
   display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+  align-items: center;
+  gap: 10px;
 }
+
+.info-reserva i {
+  font-size: 24px;
+  color: #6c757d;
+  flex-shrink: 0;
+}
+
+.info-detalle{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #e9ecef;
+}
+.info-detalle p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+
 
 .grupo-botones button {
   width: 120px;
@@ -958,19 +977,117 @@ button:hover {
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
+  margin: 10px;
+  display: flex;
+  /* icono + texto alineados */
+  align-items: center;
 }
 
 .grupo-botones #modificar-reserva {
-  background: #198754;
+  background: #764ba2;
   color: white;
+}
+
+.grupo-botones #modificar-reserva:hover {
+  opacity: 0.8;
+}
+
+.grupo-botones #eliminar-reserva {
+  background: #6c757d;
+  color: white;
+}
+.grupo-botones #eliminar-reserva:hover {
+  opacity: 0.8;
+}
+.grupo-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.grupo-botones button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-width: 120px;
+  padding: 10px 15px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.grupo-botones #modificar-reserva {
+  background: linear-gradient(135deg, #764ba2, #667eea);
+  color: #fff;
+}
+
+.grupo-botones #modificar-reserva:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
 }
 
 .grupo-botones #eliminar-reserva {
   background: #dc3545;
-  color: white;
+  color: #fff;
 }
 
-.detalles-reservacion .grupo-botones button:hover {
-  opacity: 0.8;
+.grupo-botones #eliminar-reserva:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
 }
 
+/* 
+   Iconos dentro de botones*/
+.grupo-botones button i {
+  font-size: 18px;
+}
+
+
+.header-mis-reservas {
+    display: flex;          /* Activar flexbox */
+    align-items: center;    /* Centrar verticalmente flecha y título */
+    gap: 10px;              /* Separación entre flecha y texto */
+    margin-bottom: 15px;    /* Espacio debajo del header */
+}
+
+.header-mis-reservas i {
+    font-size: 40px;
+    color: #0d6efd;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.header-mis-reservas i:hover {
+    transform: scale(1.1);
+    color: #084298;
+}
+.gestion-mis-reservas span{
+  font-size: 25px;
+  color: #495057;
+  font-weight: 600;  
+  margin-left: 20px;
+}
+.gestion-mis-reservas p {
+  font-weight: 600;
+  margin: 15px 0;
+  color: #495057;
+}
+
+/* ==========================
+   Responsividad
+========================== */
+@media (max-width: 768px) {
+  #contenedor-mis-reservas {
+    grid-template-columns: 1fr;
+  }
+
+  .detalles-reservacion {
+    min-height: auto;
+  }
+}

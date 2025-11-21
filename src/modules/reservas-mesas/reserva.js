@@ -24,7 +24,7 @@ export async function cargarMesas(contenedor, fecha, hora) {
                     <div class="mesa ${mesa.estado ? 'disponible' : 'ocupada'}" 
                          data-id="${mesa.id}">
                         <span class="numero"> ${mesa.nombreMesa}</span>
-                        <i class="bi bi-shop"></i>
+                         <i class="material-symbols-outlined">dine_lamp</i>
                         <span class="capacidad">Capacidad: ${mesa.capacidad}</span>
 
                         <span class="estado ${mesa.estado ? 'verde' : 'rojo'}">
