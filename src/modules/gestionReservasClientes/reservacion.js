@@ -1,5 +1,7 @@
 import { infoReservas } from "../gestionReservasClientes/gestionReservaServices.js";
-//import { eliminarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
+import { ActualizarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
+import { eliminarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
+import { router } from "../../router.js";
 
 export async function informacionReservas(contenedor) {
 
@@ -53,8 +55,31 @@ export async function informacionReservas(contenedor) {
         `).join("");
 
 
-        // Agregar manejadores de eventos para los botones de eliminar reserva
+       //para eliminar la reserva
         const botonesEliminar = contenedor.querySelectorAll('#eliminar-reserva');
+        botonesEliminar.forEach((boton, index) => {
+            boton.addEventListener('click', async () => {
+                const reservaId = reservas[index].id;
+                //llamar a la funcion para eliminar la reserva
+                await eliminarReserva(reservaId);
+                alert(`Reserva #${reservaId} eliminada.`);
+                // Recargar la lista de reservas después de eliminar
+                informacionReservas(contenedor);
+            }
+            );
+        });
+
+        // para modificar la reserva 
+        const botonesModificar = contenedor.querySelectorAll('#modificar-reserva');
+        botonesModificar.forEach((boton, index) => {
+            boton.addEventListener('click',async() => {
+                router.navigate(`/reservar`);
+                const reservaId = reservas[index].id;
+                //llamar a la funcion para actualizar la reserva
+                await ActualizarReserva(reservaId);
+                alert(`Funcionalidad para modificar la reserva #${reservaId} aún no implementada.`);
+            });
+        });
 
 
     }
