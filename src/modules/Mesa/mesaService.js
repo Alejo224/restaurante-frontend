@@ -59,11 +59,23 @@ export async function obtenerMesas() {
  * 🔄 Cambiar estado de mesa
  */
    
-export async function cambiarEstadoMesa(id, nuevoEstado) {
+ export async function cambiarEstadoMesa(id, nuevoEstado) {
   try {
-    const response = await fetchWithAuth(`${API_URL}/${id}`,{
+    // 1️⃣ Traer la mesa completa ANTES DE actualizar
+    const mesaResponse = await fetchWithAuth(`${API_URL}/${id}`);
+    const mesaActual = await mesaResponse.json();
+
+    // 2️⃣ Crear el nuevo objeto con los valores existentes
+    const updatedMesa = {
+      ...mesaActual,
+      estado: nuevoEstado
+    };
+
+    // 3️⃣ Enviar TODO el objeto al backend
+    const response = await fetchWithAuth(`${API_URL}/${id}`, {
       method: "PUT",
-      body: JSON.stringify({ estado: nuevoEstado })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedMesa)
     });
 
     if (!response.ok) {
@@ -76,6 +88,7 @@ export async function cambiarEstadoMesa(id, nuevoEstado) {
     throw error;
   }
 }
+
 
 /**
  * 🗑️ Eliminar mesa
