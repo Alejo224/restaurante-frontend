@@ -2,6 +2,7 @@
 import { router } from '../../../router.js';
 import { logout, getCurrentUser } from '../../auth/userService.js';
 
+
 export function UserDashboard() {
   const page = document.createElement('div');
   const user = getCurrentUser();
@@ -474,13 +475,27 @@ export function UserDashboard() {
     }
   });
 
-  // Focus management para mejor accesibilidad
-  setTimeout(() => {
-    const mainContent = page.querySelector('#main-content');
-    if (mainContent) {
-      mainContent.focus();
-    }
-  }, 100);
+  // Card: Ver Menú
+  page.querySelector('#cardMenu').addEventListener('click', () => {
+    router.navigate('/menu');
+  });
+
+  // Card: Hacer Reserva
+  page.querySelector('#cardReserva').addEventListener('click', () => {
+    // Aquí irá la funcionalidad de reserva de tu compañero
+    router.navigate('/reservar')
+  });
+
+  // Card: Mis Reservas
+  page.querySelector('#cardMisReservas').addEventListener('click', () => {
+     router.navigate('/reservar/mis-reservas');
+  });
+
+  // Card: Historial de Pedidos
+  page.querySelector('#cardHistorial').addEventListener('click', () => {
+  
+    router.navigate('/historial-pedidos');
+  });
 
   return page;
 }
