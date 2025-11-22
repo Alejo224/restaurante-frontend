@@ -15,7 +15,7 @@
   --white: #ffffff;
   --darker: #1a1a1a;
   --text-muted: #6c757d;
-  
+
 
   /* Admin Panel */
   --sidebar-width: 280px;
@@ -53,6 +53,7 @@ body {
 .text-primary {
   color: var(--primary) !important;
 }
+
 .text-panel {
   color: #e9ecef;
 }
@@ -746,23 +747,257 @@ historial pedido
    Estilos para las Mesas
 ========================== */
 
- /* --- Estilos de estado de mesas --- */ 
- 
- .estado-Disponible {
-   color: green;
-   font-weight: bold;
-   }
+/* --- Estilos de estado de mesas --- */
 
-  .estado-No-Disponible { 
-    color: red; 
-    font-weight: bold; 
-  }
-   /* Opcional: agrega un icono visual */ 
-  .estado-Disponible::before {
-   content: "🟢 "; }
-  
-  .estado-No-.estado-No-Disponible {
-  content: "🔴 "; }
+.estado-Disponible {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-No-Disponible {
+  color: red;
+  font-weight: bold;
+}
+
+/* Opcional: agrega un icono visual */
+.estado-Disponible::before {
+  content: "🟢 ";
+}
+
+.estado-No-.estado-No-Disponible {
+  content: "🔴 ";
+}
+
+
+/*Manejo de css para el formulario de reservas*/
+.reserva-mesa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+}
+
+.reserva-mesa form {
+  min-width: 800px;
+}
+
+.reserva-mesa fieldset {
+  border: 2px solid #0d6efd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reserva-mesa legend {
+
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.reserva-mesa .tipoServicio {
+  margin-top: 8px;
+}
+
+.reserva-mesa .tipoServicio i {
+  font-size: 15px;
+  margin-right: 8px;
+  color: #0d6efd;
+}
+
+.reserva-mesa .DatosContacto {
+  margin-top: 14px;
+}
+
+.reserva-mesa .DatosContacto label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.reserva-mesa .DatosContacto input {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  border: 2px solid rgba(13, 110, 253, 0.5);
+  padding: 8px;
+}
+
+.DatosContacto input::placeholder {
+  font-weight: 600;
+  outline: none;
+}
+
+
+.grupo-navegacion {
+  display: flex;
+  justify-content: space-between;
+}
+
+.grupo-navegacion i {
+  color: #0d6efd;
+  font-size: 35px;
+  margin-right: 10px;
+  align-self: center;
+}
+
+reserva-mesa .grupo-navegacion i:hover {
+  cursor: pointer;
+  color: #084298;
+}
+
+button {
+  background-color: #0d6efd;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #084298;
+}
+
+
+.mesas-container {
+  display: grid;
+  grid-template-columns: repeat(5, 140px);
+  /* 5 mesas por fila, cada una 80px */
+  gap: 10px;
+  /* espacio entre mesas */
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.mesas-container .mesa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.mesas-container .mesa i {
+  font-size: 32px;
+  color: #007bff;
+
+}
+
+.grupo-navegacion {
+  cursor: pointer;
+}
+
+.form-select form-select-sm {
+  border: 1px solid #ced4da;
+  height: 40px;
+}
+
+.form-select option {
+  font-size: 1rem;
+  /* Aumenta ligeramente el espacio vertical para que las opciones no se vean apiñadas */
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.reserva-mesa .DatosContacto select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.mesa.seleccionada {
+  border: 3px solid #42cb70;
+  background-color: #e7f1ff;
+}
+
+.mesa.ocupada {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+  cursor: not-allowed;
+}
+
+/* Página de Mis Reservas */
+.gestion-mis-reservas {
+  padding: 20px;
+}
+.gestion-mis-reservas h2 {
+  margin-bottom: 20px;
+}
+#contenedor-mis-reservas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3 reservas por fila */
+  gap: 20px; /* espacio entre reservas */
+  padding: 10px;
+}
+
+.detalles-reservacion {
+  border: 2px solid #ffc107;
+  border-radius: 12px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.detalles-reservacion p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.detalles-reservacion .grupo-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.grupo-botones button {
+  width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.grupo-botones #modificar-reserva {
+  background: #198754;
+  color: white;
+}
+
+.grupo-botones #eliminar-reserva {
+  background: #dc3545;
+  color: white;
+}
+
+.detalles-reservacion .grupo-botones button:hover {
+  opacity: 0.8;
+}
+
+.estado-No-Disponible { 
+  color: red; 
+  font-weight: bold; 
+}
+  /* Opcional: agrega un icono visual */ 
+.estado-Disponible::before {
+  content: "🟢 "; }
+
+.estado-No-.estado-No-Disponible {
+content: "🔴 "; }
 
 
 /* ==========================

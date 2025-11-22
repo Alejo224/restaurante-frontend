@@ -79,7 +79,7 @@ legend {
     align-self: center;
 }
 
-.grupo-navegacion i:hover {
+.grupo-navegacion i:hover { 
     cursor: pointer;
     color: #084298;
 }
@@ -126,3 +126,4 @@ button:hover {
     /* azul Bootstrap */
 
 }
+
