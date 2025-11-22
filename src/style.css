@@ -543,6 +543,20 @@ body {
   .user-action-icon i {
     font-size: 1.5rem;
   }
+
+  /*cARD detalle pedido cliente*/
+  .pedido-admin-card .row>div {
+    margin-bottom: 12px;
+  }
+
+  .estado-selector {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .estado-selector .form-select {
+    min-width: 100%;
+  }
 }
 
 /* ========================================
@@ -974,3 +988,95 @@ button:hover {
   opacity: 0.8;
 }
 
+.estado-No-Disponible { 
+  color: red; 
+  font-weight: bold; 
+}
+  /* Opcional: agrega un icono visual */ 
+.estado-Disponible::before {
+  content: "🟢 "; }
+
+.estado-No-.estado-No-Disponible {
+content: "🔴 "; }
+
+
+/* ==========================
+   Estilos para Detalle del pedido CLIENTE
+========================== */
+
+.pedido-admin-card {
+  transition: all 0.3s ease;
+  border-left: 4px solid #dee2e6 !important;
+}
+
+.pedido-admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pedido-admin-card[data-estado="BORRADOR"] {
+  border-left-color: #ffc107 !important;
+}
+
+.pedido-admin-card[data-estado="PENDIENTE"] {
+  border-left-color: #0dcaf0 !important;
+}
+
+.pedido-admin-card[data-estado="COMPLETADO"] {
+  border-left-color: #198754 !important;
+}
+
+.pedido-admin-card[data-estado="CANCELADO"] {
+  border-left-color: #dc3545 !important;
+}
+
+.estado-selector .form-select {
+  min-width: 140px;
+}
+
+.productos-resumen {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.user-info {
+  background: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.financiera-info {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #0d6efd;
+}
+
+.contacto-info {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+
+/* boton contactar*/
+.contacto-btn {
+  position: relative;
+}
+
+.contacto-btn:hover::after {
+  content: "Llamar/WhatsApp";
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+}
