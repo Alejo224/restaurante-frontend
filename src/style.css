@@ -1022,12 +1022,12 @@ button:hover {
   transition: all 0.3s ease;
 }
 
-.grupo-botones #modificar-reserva {
+.grupo-botones .modificar-reserva {
   background: linear-gradient(135deg, #764ba2, #667eea);
   color: #fff;
 }
 
-.grupo-botones #modificar-reserva:hover {
+.grupo-botones .modificar-reserva:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
 }

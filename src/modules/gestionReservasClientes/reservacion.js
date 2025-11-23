@@ -48,42 +48,57 @@ export async function informacionReservas(contenedor) {
             </div>
             
             <div class="grupo-botones">
-                <button id="modificar-reserva"> Modificar</button>
+                <button class="modificar-reserva" data-id="${reserva}"> Modificar</button>
                 <button class="eliminar-reserva" data-id="${reserva.id}"> Eliminar<i class="bi bi-trash"></i> </button>
             </div>
         </article>
         `).join("");
 
 
-        //para eliminar la reserva
+        // Para eliminar la reserva (con manejo de errores y feedback)
         const botonesEliminar = contenedor.querySelectorAll('.eliminar-reserva');
         botonesEliminar.forEach(boton => {
-            boton.addEventListener('click', async () => {
+            boton.addEventListener('click', async (e) => {
+                e.preventDefault();
                 const reservaId = boton.dataset.id;
-                //llamar a la funcion para eliminar la reserva
-                await eliminarReserva(reservaId);
-                alert(`Reserva #${reservaId} eliminada.`);
-                // Recargar la lista de reservas después de eliminar
-                informacionReservas(contenedor);
-            }
-            );
+                if (!reservaId) {
+                    console.error('ID de reserva no encontrado en el botón', boton);
+                    return;
+                }
+                console.log("Eliminar reserva con ID:", reservaId);
+                boton.disabled = true;
+                try {
+                    const resultado = await eliminarReserva(reservaId);
+                    if (resultado === null) {
+                        alert(`No se pudo eliminar la reserva #${reservaId}. Revisa la consola.`);
+                    } else {
+                        alert(`Reserva #${reservaId} eliminada.`);
+                        // Recargar la lista de reservas después de eliminar
+                        await informacionReservas(contenedor);
+                    }
+                } catch (err) {
+                    console.error('Error al eliminar reserva:', err);
+                    alert('Error al eliminar la reserva. Revisa la consola.');
+                } finally {
+                    boton.disabled = false;
+                }
+            });
         });
 
-        // para modificar la reserva    
-        const botonesModificar = contenedor.querySelectorAll('#modificar-reserva');
+        // Para modificar la reserva
+        const botonesModificar = contenedor.querySelectorAll('.modificar-reserva');
         botonesModificar.forEach((boton, index) => {
-            boton.addEventListener('click', async () => {
+            boton.addEventListener('click', async (e) => {
+                e.preventDefault();
                 const formulario = router.navigate(`/reservar`);
                 if (!formulario) {
                     alert("Error al cargar el formulario de reserva.");
                     return;
                 }
-                else {
-                    const reservaId = reservas[index].id;
-                    //llamar a la funcion para actualizar la reserva
-                    await ActualizarReserva(reservaId);
-                    alert(`Funcionalidad para modificar la reserva #${reservaId} aún no implementada.`);
-                }
+                const reservaId = reservas[index].id;
+                // Aquí normalmente se navegaría y se cargarían datos para editar
+                // Si existe una función para prefills, llamarla. Por ahora solo aviso.
+                alert(`Funcionalidad para modificar la reserva #${reservaId} aún no implementada.`);
             });
         });
 
