@@ -399,11 +399,9 @@ export function UserDashboard() {
         break;
       case 'reserva':
         announceToScreenReader('Funcionalidad de reserva - Próximamente');
-        alert('Funcionalidad de reserva - Próximamente');
         break;
       case 'mis-reservas':
         announceToScreenReader('Mis Reservas - Próximamente');
-        alert('Mis Reservas - Próximamente');
         break;
       case 'historial':
         router.navigate('/historial-pedidos');
