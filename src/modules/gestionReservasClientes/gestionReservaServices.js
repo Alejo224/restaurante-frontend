@@ -94,9 +94,20 @@ export async function ActualizarReserva(ReservaId, contenidoActualizado) {
         });
 
         if (!response.ok) {
-            throw new Error(`Error al actualizar la reserva (${response.status}-${response.statusText})`);
-            return await response.json();
+            const errText = await response.text();
+            let body = null;
+            try { body = errText ? JSON.parse(errText) : null; } catch (e) { body = errText; }
+            throw new Error(`Error al actualizar la reserva (${response.status}-${response.statusText}) - ${JSON.stringify(body)}`);
         }
+
+        // Si la respuesta no tiene body (204), devolver un objeto de éxito
+        if (response.status === 204) {
+            return { success: true };
+        }
+
+        // Intentar parsear JSON si existe contenido
+        const text = await response.text();
+        try { return text ? JSON.parse(text) : { success: true }; } catch (e) { return { success: true, raw: text }; }
 
     } catch (error) {
         console.error("Error en la llamada al API para actualizar la reserva", error);

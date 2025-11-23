@@ -33,6 +33,8 @@ class Router {
    * @param {string} path - Ruta destino
    */
   async navigate(path) { // ✅ CAMBIAR a async
+    // Soporta parámetros opcionales: navigate(path, params)
+    const params = arguments.length > 1 ? arguments[1] : undefined;
     const route = this.routes[path];
 
     // Si la ruta no existe, redirigir al home
@@ -72,6 +74,7 @@ class Router {
 
     // 3. Si pasa todas las validaciones, renderizar la ruta
     this.currentRoute = path;
+    this.currentRouteParams = params; // Guardar params para que render los reciba
     await this.render(); // ✅ CAMBIAR a await
     window.location.hash = path;
   }
@@ -86,7 +89,15 @@ class Router {
     const route = this.routes[this.currentRoute];
     
     if (route && route.component) {
-      const componentElement = route.component();
+      // Pasar parámetros (modo, reservaData) si existen
+      const params = this.currentRouteParams;
+      let componentElement;
+      try {
+        componentElement = route.component(params?.modo, params?.reservaData);
+      } catch (err) {
+        // Fallback: llamar sin parámetros si el componente no acepta argumentos
+        componentElement = route.component();
+      }
       
       // Si el componente es un elemento del DOM, lo agregamos directamente
       if (componentElement instanceof HTMLElement) {
@@ -99,7 +110,7 @@ class Router {
       // ✅ NUEVO: Ejecutar afterRender si existe
       if (route.afterRender && typeof route.afterRender === 'function') {
         console.log('🚀 Ejecutando afterRender para:', this.currentRoute);
-        await route.afterRender();
+        await route.afterRender(params);
       }
     } else {
       // Ruta no encontrada

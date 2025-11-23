@@ -1,6 +1,6 @@
 import { infoReservas } from "../gestionReservasClientes/gestionReservaServices.js";
-import { ActualizarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
 import { eliminarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
+import {ReservaMesaPagina} from "../reservas-mesas/reservaPage.js";
 import { router } from "../../router.js";
 
 export async function informacionReservas(contenedor) {
@@ -48,7 +48,7 @@ export async function informacionReservas(contenedor) {
             </div>
             
             <div class="grupo-botones">
-                <button class="modificar-reserva" data-id="${reserva}"> Modificar</button>
+                <button class="modificar-reserva" data-id="${reserva.id}"> Modificar</button>
                 <button class="eliminar-reserva" data-id="${reserva.id}"> Eliminar<i class="bi bi-trash"></i> </button>
             </div>
         </article>
@@ -85,22 +85,27 @@ export async function informacionReservas(contenedor) {
             });
         });
 
-        // Para modificar la reserva
+       
+        // Para modificar la reserva: navegar a la ruta /reservar y pasar los datos
         const botonesModificar = contenedor.querySelectorAll('.modificar-reserva');
-        botonesModificar.forEach((boton, index) => {
+        botonesModificar.forEach(boton => {
             boton.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const formulario = router.navigate(`/reservar`);
-                if (!formulario) {
-                    alert("Error al cargar el formulario de reserva.");
+
+                const reservaId = boton.dataset.id;
+
+                // Buscar la reserva en el arreglo ya cargado
+                const reservaSeleccionada = reservas.find(r => r.id == reservaId);
+                if (!reservaSeleccionada) {
+                    console.error(`Reserva con ID ${reservaId} no encontrada.`);
                     return;
                 }
-                const reservaId = reservas[index].id;
-                // Aquí normalmente se navegaría y se cargarían datos para editar
-                // Si existe una función para prefills, llamarla. Por ahora solo aviso.
-                alert(`Funcionalidad para modificar la reserva #${reservaId} aún no implementada.`);
+
+                // Navegar a la página de reserva pasando modo 'editar' y la reserva
+                await router.navigate('/reservar', { modo: 'editar', reservaData: reservaSeleccionada });
             });
         });
+
 
 
     }
