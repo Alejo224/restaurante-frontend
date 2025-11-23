@@ -1032,12 +1032,12 @@ button:hover {
   box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
 }
 
-.grupo-botones #eliminar-reserva {
+.grupo-botones .eliminar-reserva {
   background: #dc3545;
   color: #fff;
 }
 
-.grupo-botones #eliminar-reserva:hover {
+.grupo-botones .eliminar-reserva:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
 }

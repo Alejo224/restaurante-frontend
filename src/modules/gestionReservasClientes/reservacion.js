@@ -49,17 +49,17 @@ export async function informacionReservas(contenedor) {
             
             <div class="grupo-botones">
                 <button id="modificar-reserva"> Modificar</button>
-                <button id="eliminar-reserva"> Eliminar<i class="bi bi-trash"></i> </button>
+                <button class="eliminar-reserva" data-id="${reserva.id}"> Eliminar<i class="bi bi-trash"></i> </button>
             </div>
         </article>
         `).join("");
 
 
-       //para eliminar la reserva
-        const botonesEliminar = contenedor.querySelectorAll('#eliminar-reserva');
-        botonesEliminar.forEach((boton, index) => {
+        //para eliminar la reserva
+        const botonesEliminar = contenedor.querySelectorAll('.eliminar-reserva');
+        botonesEliminar.forEach(boton => {
             boton.addEventListener('click', async () => {
-                const reservaId = reservas[index].id;
+                const reservaId = boton.dataset.id;
                 //llamar a la funcion para eliminar la reserva
                 await eliminarReserva(reservaId);
                 alert(`Reserva #${reservaId} eliminada.`);
@@ -69,15 +69,21 @@ export async function informacionReservas(contenedor) {
             );
         });
 
-        // para modificar la reserva 
+        // para modificar la reserva    
         const botonesModificar = contenedor.querySelectorAll('#modificar-reserva');
         botonesModificar.forEach((boton, index) => {
-            boton.addEventListener('click',async() => {
-                router.navigate(`/reservar`);
-                const reservaId = reservas[index].id;
-                //llamar a la funcion para actualizar la reserva
-                await ActualizarReserva(reservaId);
-                alert(`Funcionalidad para modificar la reserva #${reservaId} aún no implementada.`);
+            boton.addEventListener('click', async () => {
+                const formulario = router.navigate(`/reservar`);
+                if (!formulario) {
+                    alert("Error al cargar el formulario de reserva.");
+                    return;
+                }
+                else {
+                    const reservaId = reservas[index].id;
+                    //llamar a la funcion para actualizar la reserva
+                    await ActualizarReserva(reservaId);
+                    alert(`Funcionalidad para modificar la reserva #${reservaId} aún no implementada.`);
+                }
             });
         });
 
