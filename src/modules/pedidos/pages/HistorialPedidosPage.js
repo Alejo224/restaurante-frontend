@@ -98,6 +98,11 @@ export function HistorialPedidosPage() {
                       aria-label="Mostrar pedidos completados">
                 Completados <span class="badge bg-success ms-1" id="count-completado">0</span>
               </button>
+              <button class="btn btn-outline-secondary btn-sm" data-filter="CONFIRMADO"
+                      aria-pressed="false"
+                      aria-label="Mostrar pedidos confirmados">
+                Completados <span class="badge bg-secundary ms-1" id="count-confirmado">0</span>
+              </button>
               <button class="btn btn-outline-danger btn-sm" data-filter="CANCELADO"
                       aria-pressed="false"
                       aria-label="Mostrar pedidos cancelador">
@@ -468,7 +473,8 @@ export async function afterRenderHistorialPedidos() {
       'BORRADOR': 'pedidos por pagar',
       'PENDIENTE': 'pedidos pendientes',
       'COMPLETADO': 'pedidos completados',
-      'CANCELADO': 'pedidos cancelados'
+      'CANCELADO': 'pedidos cancelados',
+      'CONFIRMADO': 'pedidos confirmados'
     };
     return textos[filtro] || filtro;
   }
@@ -483,9 +489,12 @@ export async function afterRenderHistorialPedidos() {
 
   function pagarPedido(pedidoId) {
     console.log('💳 Pagando pedido:', pedidoId);
-    announceToScreenReader(`Procesando pago del pedido ${pedidoId}`);
-    alert(`Procesando pago del pedido #${pedidoId} (Próximo sprint)`);
-  }
+    announceToScreenReader(`Redirigiendo a página de pago para el pedido ${pedidoId}`);
+    
+    // Redirigir a la página de pago con el ID del pedido
+    window.location.href = `/restaurante-frontend/src/modules/pagos/pago.html?pedidoId=${pedidoId}`;
+    // router.navigate(`/pago?pedidoId=${pedidoId}`);
+}
 
   function verDetallePedido(pedidoId) {
     console.log('👀 Viendo detalle del pedido:', pedidoId);

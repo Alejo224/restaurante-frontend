@@ -85,6 +85,7 @@ export class HistorialPedidosAdminComponent {
                   <option value="PENDIENTE" ${this.filtroEstado === 'PENDIENTE' ? 'selected' : ''}>Pendiente</option>
                   <option value="COMPLETADO" ${this.filtroEstado === 'COMPLETADO' ? 'selected' : ''}>Completado</option>
                   <option value="CANCELADO" ${this.filtroEstado === 'CANCELADO' ? 'selected' : ''}>Cancelado</option>
+                  <option value="CONFIRMADO" ${this.filtroEstado === 'CONFIRMADO' ? 'selected' : ''}>Confirmado</option>
                 </select>
               </div>
               <button id="btn-actualizar" class="btn btn-outline-primary">

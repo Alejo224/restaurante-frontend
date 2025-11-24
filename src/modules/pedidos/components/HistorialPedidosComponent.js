@@ -96,7 +96,7 @@ export function renderPedidoCard(pedido, service) {
         <div class="d-flex gap-2">
           <!-- Botón Pagar - Solo para pedidos BORRADOR -->
           ${pedido.estadoPedidoEnum === 'BORRADOR' ? `
-            <button class="btn btn-success btn-sm pagar-btn" 
+            <button id="submit-button" class="btn btn-success btn-sm pagar-btn" 
                     data-pedido-id="${pedido.id}"
                     aria-label="Marcar pedido ${pedido.id} como pagado">
               <i class="bi bi-credit-card me-1" aria-hidden="true"></i>Pagar
@@ -241,7 +241,8 @@ function obtenerOpcionesEstadoDefault(estadoActual) {
     { value: 'BORRADOR', text: 'Por Pagar' },
     { value: 'PENDIENTE', text: 'Pendiente' },
     { value: 'COMPLETADO', text: 'Completado' },
-    { value: 'CANCELADO', text: 'Cancelado' }
+    { value: 'CANCELADO', text: 'Cancelado' },
+    { value: 'CONFIRMADO', text: 'Confirmado' }
   ];
 
   return estados.map(estado => 
