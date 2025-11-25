@@ -19,8 +19,6 @@ import { UserDashboard } from "./modules/user/pages/UserDashboard.js";
 import { HistorialPedidosPage, afterRenderHistorialPedidos } from './modules/pedidos/pages/HistorialPedidosPage.js';
 import { ReservaMesaPagina } from "./modules/reservas-mesas/reservaPage.js";
 import { seccionMisReservas } from "./modules/gestionReservasClientes/misReservas.js";
-import { PagoExitosoPage } from "./modules/pagos/pages/PagoExitosoPage.js";
-import { PagoCanceladoPage } from "./modules/pagos/pages/PagoCanceladoPage.js";
 
 
 // ========================================
@@ -74,16 +72,6 @@ router.addRoute("/reservar", ReservaMesaPagina, {
 
 router.addRoute("/reservar/mis-reservas", seccionMisReservas,{
   requiresAuth:true,
-  requiresRole: "USER",
-});
-
-router.addRoute("/pago-exitoso", PagoExitosoPage, {
-  requiresAuth: true,
-  requiresRole: "USER",
-});
-
-router.addRoute("/pago-cancelado", PagoCanceladoPage, {
-  requiresAuth: true,
   requiresRole: "USER",
 });
 

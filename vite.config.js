@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/restaurante-frontend/', // 👈 Nombre de tu repositorio
+  base: '/restaurante-frontend/',
   build: {
     outDir: 'dist',
     sourcemap: false

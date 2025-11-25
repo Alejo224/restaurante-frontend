@@ -101,7 +101,7 @@ export function HistorialPedidosPage() {
               <button class="btn btn-outline-secondary btn-sm" data-filter="CONFIRMADO"
                       aria-pressed="false"
                       aria-label="Mostrar pedidos confirmados">
-                Completados <span class="badge bg-secundary ms-1" id="count-confirmado">0</span>
+                Comfirmados <span class="badge bg-secundary ms-1" id="count-confirmado">0</span>
               </button>
               <button class="btn btn-outline-danger btn-sm" data-filter="CANCELADO"
                       aria-pressed="false"
