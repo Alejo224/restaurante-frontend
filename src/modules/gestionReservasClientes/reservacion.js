@@ -1,5 +1,5 @@
 import { infoReservas } from "../gestionReservasClientes/gestionReservaServices.js";
-import { cancelarReserva} from "../gestionReservasClientes/gestionReservaServices.js";
+import { cancelarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
 import { router } from "../../router.js";
 
 export async function informacionReservas(contenedor) {
@@ -15,14 +15,20 @@ export async function informacionReservas(contenedor) {
     try {
         // Llamamos a la API para obtener las reservas del usuario actual
         const reservas = await infoReservas();
+        const reservasActivas = reservas.filter(r => r.estado !== "CANCELADA");
 
-        if (!reservas || reservas.length === 0) {
-            contenedor.innerHTML = `<p>No tienes reservas realizadas.</p>`;
+        if(!reservasActivas || reservasActivas.length === 0){
+            contenedor.innerHTML = `<p>No tienes reservas activas.</p>`;
             return;
         }
+   
+    //    if (!reservas || reservas.length === 0) {
+      //      contenedor.innerHTML = `<p>No tienes reservas realizadas.</p>`;
+      //      return;
+      //  }
 
 
-        contenedor.innerHTML = reservas.map(reserva => `
+        contenedor.innerHTML = reservasActivas.map(reserva => `
         <article class="detalles-reservacion">
             <h3>Reserva #${reserva.id}</h3>
             <div class="info-reserva">
@@ -73,7 +79,9 @@ export async function informacionReservas(contenedor) {
                     } else {
                         alert(`Reserva #${reservaId} cancelda.`);
                         // Recargar la lista de reservas después de eliminar
+                     
                         await informacionReservas(contenedor);
+                       
                     }
                 } catch (err) {
                     console.error('Error al cancelar la reserva:', err);
@@ -84,7 +92,7 @@ export async function informacionReservas(contenedor) {
             });
         });
 
-       
+
         // Para modificar la reserva: navegar a la ruta /reservar y pasar los datos
         const botonesModificar = contenedor.querySelectorAll('.modificar-reserva');
         botonesModificar.forEach(boton => {
