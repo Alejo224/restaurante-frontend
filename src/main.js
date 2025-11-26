@@ -74,37 +74,20 @@ router.addRoute("/reservar/mis-reservas", seccionMisReservas,{
   requiresAuth:true,
   requiresRole: "USER",
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 
 // ========================================
 // 👨‍💼 RUTAS DE ADMINISTRADOR (requiere rol ADMIN)
 // ========================================
 /*
-router.addRoute('/admin/menu', MenuManagementPage, {
-  requiresAuth: true,
-  requiresRole: 'ADMIN'
-});
 */
 router.addRoute("/admin/panel", AdminDashboard, {
   requiresAuth: true,
   requiresRole: "ADMIN",
 });
-
-// Puedes agregar más rutas de admin aquí:
-// router.addRoute('/admin/dashboard', AdminDashboard, {
-//   requiresAuth: true,
-//   requiresRole: 'ADMIN'
-// });
-
-// router.addRoute('/admin/users', UserManagement, {
-//   requiresAuth: true,
-//   requiresRole: 'ADMIN'
-// });
-
-// router.addRoute('/admin/orders', OrderManagement, {
-//   requiresAuth: true,
-//   requiresRole: 'ADMIN'
-// });
 
 // ========================================
 // 🚀 INICIALIZAR ROUTER

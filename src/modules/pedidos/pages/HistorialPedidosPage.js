@@ -1,6 +1,6 @@
 // src/modules/pedidos/pages/HistorialPedidosPage.js
 import { createPedidosService } from "../services/PedidosService.js";
-import { renderPedidoCard } from "../components/HistorialPedidosComponent.js";
+import { renderPedidoCard, mostrarModalDetalleCliente } from "../components/HistorialPedidosComponent.js";
 import { router } from "../../../router.js";
 import { logout, isAuthenticated, getCurrentUser } from '../../auth/userService.js';
 
@@ -97,6 +97,16 @@ export function HistorialPedidosPage() {
                       aria-pressed="false"
                       aria-label="Mostrar pedidos completados">
                 Completados <span class="badge bg-success ms-1" id="count-completado">0</span>
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" data-filter="CONFIRMADO"
+                      aria-pressed="false"
+                      aria-label="Mostrar pedidos confirmados">
+                Comfirmados <span class="badge bg-secundary ms-1" id="count-confirmado">0</span>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" data-filter="CANCELADO"
+                      aria-pressed="false"
+                      aria-label="Mostrar pedidos cancelador">
+                Cancelados <span class="badge bg-danger ms-1" id="count-cancelado">0</span>
               </button>
             </div>
           </div>
@@ -415,6 +425,7 @@ export async function afterRenderHistorialPedidos() {
     pedidosContainer.addEventListener('click', (e) => {
       const botonPagar = e.target.closest('.pagar-btn');
       const botonDetalle = e.target.closest('.detalle-btn');
+      const botonCancelar = e.target.closest('.cancelar-btn');
       
       if (botonPagar) {
         const pedidoId = botonPagar.dataset.pedidoId;
@@ -422,7 +433,11 @@ export async function afterRenderHistorialPedidos() {
       } else if (botonDetalle) {
         const pedidoId = botonDetalle.dataset.pedidoId;
         verDetallePedido(pedidoId);
+      } else if (botonCancelar) {
+        const pedidoId = botonCancelar.dataset.pedidoId;
+        cancelarPedido(pedidoId);
       }
+
     });
 
     // Soporte para teclado en botones de pedidos
@@ -457,7 +472,9 @@ export async function afterRenderHistorialPedidos() {
       'all': 'todos los pedidos',
       'BORRADOR': 'pedidos por pagar',
       'PENDIENTE': 'pedidos pendientes',
-      'COMPLETADO': 'pedidos completados'
+      'COMPLETADO': 'pedidos completados',
+      'CANCELADO': 'pedidos cancelados',
+      'CONFIRMADO': 'pedidos confirmados'
     };
     return textos[filtro] || filtro;
   }
@@ -472,9 +489,12 @@ export async function afterRenderHistorialPedidos() {
 
   function pagarPedido(pedidoId) {
     console.log('💳 Pagando pedido:', pedidoId);
-    announceToScreenReader(`Procesando pago del pedido ${pedidoId}`);
-    alert(`Procesando pago del pedido #${pedidoId} (Próximo sprint)`);
-  }
+    announceToScreenReader(`Redirigiendo a página de pago para el pedido ${pedidoId}`);
+    
+    // Redirigir a la página de pago con el ID del pedido
+    window.location.href = `/restaurante-frontend/src/modules/pagos/pago.html?pedidoId=${pedidoId}`;
+    // router.navigate(`/pago?pedidoId=${pedidoId}`);
+}
 
   function verDetallePedido(pedidoId) {
     console.log('👀 Viendo detalle del pedido:', pedidoId);
@@ -485,63 +505,14 @@ export async function afterRenderHistorialPedidos() {
     }
   }
 
+  // FUNCIÓN - Ahora usa el modal personalizado
   function mostrarModalDetalle(pedido, service) {
-    const modalHTML = `
-      <div class="modal fade" id="detallePedidoModal" tabindex="-1" aria-labelledby="detallePedidoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 class="modal-title h5" id="detallePedidoModalLabel">Detalle del Pedido #${pedido.id}</h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar modal"></button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <p><strong>Estado:</strong> <span class="badge ${service.obtenerClaseBadgeEstado(pedido.estadoPedidoEnum)}">${service.obtenerTextoEstado(pedido.estadoPedidoEnum)}</span></p>
-                  <p><strong>Fecha:</strong> ${service.formatearFecha(pedido.fechaPedido)}</p>
-                  <p><strong>Tipo:</strong> ${service.obtenerTextoTipoServicio(pedido.tipoServicio)}</p>
-                </div>
-                <div class="col-md-6">
-                  <p><strong>Subtotal:</strong> ${service.formatearMoneda(pedido.subtotal)}</p>
-                  <p><strong>IVA:</strong> ${service.formatearMoneda(pedido.iva)}</p>
-                  <p><strong>Total:</strong> ${service.formatearMoneda(pedido.total)}</p>
-                </div>
-              </div>
-              <hr>
-              <h4 class="h6">Productos:</h4>
-              ${pedido.detalles?.map(detalle => `
-                <div class="d-flex justify-content-between border-bottom py-2">
-                  <div>
-                    <strong>${detalle.cantidad}x ${detalle.platoNombre}</strong>
-                    ${detalle.notas ? `<br><small class="text-muted">${detalle.notas}</small>` : ''}
-                  </div>
-                  <div class="text-end">
-                    <div>${service.formatearMoneda(detalle.subtotal)}</div>
-                    <small class="text-muted">${service.formatearMoneda(detalle.precioUnitario)} c/u</small>
-                  </div>
-                </div>
-              `).join('') || '<p class="text-muted">No hay productos en este pedido</p>'}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              ${pedido.estadoPedidoEnum === 'BORRADOR' ? 
-                `<button type="button" class="btn btn-primary" onclick="pagarPedido(${pedido.id})">Pagar Pedido</button>` : 
-                ''
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    console.log('🔍 Mostrando modal de detalle para pedido:', pedido.id);
     
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    const modal = new bootstrap.Modal(document.getElementById('detallePedidoModal'));
-    modal.show();
+    // Llama a la función del componente que crea el modal personalizado
+    mostrarModalDetalleCliente(pedido, service);
     
-    document.getElementById('detallePedidoModal').addEventListener('hidden.bs.modal', function () {
-      this.remove();
-      announceToScreenReader('Modal de detalles cerrado');
-    });
+    announceToScreenReader(`Abriendo detalles del pedido ${pedido.id}`);
   }
 
   function mostrarLoading(mostrar) {
@@ -593,4 +564,92 @@ export async function afterRenderHistorialPedidos() {
       `;
     }
   }
+
+  // Función mejorada con modal personalizado
+  function cancelarPedido(pedidoId) {
+    console.log('❌ Cancelando pedido:', pedidoId);
+    
+    // Crear modal para motivo
+    const motivo = mostrarModalMotivoCancelacion();
+    
+    if (!motivo) {
+      announceToScreenReader('Cancelación cancelada: no se proporcionó motivo');
+      return;
+    }
+
+    announceToScreenReader(`Cancelando pedido ${pedidoId}`);
+    
+    service.cancelarPedido(pedidoId, motivo)
+      .then((pedidoCancelado) => {
+        console.log('✅ Pedido cancelado:', pedidoCancelado);
+        announceToScreenReader('Pedido cancelado correctamente');
+        
+        // Recargar lista
+        return service.obtenerPedidos();
+      })
+      .then((nuevosPedidos) => {
+        pedidos = nuevosPedidos;
+        renderizarPedidos();
+        actualizarContadores();
+      })
+      .catch(error => {
+        console.error('❌ Error cancelando pedido:', error);
+        announceToScreenReader('Error al cancelar el pedido: ' + error.message);
+        alert('Error al cancelar el pedido: ' + error.message);
+      });
+  }
+
+  //  Función para mostrar modal de motivo
+  function mostrarModalMotivoCancelacion() {
+    return prompt('Por favor, indica el motivo de la cancelación:');
+  }
+
+//  versión más elaborada con HTML:
+function mostrarModalMotivoAvanzado() {
+  return new Promise((resolve) => {
+    const modalHTML = `
+      <div class="modal fade" id="motivoCancelacionModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Motivo de Cancelación</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <textarea id="motivoCancelacionText" class="form-control" rows="3" 
+                        placeholder="Por favor, explica por qué cancelas este pedido..."></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger" id="confirmarCancelacion">Confirmar Cancelación</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = new bootstrap.Modal(document.getElementById('motivoCancelacionModal'));
+    
+    modal.show();
+    
+    document.getElementById('confirmarCancelacion').addEventListener('click', () => {
+      const motivo = document.getElementById('motivoCancelacionText').value.trim();
+      modal.hide();
+      
+      setTimeout(() => {
+        document.getElementById('motivoCancelacionModal').remove();
+      }, 500);
+
+      resolve(motivo);
+    });
+    
+    document.getElementById('motivoCancelacionModal').addEventListener('hidden.bs.modal', () => {
+      setTimeout(() => {
+        document.getElementById('motivoCancelacionModal').remove();
+        resolve(null);
+      }, 500);
+    });
+  });
+}
 }

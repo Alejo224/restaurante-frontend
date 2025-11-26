@@ -1,7 +1,7 @@
 // src/modules/pedidos/services/PedidosService.js
+const API_BASE = 'http://localhost:8080/api';
 
 export function createPedidosService() {
-  const apiUrl = "http://localhost:8080/api/pedidos";
 
   return {
     async obtenerPedidos() {
@@ -11,7 +11,7 @@ export function createPedidosService() {
         throw new Error("No hay token de autenticación");
       }
 
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${API_BASE}/pedidos`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -89,6 +89,35 @@ export function createPedidosService() {
         hour: "2-digit",
         minute: "2-digit"
       });
+    },
+
+    async cancelarPedido(pedidoId, motivoCancelacion) {
+      const token = localStorage.getItem("user_token") || localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error("No hay token de autenticación");
+      }
+
+      console.log("Cancelando pedido:", pedidoId, "Motivo:", motivoCancelacion);
+
+      const response = await fetch(`${API_BASE}/pedidos/${pedidoId}/cancelar`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          motivoCancelacion
+          })
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
+      }
+
+      console.log("Pedido cancelado con éxito:", pedidoId);
+      return await response.json();
     }
   };
 }

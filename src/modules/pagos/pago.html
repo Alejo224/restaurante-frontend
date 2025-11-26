@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar Pedido - Mi Restaurante</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Remueve Stripe.js del head ya que no lo usaremos aquí -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header" role="banner">
+            <h1 id="page-title">Confirmar Pago</h1>
+            <p id="page-description">Confirma tu correo para proceder con el pago seguro</p>
+        </header>
+        
+        <main id="main-content" role="main">
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center my-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando información del pedido...</span>
+                </div>
+                <p class="mt-2 text-muted">Cargando información del pedido...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="alert alert-danger d-none" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span id="error-message"></span>
+                <button class="btn btn-outline-danger btn-sm ms-2" onclick="volverAlHistorial()">
+                    Volver al Historial
+                </button>
+            </div>
+
+            <!-- Order Info (se llena dinámicamente) -->
+            <section id="order-info-section" class="order-info d-none" aria-labelledby="order-info-title">
+                <h2 id="order-info-title" class="sr-only">Información del pedido</h2>
+                <div class="info-row">
+                    <span class="info-label">Pedido:</span>
+                    <span class="info-value">#<span id="order-id">-</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Productos:</span>
+                    <span class="info-value" id="order-products">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Subtotal:</span>
+                    <span class="info-value">$ <span id="order-subtotal">0,00</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">IVA (19%):</span>
+                    <span class="info-value">$ <span id="order-tax">0,00</span></span>
+                </div>
+                <div class="info-row total-row">
+                    <span class="info-label">Total:</span>
+                    <span class="info-value">$ <span id="order-total">0,00</span></span>
+                </div>
+            </section>
+            
+            <!-- SIMPLIFICADO: Solo formulario de email -->
+            <div id="payment-form-container" class="d-none">
+                <div class="payment-form">
+                    <div role="alert" id="form-errors" class="alert alert-error hidden" aria-live="polite"></div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label required">Correo electrónico para el recibo</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-control" 
+                            placeholder="tu@email.com" 
+                            required
+                            aria-required="true"
+                        >
+                        <small class="form-text text-muted">
+                            Te enviaremos el recibo de tu compra a esta dirección
+                        </small>
+                    </div>
+                    
+                    <div class="secure-notice mt-4">
+                        <span aria-hidden="true">🔒</span>
+                        <span>Pago seguro procesado por Stripe</span>
+                    </div>
+                    
+                    <button 
+                        type="button" 
+                        id="submit-button" 
+                        class="btn btn-primary mt-3"
+                    >
+                        <span id="button-text">Continuar al Pago</span>
+                        <span id="button-spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                    </button>
+                    
+                    <button 
+                        type="button" 
+                        id="cancel-button" 
+                        class="btn btn-secondary mt-2"
+                    >
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../pagos/pago-service.js"></script>
+</body>
+</html>

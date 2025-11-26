@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Cancelado - Mi Restaurante</title>
+    <meta name="description" content="Pago cancelado - puedes reintentar cuando desees">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --warning-color: #dc3545;
+            --warning-light: #f8d7da;
+            --text-color: #212529;
+            --background-color: #f8f9fa;
+        }
+
+        @media (prefers-contrast: high) {
+            :root {
+                --warning-color: #8b0000;
+                --text-color: #000000;
+                --background-color: #ffffff;
+            }
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cancel-container {
+            max-width: 500px;
+            width: 100%;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--warning-color);
+            text-align: center;
+        }
+
+        .cancel-icon {
+            font-size: 4rem;
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+        }
+
+        .btn:focus {
+            outline: 3px solid var(--warning-color);
+            outline-offset: 2px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip link -->
+    <a href="#main-content" class="sr-only">
+        Saltar al contenido principal
+    </a>
+
+    <div class="cancel-container" role="alert" aria-live="assertive" aria-atomic="true">
+        <!-- Icono -->
+        <div class="cancel-icon" aria-hidden="true">
+            <i class="bi bi-x-circle-fill"></i>
+        </div>
+        <span class="sr-only">Pago cancelado</span>
+
+        <!-- Título principal -->
+        <h1 id="page-title" class="text-danger mb-3 h2">
+            Pago Cancelado
+        </h1>
+
+        <!-- Descripción -->
+        <p class="lead mb-4" id="page-description">
+            El proceso de pago ha sido cancelado.
+        </p>
+
+        <!-- Información del pedido -->
+        <div id="pedido-info" class="mb-4" aria-live="polite">
+            <!-- Se llenará dinámicamente -->
+        </div>
+
+        <!-- Información adicional -->
+        <div class="alert alert-warning" role="status">
+            <i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>
+            <span>No se ha realizado ningún cargo. Puedes intentar nuevamente cuando lo desees.</span>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center" role="group"
+            aria-label="Opciones después de cancelación">
+            <button class="btn btn-warning flex-md-fill" id="reintentarBtn" aria-label="Reintentar el pago del pedido">
+                <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>
+                Reintentar Pago
+            </button>
+
+            <button class="btn btn-outline-secondary flex-md-fill" id="volverHistorialBtn"
+                aria-label="Volver al historial de pedidos">
+                <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>
+                Volver al Historial
+            </button>
+        </div>
+    </div>
+
+    <!-- Área de anuncios para screen readers -->
+    <div id="aria-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+    <script>
+        // Función para anunciar a screen readers
+        function announceToScreenReader(message) {
+            const liveRegion = document.getElementById('aria-live-region');
+            if (liveRegion) {
+                liveRegion.textContent = message;
+            }
+        }
+
+        // Funciones de navegación - DEFINIDAS EN EL ÁMBITO GLOBAL
+        function volverAlHistorial() {
+            announceToScreenReader('Volviendo al historial de pedidos');
+            window.location.href = 'historial-pedidos.html';
+        }
+
+        function reintentarPago() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pedidoId = urlParams.get('pedidoId');
+
+            if (pedidoId) {
+                announceToScreenReader(`Reintentando pago del pedido ${pedidoId}`);
+                window.location.href = `pago.html?pedidoId=${pedidoId}`;
+            } else {
+                announceToScreenReader('Navegando al historial de pedidos');
+                window.history.back();
+            }
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            const reintentarBtn = document.getElementById('reintentarBtn');
+            const volverBtn = document.getElementById('volverHistorialBtn');
+
+            if (reintentarBtn) {
+                reintentarBtn.addEventListener('click', reintentarPago);
+                reintentarBtn.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        reintentarPago();
+                    }
+                });
+            }
+
+            if (volverBtn) {
+                volverBtn.addEventListener('click', volverAlHistorial);
+                volverBtn.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        volverAlHistorial();
+                    }
+                });
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener el ID del pedido de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const pedidoId = urlParams.get('pedidoId');
+
+            // Anunciar carga de página
+            announceToScreenReader('Página de pago cancelado cargada');
+
+            // Mostrar información del pedido si está disponible
+            if (pedidoId) {
+                const pedidoInfo = document.getElementById('pedido-info');
+                if (pedidoInfo) {
+                    pedidoInfo.innerHTML = `
+                        <div class="alert alert-info" role="status">
+                            <h2 class="h6 mb-2">
+                                <i class="bi bi-receipt me-2" aria-hidden="true"></i>
+                                Detalles del Pedido
+                            </h2>
+                            <p class="mb-1"><strong>Número de pedido:</strong> #${pedidoId}</p>
+                            <p class="mb-0">
+                                <strong>Estado:</strong> 
+                                <span class="badge bg-warning text-dark">
+                                    Por Pagar
+                                    <span class="sr-only">estado del pedido: por pagar</span>
+                                </span>
+                            </p>
+                        </div>
+                    `;
+
+                    announceToScreenReader(`Pedido número ${pedidoId} aún pendiente de pago`);
+                }
+            }
+
+            setupEventListeners();
+
+            // Enfocar el primer botón para fácil navegación por teclado
+            setTimeout(() => {
+                const firstButton = document.getElementById('reintentarBtn');
+                if (firstButton) {
+                    firstButton.focus();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

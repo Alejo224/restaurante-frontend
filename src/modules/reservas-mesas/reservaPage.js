@@ -3,6 +3,7 @@ import { cargarMesas } from "./reserva.js"
 import { ObtenerHorarios } from "./reserva.js";
 import { crearReservaCliente } from "./reserva.js";
 import { MesasOcupadas } from "./reservacionServices.js";
+<<<<<<< HEAD
 import { ActualizarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
 
 
@@ -11,6 +12,12 @@ export function ReservaMesaPagina(modo, reservaData = null) {
     // Mantener el id de la mesa en el scope del componente para evitar
     // que persista entre diferentes vistas/instancias de la página.
     let mesaSeleccionadaId = null;
+=======
+
+let mesaSeleccionadaId = null;
+
+export function ReservaMesaPagina() {
+>>>>>>> main
 
     const reservaPage = document.createElement('div');
     reservaPage.classList.add('container');
@@ -18,7 +25,11 @@ export function ReservaMesaPagina(modo, reservaData = null) {
     //Creamos el componente del html 
     reservaPage.innerHTML = `
         <div class="reserva-mesa">  
+<<<<<<< HEAD
         <form id="form-reserva">
+=======
+        <form id="form-reserva"">
+>>>>>>> main
             <fieldset>
                         <legend for="reservacion">Reservación de Mesa:</legend>
                         <div class="DatosContacto">
@@ -59,12 +70,16 @@ export function ReservaMesaPagina(modo, reservaData = null) {
     const contenedorMesas = reservaPage.querySelector('#mesas-container');
     const selectHora = reservaPage.querySelector('#hora-select');
     const formualrioReserva = reservaPage.querySelector('#form-reserva');
+<<<<<<< HEAD
    
 
     if (modo === 'editar' && reservaData) {
         fechaInput.value = reservaData.fechaReserva;
         notaText.value = reservaData.nota;
     }
+=======
+    const horaSeleccionada = selectHora.value;
+>>>>>>> main
 
     // establecer fecha mínima (hoy) para evitar seleccionar días pasados
     fechaInput.min = getTodayIso();
@@ -99,6 +114,7 @@ export function ReservaMesaPagina(modo, reservaData = null) {
     //cargar mesas iniciales 
     cargarMesas(contenedorMesas).then(() => {
         activarSeleccionMesas();
+<<<<<<< HEAD
         if (modo === 'editar' && reservaData) {
             const mesas = contenedorMesas.querySelectorAll('.mesa');
             mesas.forEach(mesa => {
@@ -115,10 +131,13 @@ export function ReservaMesaPagina(modo, reservaData = null) {
             mesas.forEach(m => m.classList.remove('seleccionada'));
             mesaSeleccionadaId = null;
         }
+=======
+>>>>>>> main
     });
 
     //cargar horarios 
     ObtenerHorarios(selectHora);
+<<<<<<< HEAD
     if (modo === 'editar' && reservaData) {
         setTimeout(() => {
             selectHora.value = reservaData.horaReserva;
@@ -126,6 +145,8 @@ export function ReservaMesaPagina(modo, reservaData = null) {
         // Actualizar mesas ocupadas después de establecer la hora
         actualizarMesa();
     }
+=======
+>>>>>>> main
 
     // Selección de mesas
     function activarSeleccionMesas() {
@@ -181,6 +202,7 @@ export function ReservaMesaPagina(modo, reservaData = null) {
             nota: nota_Text
         };
         try {
+<<<<<<< HEAD
 
             let respuesta;
 
@@ -192,6 +214,9 @@ export function ReservaMesaPagina(modo, reservaData = null) {
                 // Crear nueva reserva
                 respuesta = await crearReservaCliente(reservaDatos);
             }
+=======
+            const respuesta = await crearReservaCliente(reservaDatos);
+>>>>>>> main
 
             // Si el backend devuelve null o un objeto vacío, considerarlo error
             if (!respuesta || Object.keys(respuesta).length === 0) {
@@ -199,6 +224,7 @@ export function ReservaMesaPagina(modo, reservaData = null) {
                 return;
             }
 
+<<<<<<< HEAD
             // Guardar en localStorage una marca de la reserva actualizada (para sincronizar UI)
             if (modo === 'editar' && reservaData) {
                 try {
@@ -216,6 +242,8 @@ export function ReservaMesaPagina(modo, reservaData = null) {
                 }
             }
 
+=======
+>>>>>>> main
             alert("Reserva realizada exitosamente.");
             router.navigate('/dashboard');
 
@@ -223,7 +251,11 @@ export function ReservaMesaPagina(modo, reservaData = null) {
             console.error("Error al crear la reserva:", error);
             alert("No se pudo crear la reserva.");
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> main
         console.log("📦 Datos enviados al backend:", reservaDatos);
         console.log("📦 JSON enviado:", JSON.stringify(reservaDatos));
 
@@ -249,6 +281,7 @@ export function ReservaMesaPagina(modo, reservaData = null) {
         const mesasDOM = contenedorMesas.querySelectorAll('.mesa');
 
         const idOcupadas = mesasOcupadas.map(reserva => reserva.mesa.id);
+<<<<<<< HEAD
 
         // Aplicar marca local si existe una reserva actualizada recientemente
         try {
@@ -275,6 +308,8 @@ export function ReservaMesaPagina(modo, reservaData = null) {
                 idOcupadas.splice(index, 1); // Eliminar el ID de la mesa original
             }
         }
+=======
+>>>>>>> main
         mesasDOM.forEach(mesa => {
             const idMesaDOM = mesa.dataset.id;
             if (idOcupadas.includes(Number(idMesaDOM))) {
