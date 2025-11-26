@@ -38,7 +38,7 @@ export async function infoReservas() {
     }
 }
 
-export async function eliminarReserva(reservaId) {
+export async function cancelarReserva(reservaId) {
     const usuario = getCurrentUser();
     const token = usuario?.token;//Obtenemos el token
 
@@ -49,26 +49,26 @@ export async function eliminarReserva(reservaId) {
 
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reserva/${reservaId}`, {
-            method: 'DELETE', //Usamos el DELETE como en el postman para eliminar la reserva
+        const response = await fetch(`${API_BASE_URL}/api/reserva/${reservaId}/cancelar`, {
+            method: 'PUT', //Usamos el DELETE como en el postman para eliminar la reserva
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
         if (!response.ok) {
-            throw new Error(`Error al eliminar la reserva (${response.status}-${response.statusText})`);
+            throw new Error(`Error al actualizar la reserva (${response.status}-${response.statusText})`);
         }
 
         if(response.status === 204){
-            return { message: 'Reserva eliminada con exito' };
+            return { message: 'Reserva cancelada con exito' };
         }
          // Solo intenta leer JSON si tiene contenido
         const text = await response.text();
         return text ? JSON.parse(text) : { success: true };
 
     } catch (error) {
-        console.error("Error en la llamada al API para eliminar la reserva", error);
+        console.error("Error en la llamada al API para cancelar la reserva", error);
         return null; // Devolvemos null en caso de error
     }
 }

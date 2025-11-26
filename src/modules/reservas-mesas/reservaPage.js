@@ -5,6 +5,7 @@ import { crearReservaCliente } from "./reserva.js";
 import { MesasOcupadas } from "./reservacionServices.js";
 import { ActualizarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
 
+
 export function ReservaMesaPagina(modo, reservaData = null) {
 
     // Mantener el id de la mesa en el scope del componente para evitar
@@ -63,8 +64,6 @@ export function ReservaMesaPagina(modo, reservaData = null) {
     if (modo === 'editar' && reservaData) {
         fechaInput.value = reservaData.fechaReserva;
         notaText.value = reservaData.nota;
-        selectHora.value = reservaData.horaReserva;
-
     }
 
     // establecer fecha mínima (hoy) para evitar seleccionar días pasados

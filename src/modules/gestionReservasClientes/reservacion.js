@@ -1,6 +1,5 @@
 import { infoReservas } from "../gestionReservasClientes/gestionReservaServices.js";
-import { eliminarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
-import {ReservaMesaPagina} from "../reservas-mesas/reservaPage.js";
+import { cancelarReserva} from "../gestionReservasClientes/gestionReservaServices.js";
 import { router } from "../../router.js";
 
 export async function informacionReservas(contenedor) {
@@ -49,15 +48,15 @@ export async function informacionReservas(contenedor) {
             
             <div class="grupo-botones">
                 <button class="modificar-reserva" data-id="${reserva.id}"> Modificar</button>
-                <button class="eliminar-reserva" data-id="${reserva.id}"> Eliminar<i class="bi bi-trash"></i> </button>
+                <button class="cancelar-reserva" data-id="${reserva.id}"> cancelar<i class="bi bi-trash"></i> </button>
             </div>
         </article>
         `).join("");
 
 
         // Para eliminar la reserva (con manejo de errores y feedback)
-        const botonesEliminar = contenedor.querySelectorAll('.eliminar-reserva');
-        botonesEliminar.forEach(boton => {
+        const botonesCancelar = contenedor.querySelectorAll('.cancelar-reserva');
+        botonesCancelar.forEach(boton => {
             boton.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const reservaId = boton.dataset.id;
@@ -65,20 +64,20 @@ export async function informacionReservas(contenedor) {
                     console.error('ID de reserva no encontrado en el botón', boton);
                     return;
                 }
-                console.log("Eliminar reserva con ID:", reservaId);
+                console.log("cancelar reserva con ID:", reservaId);
                 boton.disabled = true;
                 try {
-                    const resultado = await eliminarReserva(reservaId);
+                    const resultado = await cancelarReserva(reservaId);
                     if (resultado === null) {
-                        alert(`No se pudo eliminar la reserva #${reservaId}. Revisa la consola.`);
+                        alert(`No se pudo cancelar la reserva #${reservaId}. Revisa la consola.`);
                     } else {
-                        alert(`Reserva #${reservaId} eliminada.`);
+                        alert(`Reserva #${reservaId} cancelda.`);
                         // Recargar la lista de reservas después de eliminar
                         await informacionReservas(contenedor);
                     }
                 } catch (err) {
-                    console.error('Error al eliminar reserva:', err);
-                    alert('Error al eliminar la reserva. Revisa la consola.');
+                    console.error('Error al cancelar la reserva:', err);
+                    alert('Error al cancelar la reserva. Revisa la consola.');
                 } finally {
                     boton.disabled = false;
                 }
