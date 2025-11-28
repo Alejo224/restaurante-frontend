@@ -1,4 +1,5 @@
 import { getCurrentUser } from "../auth/userService";
+import { servicioNotificaciones } from "../../shared/services/toastService.js";
 const API_BASE_URL = 'http://localhost:8080';
 
 //Funcion para llamar la api 

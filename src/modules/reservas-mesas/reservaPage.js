@@ -4,6 +4,7 @@ import { ObtenerHorarios } from "./reserva.js";
 import { crearReservaCliente } from "./reserva.js";
 import { MesasOcupadas } from "./reservacionServices.js";
 import { ActualizarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
+import { servicioNotificaciones } from "../../shared/services/toastService.js";
 
 
 export function ReservaMesaPagina(modo, reservaData = null) {
@@ -81,7 +82,7 @@ export function ReservaMesaPagina(modo, reservaData = null) {
         const hora = selectHora.value;
         const check = validarFechaHora(fecha, hora);
         if (!check.valido) {
-            alert(check.mensaje);
+            toastService.warning(check.mensaje);
             // opcional: resetear la hora seleccionada
             selectHora.value = "";
         }
@@ -165,12 +166,12 @@ export function ReservaMesaPagina(modo, reservaData = null) {
         // validar fecha y hora antes de enviar
         const validacion = validarFechaHora(fechaReserva, horaDeReserva);
         if (!validacion.valido) {
-            alert(validacion.mensaje);
+            servicioNotificaciones.advertencia(validacion.mensaje);
             return;
         }
 
         if (mesaSeleccionadaId == null) {
-            alert('Por favor seleccione una mesa.');
+            servicioNotificaciones.advertencia('Por favor seleccione una mesa.');
             return;
         }
 
@@ -195,7 +196,7 @@ export function ReservaMesaPagina(modo, reservaData = null) {
 
             // Si el backend devuelve null o un objeto vacío, considerarlo error
             if (!respuesta || Object.keys(respuesta).length === 0) {
-                alert("No se pudo crear la reserva.");
+                servicioNotificaciones.error("No se pudo crear la reserva.");
                 return;
             }
 
@@ -216,12 +217,12 @@ export function ReservaMesaPagina(modo, reservaData = null) {
                 }
             }
 
-            alert("Reserva realizada exitosamente.");
+            servicioNotificaciones.exito("Reserva realizada exitosamente.");
             router.navigate('/dashboard');
 
         } catch (error) {
             console.error("Error al crear la reserva:", error);
-            alert("No se pudo crear la reserva.");
+            //toastService.error("No se pudo crear la reserva.");
         }
         console.log("📦 Datos enviados al backend:", reservaDatos);
         console.log("📦 JSON enviado:", JSON.stringify(reservaDatos));

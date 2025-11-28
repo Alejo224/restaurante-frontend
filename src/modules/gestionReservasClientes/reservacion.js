@@ -1,6 +1,7 @@
 import { infoReservas } from "../gestionReservasClientes/gestionReservaServices.js";
 import { cancelarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
 import { router } from "../../router.js";
+import { servicioNotificaciones } from "../../shared/services/toastService.js";
 
 export async function informacionReservas(contenedor) {
 
@@ -75,9 +76,9 @@ export async function informacionReservas(contenedor) {
                 try {
                     const resultado = await cancelarReserva(reservaId);
                     if (resultado === null) {
-                        alert(`No se pudo cancelar la reserva #${reservaId}. Revisa la consola.`);
+                        servicioNotificaciones.error(`No se pudo cancelar la reserva #${reservaId}.`);
                     } else {
-                        alert(`Reserva #${reservaId} cancelda.`);
+                        servicioNotificaciones.exito(`Reserva #${reservaId} cancelada exitosamente.`);
                         // Recargar la lista de reservas después de eliminar
 
                         await informacionReservas(contenedor);
@@ -85,7 +86,7 @@ export async function informacionReservas(contenedor) {
                     }
                 } catch (err) {
                     console.error('Error al cancelar la reserva:', err);
-                    alert('Error al cancelar la reserva. Revisa la consola.');
+                    servicioNotificaciones.error('Error al cancelar la reserva. Intente nuevamente.');
                 } finally {
                     boton.disabled = false;
                 }
