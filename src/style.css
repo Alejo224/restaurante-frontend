@@ -887,11 +887,7 @@ button:hover {
 }
 
 .mesas-container .mesa i {
-<<<<<<< HEAD
   font-size: 40px;
-=======
-  font-size: 32px;
->>>>>>> main
   color: #007bff;
 
 }
@@ -931,7 +927,6 @@ button:hover {
 }
 
 /* Página de Mis Reservas */
-<<<<<<< HEAD
 
 #contenedor-mis-reservas {
   display: grid;
@@ -947,32 +942,10 @@ button:hover {
   border-radius: 15px;
   background-color: #ffffff;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-=======
-.gestion-mis-reservas {
-  padding: 20px;
-}
-.gestion-mis-reservas h2 {
-  margin-bottom: 20px;
-}
-#contenedor-mis-reservas {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 3 reservas por fila */
-  gap: 20px; /* espacio entre reservas */
-  padding: 10px;
-}
-
-.detalles-reservacion {
-  border: 2px solid #ffc107;
-  border-radius: 12px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
->>>>>>> main
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 250px;
-<<<<<<< HEAD
   padding: 20px;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -1009,21 +982,6 @@ button:hover {
 }
 
 
-=======
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.detalles-reservacion p {
-  font-size: 1rem;
-  margin: 5px 0;
-}
-
-.detalles-reservacion .grupo-botones {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
->>>>>>> main
 
 .grupo-botones button {
   width: 120px;
@@ -1033,7 +991,6 @@ button:hover {
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
-<<<<<<< HEAD
   margin: 10px;
   display: flex;
   /* icono + texto alineados */
@@ -1200,113 +1157,4 @@ button:hover {
 @keyframes fadeIn {
     from { transform: translateY(-10px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
-=======
-}
-
-.grupo-botones #modificar-reserva {
-  background: #198754;
-  color: white;
-}
-
-.grupo-botones #eliminar-reserva {
-  background: #dc3545;
-  color: white;
-}
-
-.detalles-reservacion .grupo-botones button:hover {
-  opacity: 0.8;
-}
-
-.estado-No-Disponible { 
-  color: red; 
-  font-weight: bold; 
-}
-  /* Opcional: agrega un icono visual */ 
-.estado-Disponible::before {
-  content: "🟢 "; }
-
-.estado-No-.estado-No-Disponible {
-content: "🔴 "; }
-
-
-/* ==========================
-   Estilos para Detalle del pedido CLIENTE
-========================== */
-
-.pedido-admin-card {
-  transition: all 0.3s ease;
-  border-left: 4px solid #dee2e6 !important;
-}
-
-.pedido-admin-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.pedido-admin-card[data-estado="BORRADOR"] {
-  border-left-color: #ffc107 !important;
-}
-
-.pedido-admin-card[data-estado="PENDIENTE"] {
-  border-left-color: #0dcaf0 !important;
-}
-
-.pedido-admin-card[data-estado="COMPLETADO"] {
-  border-left-color: #198754 !important;
-}
-
-.pedido-admin-card[data-estado="CANCELADO"] {
-  border-left-color: #dc3545 !important;
-}
-
-.estado-selector .form-select {
-  min-width: 140px;
-}
-
-.productos-resumen {
-  max-height: 120px;
-  overflow-y: auto;
-}
-
-.user-info {
-  background: #f8f9fa;
-  padding: 4px 8px;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.financiera-info {
-  background: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border-left: 3px solid #0d6efd;
-}
-
-.contacto-info {
-  background: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin-top: 8px;
-}
-
-
-/* boton contactar*/
-.contacto-btn {
-  position: relative;
-}
-
-.contacto-btn:hover::after {
-  content: "Llamar/WhatsApp";
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1000;
->>>>>>> main
 }

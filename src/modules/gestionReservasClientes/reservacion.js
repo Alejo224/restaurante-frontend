@@ -1,10 +1,6 @@
 import { infoReservas } from "../gestionReservasClientes/gestionReservaServices.js";
-<<<<<<< HEAD
 import { cancelarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
 import { router } from "../../router.js";
-=======
-//import { eliminarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
->>>>>>> main
 
 export async function informacionReservas(contenedor) {
 
@@ -15,22 +11,21 @@ export async function informacionReservas(contenedor) {
 
     contenedor.innerHTML = `<p>Cargando reservas...</p>`;
 
-<<<<<<< HEAD
     // contenedor.querySelectorAll(".detalles-reservacion").innerHTML = `<p>cargando reservaciones....</p>`
     try {
         // Llamamos a la API para obtener las reservas del usuario actual
         const reservas = await infoReservas();
         const reservasActivas = reservas.filter(r => r.estado !== "CANCELADA");
 
-        if(!reservasActivas || reservasActivas.length === 0){
+        if (!reservasActivas || reservasActivas.length === 0) {
             contenedor.innerHTML = `<p>No tienes reservas activas.</p>`;
             return;
         }
-   
-    //    if (!reservas || reservas.length === 0) {
-      //      contenedor.innerHTML = `<p>No tienes reservas realizadas.</p>`;
-      //      return;
-      //  }
+
+        //    if (!reservas || reservas.length === 0) {
+        //      contenedor.innerHTML = `<p>No tienes reservas realizadas.</p>`;
+        //      return;
+        //  }
 
 
         contenedor.innerHTML = reservasActivas.map(reserva => `
@@ -84,9 +79,9 @@ export async function informacionReservas(contenedor) {
                     } else {
                         alert(`Reserva #${reservaId} cancelda.`);
                         // Recargar la lista de reservas después de eliminar
-                     
+
                         await informacionReservas(contenedor);
-                       
+
                     }
                 } catch (err) {
                     console.error('Error al cancelar la reserva:', err);
@@ -119,39 +114,6 @@ export async function informacionReservas(contenedor) {
         });
 
 
-=======
-   // contenedor.querySelectorAll(".detalles-reservacion").innerHTML = `<p>cargando reservaciones....</p>`
-    try {
-        // Llamamos a la API para obtener las reservas del usuario actual
-        const reservas = await infoReservas();
-
-        if (!reservas || reservas.length === 0) {
-            contenedor.innerHTML = `<p>No tienes reservas realizadas.</p>`;
-            return;
-        }
-          
-
-        contenedor.innerHTML = reservas.map(reserva => `
-        <article class="detalles-reservacion">
-            <h3>Reserva #${reserva.id}</h3>
-            <p>Fecha: ${reserva.fechaReserva} </p>
-            <p>Horario: ${reserva.horaReserva}</p>
-            <p>Descripcion: ${reserva.nota}</p>
-            <p>Mesa: ${reserva.mesaId}</p>
-            <div class="grupo-botones">
-                <button id="modificar-reserva"> Modificar</button>
-                <div class = grupo-botones></div>
-                <button id="eliminar-reserva"> Eliminar<i class="bi bi-trash"></i> </button>
-                
-            </div>
-        </article>
-        `). join("");
-
-
-        // Agregar manejadores de eventos para los botones de eliminar reserva
-        const botonesEliminar = contenedor.querySelectorAll('#eliminar-reserva');
-        
->>>>>>> main
 
     }
     catch (err) {
