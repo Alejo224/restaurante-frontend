@@ -3,10 +3,15 @@ import { cargarMesas } from "./reserva.js"
 import { ObtenerHorarios } from "./reserva.js";
 import { crearReservaCliente } from "./reserva.js";
 import { MesasOcupadas } from "./reservacionServices.js";
+import { ActualizarReserva } from "../gestionReservasClientes/gestionReservaServices.js";
+import { servicioNotificaciones } from "../../shared/services/toastService.js";
 
-let mesaSeleccionadaId = null;
 
-export function ReservaMesaPagina() {
+export function ReservaMesaPagina(modo, reservaData = null) {
+
+    // Mantener el id de la mesa en el scope del componente para evitar
+    // que persista entre diferentes vistas/instancias de la página.
+    let mesaSeleccionadaId = null;
 
     const reservaPage = document.createElement('div');
     reservaPage.classList.add('container');
@@ -14,7 +19,7 @@ export function ReservaMesaPagina() {
     //Creamos el componente del html 
     reservaPage.innerHTML = `
         <div class="reserva-mesa">  
-        <form id="form-reserva"">
+        <form id="form-reserva">
             <fieldset>
                         <legend for="reservacion">Reservación de Mesa:</legend>
                         <div class="DatosContacto">
@@ -55,7 +60,12 @@ export function ReservaMesaPagina() {
     const contenedorMesas = reservaPage.querySelector('#mesas-container');
     const selectHora = reservaPage.querySelector('#hora-select');
     const formualrioReserva = reservaPage.querySelector('#form-reserva');
-    const horaSeleccionada = selectHora.value;
+   
+
+    if (modo === 'editar' && reservaData) {
+        fechaInput.value = reservaData.fechaReserva;
+        notaText.value = reservaData.nota;
+    }
 
     // establecer fecha mínima (hoy) para evitar seleccionar días pasados
     fechaInput.min = getTodayIso();
@@ -72,7 +82,7 @@ export function ReservaMesaPagina() {
         const hora = selectHora.value;
         const check = validarFechaHora(fecha, hora);
         if (!check.valido) {
-            alert(check.mensaje);
+            toastService.warning(check.mensaje);
             // opcional: resetear la hora seleccionada
             selectHora.value = "";
         }
@@ -90,10 +100,33 @@ export function ReservaMesaPagina() {
     //cargar mesas iniciales 
     cargarMesas(contenedorMesas).then(() => {
         activarSeleccionMesas();
+        if (modo === 'editar' && reservaData) {
+            const mesas = contenedorMesas.querySelectorAll('.mesa');
+            mesas.forEach(mesa => {
+                if (Number(mesa.dataset.id) === reservaData.mesa.id) {
+                    mesa.classList.add('seleccionada');// Marcar la mesa como seleccionada
+                    mesaSeleccionadaId = reservaData.mesa.id; // Guardar ID de la mesa seleccionada
+                }
+            });
+            // Actualizar mesas ocupadas después de establecer la hora
+            actualizarMesa();
+        } else {
+            // Modo creación: asegurarse que no queden mesas seleccionadas
+            const mesas = contenedorMesas.querySelectorAll('.mesa');
+            mesas.forEach(m => m.classList.remove('seleccionada'));
+            mesaSeleccionadaId = null;
+        }
     });
 
     //cargar horarios 
     ObtenerHorarios(selectHora);
+    if (modo === 'editar' && reservaData) {
+        setTimeout(() => {
+            selectHora.value = reservaData.horaReserva;
+        }, (50));
+        // Actualizar mesas ocupadas después de establecer la hora
+        actualizarMesa();
+    }
 
     // Selección de mesas
     function activarSeleccionMesas() {
@@ -133,12 +166,12 @@ export function ReservaMesaPagina() {
         // validar fecha y hora antes de enviar
         const validacion = validarFechaHora(fechaReserva, horaDeReserva);
         if (!validacion.valido) {
-            alert(validacion.mensaje);
+            servicioNotificaciones.advertencia(validacion.mensaje);
             return;
         }
 
         if (mesaSeleccionadaId == null) {
-            alert('Por favor seleccione una mesa.');
+            servicioNotificaciones.advertencia('Por favor seleccione una mesa.');
             return;
         }
 
@@ -149,22 +182,48 @@ export function ReservaMesaPagina() {
             nota: nota_Text
         };
         try {
-            const respuesta = await crearReservaCliente(reservaDatos);
+
+            let respuesta;
+
+            if (modo === 'editar' && reservaData) {
+                // Actualizar reserva existente
+                respuesta = await ActualizarReserva(reservaData.id, reservaDatos);
+            }
+            else {
+                // Crear nueva reserva
+                respuesta = await crearReservaCliente(reservaDatos);
+            }
 
             // Si el backend devuelve null o un objeto vacío, considerarlo error
             if (!respuesta || Object.keys(respuesta).length === 0) {
-                alert("No se pudo crear la reserva.");
+                servicioNotificaciones.error("No se pudo crear la reserva.");
                 return;
             }
 
-            alert("Reserva realizada exitosamente.");
+            // Guardar en localStorage una marca de la reserva actualizada (para sincronizar UI)
+            if (modo === 'editar' && reservaData) {
+                try {
+                    const marker = {
+                        fechaReserva: reservaDatos.fechaReserva,
+                        horaReserva: reservaDatos.horaReserva,
+                        mesaId: reservaDatos.mesaId,
+                        updatedAt: Date.now()
+                    };
+                    localStorage.setItem('ultimaReservaActualizada', JSON.stringify(marker));
+                    // also dispatch a custom event so other views can react immediately
+                    window.dispatchEvent(new CustomEvent('reserva:actualizada', { detail: marker }));
+                } catch (e) {
+                    console.warn('No se pudo guardar marca de reserva actualizada', e);
+                }
+            }
+
+            servicioNotificaciones.exito("Reserva realizada exitosamente.");
             router.navigate('/dashboard');
 
         } catch (error) {
             console.error("Error al crear la reserva:", error);
-            alert("No se pudo crear la reserva.");
+            //toastService.error("No se pudo crear la reserva.");
         }
-        
         console.log("📦 Datos enviados al backend:", reservaDatos);
         console.log("📦 JSON enviado:", JSON.stringify(reservaDatos));
 
@@ -190,6 +249,32 @@ export function ReservaMesaPagina() {
         const mesasDOM = contenedorMesas.querySelectorAll('.mesa');
 
         const idOcupadas = mesasOcupadas.map(reserva => reserva.mesa.id);
+
+        // Aplicar marca local si existe una reserva actualizada recientemente
+        try {
+            const markerRaw = localStorage.getItem('ultimaReservaActualizada');
+            if (markerRaw) {
+                const marker = JSON.parse(markerRaw);
+                const age = Date.now() - (marker.updatedAt || 0);
+                // aplicar sólo si fecha y hora coinciden y la marca no es demasiado antigua (5 minutos)
+                if (marker.fechaReserva === fecha && marker.horaReserva === hora && age < 1000 * 60 * 5) {
+                    const mid = Number(marker.mesaId);
+                    if (!idOcupadas.includes(mid)) {
+                        idOcupadas.push(mid);
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('No se pudo aplicar marca local de reserva actualizada', e);
+        }
+
+        if (modo === 'editar' && reservaData) {
+            const idMesaOriginal = reservaData.mesa.id;
+            const index = idOcupadas.indexOf(idMesaOriginal);
+            if (index !== -1) {
+                idOcupadas.splice(index, 1); // Eliminar el ID de la mesa original
+            }
+        }
         mesasDOM.forEach(mesa => {
             const idMesaDOM = mesa.dataset.id;
             if (idOcupadas.includes(Number(idMesaDOM))) {

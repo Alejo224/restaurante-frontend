@@ -2,6 +2,7 @@
 import { obtenerMesas } from "/src/modules/Mesa/mesaService.js";
 import { obtenerHorarioDisponible } from "./reservacionServices";
 import { crearReserva } from "./reservacionServices";
+import { servicioNotificaciones } from "../../shared/services/toastService.js";
 
 
 
@@ -24,7 +25,7 @@ export async function cargarMesas(contenedor, fecha, hora) {
                     <div class="mesa ${mesa.estado ? 'disponible' : 'ocupada'}" 
                          data-id="${mesa.id}">
                         <span class="numero"> ${mesa.nombreMesa}</span>
-                        <i class="bi bi-shop"></i>
+                         <i class="material-symbols-outlined">dine_lamp</i>
                         <span class="capacidad">Capacidad: ${mesa.capacidad}</span>
 
                         <span class="estado ${mesa.estado ? 'verde' : 'rojo'}">
@@ -67,7 +68,7 @@ export async function crearReservaCliente({ fechaReserva, horaReserva, mesaId, n
     }
 
     if (!fechaReserva || !horaReserva || !mesaId) {
-        alert("Todos los campos son obligatorios");
+        servicioNotificaciones.advertencia("Todos los campos son obligatorios");
         return null;
     }
     try {

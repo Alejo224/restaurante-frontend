@@ -1,5 +1,6 @@
 import { CarritoOffcanvas } from '../carrito/components/CarritoOffcanvas.js';
 import { getToken, isAuthenticated } from '../auth/userService.js';
+import { servicioNotificaciones } from '../../shared/services/toastService.js';
 
 // Configuración del API
 const API_BASE_URL = 'http://localhost:8080';
@@ -740,36 +741,12 @@ async function compararIDsCarritoVsBD() {
 
 // Función para mostrar mensajes de error
 function mostrarError(mensaje) {
-    const contenedor = document.createElement('div');
-    contenedor.className = 'alert alert-danger alert-dismissible fade show position-fixed';
-    contenedor.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
-    contenedor.innerHTML = `
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        ${mensaje}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    document.body.appendChild(contenedor);
-
-    setTimeout(() => {
-        if (contenedor.parentNode) contenedor.remove();
-    }, 5000);
+    servicioNotificaciones.error(mensaje);
 }
 
 // Función para mostrar mensajes de éxito
 function mostrarExito(mensaje) {
-    const contenedor = document.createElement('div');
-    contenedor.className = 'alert alert-success alert-dismissible fade show position-fixed';
-    contenedor.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
-    contenedor.innerHTML = `
-        <i class="bi bi-check-circle-fill me-2"></i>
-        ${mensaje}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    document.body.appendChild(contenedor);
-
-    setTimeout(() => {
-        if (contenedor.parentNode) contenedor.remove();
-    }, 5000);
+    servicioNotificaciones.exito(mensaje);
 }
 
 // Hacer funciones disponibles en consola

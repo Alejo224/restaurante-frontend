@@ -1,4 +1,5 @@
 import { getCurrentUser } from "../auth/userService";
+import { servicioNotificaciones } from "../../shared/services/toastService.js";
 const API_BASE_URL = 'http://localhost:8080';
 
 //Funcion para llamar la api 
@@ -7,9 +8,9 @@ export async function infoReservas() {
     const usuario = getCurrentUser();
     const token = usuario?.token;//Obtenemos el token 
 
-    if(!token){
+    if (!token) {
         alert("error token invalido");
-        return[]; 
+        return [];
     }
 
     const fetchOpciones = {
@@ -34,5 +35,82 @@ export async function infoReservas() {
 
         console.error("Error en la llamda al APi de reservas", error);
         return []; //Devolvemos la lista vacia 
+    }
+}
+
+export async function cancelarReserva(reservaId) {
+    const usuario = getCurrentUser();
+    const token = usuario?.token;//Obtenemos el token
+
+    if (!token) {
+        console.log("error token invalido");
+        return [];
+    }
+
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/reserva/${reservaId}/cancelar`, {
+            method: 'PUT', //Usamos el DELETE como en el postman para eliminar la reserva
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`Error al actualizar la reserva (${response.status}-${response.statusText})`);
+        }
+
+        if(response.status === 204){
+            return { message: 'Reserva cancelada con exito' };
+        }
+         // Solo intenta leer JSON si tiene contenido
+        const text = await response.text();
+        return text ? JSON.parse(text) : { success: true };
+
+    } catch (error) {
+        console.error("Error en la llamada al API para cancelar la reserva", error);
+        return null; // Devolvemos null en caso de error
+    }
+}
+
+export async function ActualizarReserva(ReservaId, contenidoActualizado) {
+
+    const usuario = getCurrentUser();
+    const token = usuario?.token;//Obtenemos el token
+
+    if (!token) {
+        console.log("error token invalido");
+        return [];
+    }
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/reserva/${ReservaId}`, {
+
+            method: 'PUT', //Usamos el PUT como en el postman para actualizar la reserva
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(contenidoActualizado)
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            let body = null;
+            try { body = errText ? JSON.parse(errText) : null; } catch (e) { body = errText; }
+            throw new Error(`Error al actualizar la reserva (${response.status}-${response.statusText}) - ${JSON.stringify(body)}`);
+        }
+
+        // Si la respuesta no tiene body (204), devolver un objeto de éxito
+        if (response.status === 204) {
+            return { success: true };
+        }
+
+        // Intentar parsear JSON si existe contenido
+        const text = await response.text();
+        try { return text ? JSON.parse(text) : { success: true }; } catch (e) { return { success: true, raw: text }; }
+
+    } catch (error) {
+        console.error("Error en la llamada al API para actualizar la reserva", error);
+        return null; // Devolvemos null en caso de error
     }
 }
