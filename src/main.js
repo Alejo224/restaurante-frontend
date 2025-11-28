@@ -74,10 +74,6 @@ router.addRoute("/reservar/mis-reservas", seccionMisReservas,{
   requiresAuth:true,
   requiresRole: "USER",
 });
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 
 // ========================================
 // 👨‍💼 RUTAS DE ADMINISTRADOR (requiere rol ADMIN)

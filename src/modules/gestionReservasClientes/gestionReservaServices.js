@@ -1,8 +1,4 @@
 import { getCurrentUser } from "../auth/userService";
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 const API_BASE_URL = 'http://localhost:8080';
 
 //Funcion para llamar la api 
@@ -11,15 +7,9 @@ export async function infoReservas() {
     const usuario = getCurrentUser();
     const token = usuario?.token;//Obtenemos el token 
 
-<<<<<<< HEAD
     if (!token) {
         alert("error token invalido");
         return [];
-=======
-    if(!token){
-        alert("error token invalido");
-        return[]; 
->>>>>>> main
     }
 
     const fetchOpciones = {
@@ -45,7 +35,6 @@ export async function infoReservas() {
         console.error("Error en la llamda al APi de reservas", error);
         return []; //Devolvemos la lista vacia 
     }
-<<<<<<< HEAD
 }
 
 export async function cancelarReserva(reservaId) {
@@ -123,6 +112,4 @@ export async function ActualizarReserva(ReservaId, contenidoActualizado) {
         console.error("Error en la llamada al API para actualizar la reserva", error);
         return null; // Devolvemos null en caso de error
     }
-=======
->>>>>>> main
 }
