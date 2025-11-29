@@ -5,6 +5,7 @@ import { PlatoList } from '../../menu/components/PlatoList.js';
 import { MesasList } from '../../Mesa/MesasList.js';
 import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
 import { HistorialPedidosAdminComponent } from '../../pedidos/components/HistorialPedidosAdminComponent.js';
+import { EstadisticasAvanzadas } from '../../estadisticas/components/EstadisticasAvanzadas.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -14,6 +15,9 @@ export function AdminDashboard() {
   const user = getCurrentUser();
   const userName = user?.email?.split('@')[0] || 'Administrador';
   const displayName = userName.charAt(0).toUpperCase() + userName.slice(1);
+
+  // Inicializar estadisticas avanzadas
+  let estadisticasAvanzadas;
 
   page.innerHTML = `
   <!-- Layout con Sidebar -->
@@ -83,6 +87,15 @@ export function AdminDashboard() {
                aria-label="Gestión de pedidos de clientes">
               <i class="bi bi-receipt me-2" aria-hidden="true"></i>
               <span>Gestión de Pedidos</span>
+            </a>
+          </li>
+
+          <!-- Estadísticas Avanzadas -->
+          <li class="nav-item" role="none">
+            <a href="#" class="nav-link" id="navEstadisticas" data-section="estadisticas" role="menuitem" 
+              aria-label="Ver estadísticas avanzadas del restaurante">
+              <i class="bi bi-graph-up me-2" aria-hidden="true"></i>
+              <span>Estadísticas</span>
             </a>
           </li>
 
@@ -376,6 +389,196 @@ export function AdminDashboard() {
           <!-- Componente de historial de pedidos -->
           <div id="historial-pedidos-container" role="region" aria-label="Historial completo de pedidos"></div>
         </section>
+
+        <!-- SECCIÓN ESTADÍSTICAS AVANZADAS -->
+        <section id="seccionEstadisticas" class="content-section" style="display: none;" aria-labelledby="estadisticas-heading">
+          <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h1 id="estadisticas-heading" class="fw-bold mb-1">
+                <i class="bi bi-graph-up me-2 text-info" aria-hidden="true"></i>
+                Estadísticas Avanzadas
+              </h1>
+              <p class="text-muted mb-0">Análisis detallado del rendimiento del restaurante</p>
+            </div>
+            <div class="d-flex gap-2">
+              <select class="form-select form-select-sm" id="rangoEstadisticas" aria-label="Seleccionar rango de tiempo">
+                <option value="7">Últimos 7 días</option>
+                <option value="30" selected>Últimos 30 días</option>
+                <option value="90">Últimos 3 meses</option>
+              </select>
+            </div>
+          </header>
+
+          <!-- Loading State -->
+          <div id="estadisticas-loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando estadísticas...</span>
+            </div>
+            <p class="mt-2 text-muted">Cargando estadísticas...</p>
+          </div>
+
+          <!-- Contenido de Estadísticas -->
+          <div id="estadisticas-content" style="display: none;">
+            
+            <!-- Cards de Resumen -->
+            <div class="row mb-4">
+              <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-grow-1">
+                        <h6 class="card-title text-muted mb-1">Ingresos Totales</h6>
+                        <h4 class="mb-0 text-success" id="ingresos-totales">$0</h4>
+                        <small class="text-muted" id="ingresos-variacion">+0% vs período anterior</small>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <i class="bi bi-currency-dollar fs-2 text-success opacity-25"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-grow-1">
+                        <h6 class="card-title text-muted mb-1">Pedidos Completados</h6>
+                        <h4 class="mb-0 text-primary" id="pedidos-completados">0</h4>
+                        <small class="text-muted" id="pedidos-variacion">+0% vs período anterior</small>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <i class="bi bi-check-circle fs-2 text-primary opacity-25"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-grow-1">
+                        <h6 class="card-title text-muted mb-1">Tasa de Éxito</h6>
+                        <h4 class="mb-0 text-info" id="tasa-exito">0%</h4>
+                        <small class="text-muted" id="tasa-variacion">+0% vs período anterior</small>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <i class="bi bi-graph-up fs-2 text-info opacity-25"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-grow-1">
+                        <h6 class="card-title text-muted mb-1">Ticket Promedio</h6>
+                        <h4 class="mb-0 text-warning" id="ticket-promedio">$0</h4>
+                        <small class="text-muted" id="ticket-variacion">+0% vs período anterior</small>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <i class="bi bi-receipt fs-2 text-warning opacity-25"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="row">
+              <!-- Gráfico de Ventas por Fecha -->
+              <div class="col-lg-8 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Ventas por Fecha</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="chartVentas" height="300"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gráfico de Platos Populares -->
+              <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Platos Más Populares</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="chartPlatosPopulares" height="300"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Segunda fila de gráficos -->
+            <div class="row">
+              <!-- Distribución de Pedidos por Estado -->
+              <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Distribución de Pedidos</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="chartDistribucionPedidos" height="250"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tendencias Semanales -->
+              <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Tendencias Semanales</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="chartTendencias" height="250"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabla de Platos Populares -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Top 10 Platos Más Vendidos</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-hover" id="tablaPlatosPopulares">
+                        <thead>
+                          <tr>
+                            <th>Plato</th>
+                            <th class="text-end">Cantidad Vendida</th>
+                            <th class="text-end">Ingresos Generados</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Los datos se llenarán dinámicamente -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error State -->
+          <div id="estadisticas-error" class="alert alert-danger text-center" style="display: none;" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Error al cargar las estadísticas.</strong> Por favor, intente nuevamente.
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -506,6 +709,9 @@ export function AdminDashboard() {
         console.error("❌ Error cargando componente de mesas:", error);
       });
     }
+
+    // Inicializar estadisticas avanzadas
+    estadisticasAvanzadas = new EstadisticasAvanzadas();
   }
 
   function setupEventListeners() {
@@ -640,7 +846,8 @@ export function AdminDashboard() {
       menu: page.querySelector('#seccionMenu'),
       mesas: page.querySelector('#seccionMesas'),
       reservas: page.querySelector('#seccionReservas'),
-      pedidos: page.querySelector('#seccionPedidos')
+      pedidos: page.querySelector('#seccionPedidos'),
+      estadisticas: page.querySelector('#seccionEstadisticas')
     };
 
     Object.values(sections).forEach(s => {
@@ -661,7 +868,8 @@ export function AdminDashboard() {
       menu: 'Gestionar Menú',
       mesas: 'Gestionar Mesas',
       reservas: 'Gestionar Reservas',
-      pedidos: 'Gestión de Pedidos'
+      pedidos: 'Gestión de Pedidos',
+      estadisticas: 'Estadísticas Avanzadas'
     };
 
     if (pageTitle) {
@@ -695,7 +903,8 @@ export function AdminDashboard() {
       menu: 'Gestión de menú',
       mesas: 'Gestión de mesas',
       reservas: 'Gestión de reservas',
-      pedidos: 'Gestión de pedidos'
+      pedidos: 'Gestión de pedidos',
+      estadisticas: 'Estadísticas avanzadas'
     };
 
     announceToScreenReader(`Navegando a ${sectionNames[sectionName] || 'sección'}`);
@@ -709,6 +918,13 @@ export function AdminDashboard() {
       if (sidebar) sidebar.classList.remove('show');
       if (overlay) overlay.classList.remove('show');
       if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    // Inicializar estadísticas cuando se navega a esa sección
+    if (sectionName === 'estadisticas') {
+      setTimeout(() => {
+        estadisticasAvanzadas.initialize();
+      }, 100);
     }
   }
 
