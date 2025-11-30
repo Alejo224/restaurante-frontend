@@ -102,15 +102,6 @@ export function AdminDashboard() {
 
           <li role="separator"><hr class="border-secondary my-2"></li>
 
-          <!-- Facturación (próximamente) -->
-          <li class="nav-item" role="none">
-            <a href="#" class="nav-link disabled" aria-disabled="true" role="menuitem" 
-               aria-label="Facturación - Próximamente">
-              <i class="bi bi-receipt-cutoff me-2" aria-hidden="true"></i>
-              <span>Facturación</span>
-              <span class="badge bg-secondary ms-auto">Próximo</span>
-            </a>
-          </li>
         </ul>
       </nav>
 
@@ -252,8 +243,8 @@ export function AdminDashboard() {
               <div class="dashboard-card-icon warning" aria-hidden="true">
                 <i class="bi bi-graph-up me-2 text-info" aria-hidden="true"></i>
               </div>
-              <div class="dashboard-card-title">ESTADÍSTICAS AVANZADAS</div>
-              <h3 class="dashboard-card-content h4">Estadísticas</h3>
+              <div class="dashboard-card-title">ESTADÍSTICAS <div>
+              <h3 class="dashboard-card-content h4">Estadísticas Avanzadas</h3>
               <p class="text-muted small mb-0 mt-2">
                 Análisis detallado del rendimiento del restaurante
               </p>
@@ -263,19 +254,6 @@ export function AdminDashboard() {
               </div>
             </article>
 
-            <!-- Card: Facturación (próximamente) -->
-            <article class="dashboard-card" style="opacity: 0.6;" role="listitem" aria-disabled="true"
-                     aria-label="Facturación - Próximamente - Generar y gestionar facturas">
-              <div class="dashboard-card-icon info" aria-hidden="true">
-                <i class="bi bi-receipt-cutoff"></i>
-              </div>
-              <div class="dashboard-card-title">GESTIÓN</div>
-              <h3 class="dashboard-card-content h4">Facturación</h3>
-              <p class="text-muted small mb-0 mt-2">
-                Generar y gestionar facturas
-              </p>
-              <span class="badge bg-secondary mt-2">Próximamente</span>
-            </article>
           </div>
 
           
