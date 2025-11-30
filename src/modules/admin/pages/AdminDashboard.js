@@ -246,6 +246,23 @@ export function AdminDashboard() {
               </div>
             </article>
 
+            <!-- Card: Estadisticas  -->
+            <article class="dashboard-card" data-navigate="estadisticas" role="listitem" tabindex="0"
+                     aria-label="Estadísticas - Ver estadísticas con gráficas">
+              <div class="dashboard-card-icon warning" aria-hidden="true">
+                <i class="bi bi-graph-up me-2 text-info" aria-hidden="true"></i>
+              </div>
+              <div class="dashboard-card-title">ESTADÍSTICAS AVANZADAS</div>
+              <h3 class="dashboard-card-content h4">Estadísticas</h3>
+              <p class="text-muted small mb-0 mt-2">
+                Análisis detallado del rendimiento del restaurante
+              </p>
+              <div class="dashboard-card-action">
+                Ver más
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </div>
+            </article>
+
             <!-- Card: Facturación (próximamente) -->
             <article class="dashboard-card" style="opacity: 0.6;" role="listitem" aria-disabled="true"
                      aria-label="Facturación - Próximamente - Generar y gestionar facturas">
@@ -267,8 +284,8 @@ export function AdminDashboard() {
             <article class="stat-card" role="listitem">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
-                  <div class="stat-label">Reservas Hoy</div>
-                  <div class="stat-value" aria-live="polite" id="reservas-hoy-value">0</div>
+                  <div class="stat-label">Total De Pedidos Hoy</div>
+                  <div class="stat-value" aria-live="polite" id="total-pedidos-hoy-value">0</div>
                 </div>
                 <div class="stat-icon bg-primary bg-opacity-10 text-primary" aria-hidden="true">
                   <i class="bi bi-calendar"></i>
@@ -279,8 +296,8 @@ export function AdminDashboard() {
             <article class="stat-card" role="listitem">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
-                  <div class="stat-label">Mesas Ocupadas</div>
-                  <div class="stat-value" aria-live="polite" id="mesas-ocupadas-value">0/0</div>
+                  <div class="stat-label">Reservas Confirmadas</div>
+                  <div class="stat-value" aria-live="polite" id="reservas-confirmadas-value">0/0</div>
                 </div>
                 <div class="stat-icon bg-success bg-opacity-10 text-success" aria-hidden="true">
                   <i class="bi bi-table"></i>
@@ -715,9 +732,8 @@ export function AdminDashboard() {
         minimumFractionDigits: 0
       });
 
-      // Actualizar UI
-      document.getElementById('reservas-hoy-value').textContent = estadisticasHoy.reservasHoy || 0;
-      document.getElementById('mesas-ocupadas-value').textContent = estadisticasHoy.mesasOcupadas || '0/0';
+      document.getElementById('total-pedidos-hoy-value').textContent = estadisticasHoy.totalPedidosHoy || 0;
+      document.getElementById('reservas-confirmadas-value').textContent = estadisticasHoy.reservasConfirmadasHoy || 0;
       document.getElementById('ingresos-hoy-value').textContent = formatter.format(estadisticasHoy.ingresosHoy || 0);
       document.getElementById('platos-activos-value').textContent = estadisticasHoy.platosActivos || 0;
       
