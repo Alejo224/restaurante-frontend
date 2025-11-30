@@ -1,5 +1,5 @@
 // src/modules/estadisticas/components/EstadisticasAvanzadas.js
-import { EstadisticasAvanzadasService } from '../EstadisticasAvanzadasService.js';
+import { estadisticasAvanzadasService } from '../EstadisticasAvanzadasService.js';
 
 export class EstadisticasAvanzadas {
   constructor() {
@@ -29,14 +29,15 @@ export class EstadisticasAvanzadas {
       inicio.setDate(inicio.getDate() - dias);
 
       // Cargar datos en paralelo
-      const [resumen, ventas, platos, distribucion] = await Promise.all([
-        EstadisticasAvanzadasService.obtenerResumenGeneral(),
-        EstadisticasAvanzadasService.obtenerVentasPorFecha(inicio, fin),
-        EstadisticasAvanzadasService.obtenerPlatosPopulares(10),
-        EstadisticasAvanzadasService.obtenerDistribucionPedidos()
+      const [resumen, ventas, platos, distribucion, hoy] = await Promise.all([
+        estadisticasAvanzadasService.obtenerResumenGeneral(),
+        estadisticasAvanzadasService.obtenerVentasPorFecha(inicio, fin),
+        estadisticasAvanzadasService.obtenerPlatosPopulares(10),
+        estadisticasAvanzadasService.obtenerDistribucionPedidos(),
+        estadisticasAvanzadasService.obtenerEstadisticasHoy()
       ]);
 
-      this.data = { resumen, ventas, platos, distribucion };
+      this.data = { resumen, ventas, platos, distribucion, hoy };
       
       // Actualizar UI
       this.actualizarResumen();
@@ -64,6 +65,7 @@ export class EstadisticasAvanzadas {
       minimumFractionDigits: 0
     });
 
+    // Actualizar cards de resumen
     document.getElementById('ingresos-totales').textContent = formatter.format(resumen.totalIngresos || 0);
     document.getElementById('pedidos-completados').textContent = resumen.totalPedidosPagados || 0;
     
@@ -73,6 +75,11 @@ export class EstadisticasAvanzadas {
     document.getElementById('tasa-exito').textContent = `${tasaExito}%`;
     
     document.getElementById('ticket-promedio').textContent = formatter.format(resumen.ticketPromedio || 0);
+
+    // Ocultar variaciones por ahora (no tenemos datos históricos)
+    document.querySelectorAll('[id$="variacion"]').forEach(el => {
+      el.textContent = '';
+    });
   }
 
   actualizarTablaPlatos() {
@@ -86,13 +93,27 @@ export class EstadisticasAvanzadas {
       minimumFractionDigits: 0
     });
 
-    tbody.innerHTML = platos.map(plato => `
-      <tr>
-        <td>${plato.nombrePlato}</td>
-        <td class="text-end">${plato.totalVendido || 0}</td>
-        <td class="text-end">${formatter.format(plato.ingresosGenerados || 0)}</td>
-      </tr>
-    `).join('');
+    // Limpiar tabla
+    tbody.innerHTML = '';
+
+    // Llenar tabla con datos reales
+    if (platos && platos.length > 0) {
+      tbody.innerHTML = platos.map(plato => `
+        <tr>
+          <td>${plato.nombrePlato || 'Sin nombre'}</td>
+          <td class="text-end">${plato.totalVendido || 0}</td>
+          <td class="text-end">${plato.ingresosGenerados ? formatter.format(plato.ingresosGenerados) : 'N/A'}</td>
+        </tr>
+      `).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="3" class="text-center text-muted py-3">
+            No hay datos de platos populares disponibles
+          </td>
+        </tr>
+      `;
+    }
   }
 
   inicializarCharts() {
@@ -112,11 +133,18 @@ export class EstadisticasAvanzadas {
     }
 
     const { ventas } = this.data;
-    const labels = ventas.map(v => {
-      const date = new Date(v.fecha);
-      return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-    });
-    const data = ventas.map(v => v.monto);
+    
+    // Preparar datos para el gráfico
+    const labels = ventas && ventas.length > 0 
+      ? ventas.map(v => {
+          const date = new Date(v.fecha);
+          return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+        })
+      : ['Sin datos'];
+
+    const data = ventas && ventas.length > 0 
+      ? ventas.map(v => v.monto || 0)
+      : [0];
 
     this.charts.ventas = new Chart(ctx, {
       type: 'line',
@@ -168,14 +196,39 @@ export class EstadisticasAvanzadas {
     }
 
     const { platos } = this.data;
-    const top5Platos = platos.slice(0, 5);
+    
+    // Tomar solo los primeros 5 platos para el gráfico
+    const topPlatos = platos && platos.length > 0 ? platos.slice(0, 5) : [];
+
+    if (topPlatos.length === 0) {
+      // Mostrar gráfico vacío si no hay datos
+      this.charts.platosPopulares = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Sin datos'],
+          datasets: [{
+            data: [1],
+            backgroundColor: ['#e9ecef']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+      return;
+    }
 
     this.charts.platosPopulares = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: top5Platos.map(p => p.nombrePlato),
+        labels: topPlatos.map(p => p.nombrePlato),
         datasets: [{
-          data: top5Platos.map(p => p.totalVendido),
+          data: topPlatos.map(p => p.totalVendido || 0),
           backgroundColor: [
             '#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1'
           ],
@@ -203,6 +256,29 @@ export class EstadisticasAvanzadas {
     }
 
     const { distribucion } = this.data;
+
+    if (!distribucion || distribucion.length === 0) {
+      // Mostrar gráfico vacío si no hay datos
+      this.charts.distribucionPedidos = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Sin datos'],
+          datasets: [{
+            data: [1],
+            backgroundColor: ['#e9ecef']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+      return;
+    }
 
     this.charts.distribucionPedidos = new Chart(ctx, {
       type: 'pie',
@@ -238,17 +314,30 @@ export class EstadisticasAvanzadas {
       this.charts.tendencias.destroy();
     }
 
-    // Datos de ejemplo para tendencias semanales
-    const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-    const ventasSemanales = [1200, 1900, 1500, 2000, 1800, 2500, 2200];
+    // Usar datos de ventas para tendencias semanales
+    const { ventas } = this.data;
+    
+    let datosTendencias = [0, 0, 0, 0, 0, 0, 0]; // Valores por defecto
+    
+    if (ventas && ventas.length > 0) {
+      // Agrupar por día de la semana (simplificado)
+      const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+      datosTendencias = diasSemana.map((_, index) => {
+        const ventasDia = ventas.filter(v => {
+          const fecha = new Date(v.fecha);
+          return fecha.getDay() === index;
+        });
+        return ventasDia.reduce((sum, venta) => sum + (venta.monto || 0), 0);
+      });
+    }
 
     this.charts.tendencias = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: diasSemana,
+        labels: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
         datasets: [{
-          label: 'Ventas Semanales',
-          data: ventasSemanales,
+          label: 'Ventas por Día de la Semana',
+          data: datosTendencias,
           backgroundColor: 'rgba(32, 201, 151, 0.2)',
           borderColor: 'rgba(32, 201, 151, 1)',
           borderWidth: 2

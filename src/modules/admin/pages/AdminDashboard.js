@@ -6,6 +6,7 @@ import { MesasList } from '../../Mesa/MesasList.js';
 import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
 import { HistorialPedidosAdminComponent } from '../../pedidos/components/HistorialPedidosAdminComponent.js';
 import { EstadisticasAvanzadas } from '../../estadisticas/components/EstadisticasAvanzadas.js';
+import { estadisticasAvanzadasService } from '../../estadisticas/EstadisticasAvanzadasService.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -260,69 +261,57 @@ export function AdminDashboard() {
             </article>
           </div>
 
-          <!-- Estadísticas rápidas -->
-          <section aria-labelledby="estadisticas-heading">
-            <header class="row mt-4">
-              <div class="col-12">
-                <h2 id="estadisticas-heading" class="h5 fw-bold mb-3">Estadísticas de Hoy</h2>
+          
+          <div class="stats-grid" role="list" aria-label="Estadísticas del día actual">
+            <!-- Estos valores ahora se cargarán dinámicamente -->
+            <article class="stat-card" role="listitem">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="stat-label">Reservas Hoy</div>
+                  <div class="stat-value" aria-live="polite" id="reservas-hoy-value">0</div>
+                </div>
+                <div class="stat-icon bg-primary bg-opacity-10 text-primary" aria-hidden="true">
+                  <i class="bi bi-calendar"></i>
+                </div>
               </div>
-            </header>
+            </article>
 
-            <div class="stats-grid" role="list" aria-label="Estadísticas del día actual">
-              
-              <!-- Reservas Hoy -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Reservas Hoy</div>
-                    <div class="stat-value" aria-live="polite">12</div>
-                  </div>
-                  <div class="stat-icon bg-primary bg-opacity-10 text-primary" aria-hidden="true">
-                    <i class="bi bi-calendar"></i>
-                  </div>
+            <article class="stat-card" role="listitem">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="stat-label">Mesas Ocupadas</div>
+                  <div class="stat-value" aria-live="polite" id="mesas-ocupadas-value">0/0</div>
                 </div>
-              </article>
+                <div class="stat-icon bg-success bg-opacity-10 text-success" aria-hidden="true">
+                  <i class="bi bi-table"></i>
+                </div>
+              </div>
+            </article>
 
-              <!-- Mesas Ocupadas -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Mesas Ocupadas</div>
-                    <div class="stat-value" aria-live="polite">8/15</div>
-                  </div>
-                  <div class="stat-icon bg-success bg-opacity-10 text-success" aria-hidden="true">
-                    <i class="bi bi-table"></i>
-                  </div>
+            <article class="stat-card" role="listitem">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="stat-label">Ingresos Hoy</div>
+                  <div class="stat-value" aria-live="polite" id="ingresos-hoy-value">$0</div>
                 </div>
-              </article>
+                <div class="stat-icon bg-warning bg-opacity-10 text-warning" aria-hidden="true">
+                  <i class="bi bi-cash-stack"></i>
+                </div>
+              </div>
+            </article>
 
-              <!-- Ingresos Hoy -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Ingresos Hoy</div>
-                    <div class="stat-value" aria-live="polite">$1,234</div>
-                  </div>
-                  <div class="stat-icon bg-warning bg-opacity-10 text-warning" aria-hidden="true">
-                    <i class="bi bi-cash-stack"></i>
-                  </div>
+            <article class="stat-card" role="listitem">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="stat-label">Platos Activos</div>
+                  <div class="stat-value" aria-live="polite" id="platos-activos-value">0</div>
                 </div>
-              </article>
-
-              <!-- Platos Disponibles -->
-              <article class="stat-card" role="listitem">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <div class="stat-label">Platos Activos</div>
-                    <div class="stat-value" aria-live="polite">45</div>
-                  </div>
-                  <div class="stat-icon bg-info bg-opacity-10 text-info" aria-hidden="true">
-                    <i class="bi bi-menu-button"></i>
-                  </div>
+                <div class="stat-icon bg-info bg-opacity-10 text-info" aria-hidden="true">
+                  <i class="bi bi-menu-button"></i>
                 </div>
-              </article>
-            </div>
-          </section>
+              </div>
+            </article>
+          </div>
         </section>
 
         <!-- SECCIÓN GESTIONAR MENÚ -->
@@ -712,7 +701,32 @@ export function AdminDashboard() {
 
     // Inicializar estadisticas avanzadas
     estadisticasAvanzadas = new EstadisticasAvanzadas();
+    cargarEstadisticasDashboard();
   }
+
+  async function cargarEstadisticasDashboard() {
+    try {
+      const estadisticasHoy = await estadisticasAvanzadasService.obtenerEstadisticasHoy();
+      
+      // Formatear montos
+      const formatter = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      });
+
+      // Actualizar UI
+      document.getElementById('reservas-hoy-value').textContent = estadisticasHoy.reservasHoy || 0;
+      document.getElementById('mesas-ocupadas-value').textContent = estadisticasHoy.mesasOcupadas || '0/0';
+      document.getElementById('ingresos-hoy-value').textContent = formatter.format(estadisticasHoy.ingresosHoy || 0);
+      document.getElementById('platos-activos-value').textContent = estadisticasHoy.platosActivos || 0;
+      
+    } catch (error) {
+      console.error('Error cargando estadísticas del dashboard:', error);
+    }
+  }
+
+
 
   function setupEventListeners() {
     setupSidebarNavigation();
