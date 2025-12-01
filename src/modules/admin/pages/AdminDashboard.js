@@ -7,6 +7,7 @@ import { CrearMesaModal } from '../crear-mesa/CrearMesaModal.js';
 import { HistorialPedidosAdminComponent } from '../../pedidos/components/HistorialPedidosAdminComponent.js';
 import { EstadisticasAvanzadas } from '../../estadisticas/components/EstadisticasAvanzadas.js';
 import { estadisticasAvanzadasService } from '../../estadisticas/EstadisticasAvanzadasService.js';
+import { ListaReservasAdmin } from '../reservas/components/ListaReservasAdmin.js';
 
 export function AdminDashboard() {
   const page = document.createElement('div');
@@ -19,6 +20,8 @@ export function AdminDashboard() {
 
   // Inicializar estadisticas avanzadas
   let estadisticasAvanzadas;
+
+  let listaReservasAdmin;
 
   page.innerHTML = `
   <!-- Layout con Sidebar -->
@@ -349,13 +352,31 @@ export function AdminDashboard() {
                 <i class="bi bi-calendar-check me-2 text-warning" aria-hidden="true"></i>
                 Gestión de Reservas
               </h1>
-              <p class="text-muted mb-0">Ver y administrar reservas de clientes</p>
+              <p class="text-muted mb-0">Administra todas las reservas del restaurante</p>
             </div>
+            <button class="btn btn-primary" id="actualizarReservasBtn">
+              <i class="bi bi-arrow-clockwise me-1"></i>
+              Actualizar
+            </button>
           </header>
 
-          <div class="alert alert-warning" role="status" aria-live="polite">
-            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
-            <strong>Próximamente:</strong> Aquí verás las reservas realizadas por los clientes
+          <!-- Loading State -->
+          <div id="reservas-loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando reservas...</span>
+            </div>
+            <p class="mt-2 text-muted">Cargando reservas...</p>
+          </div>
+
+          <!-- Contenido de Reservas -->
+          <div id="reservas-content" style="display: none;">
+            <div id="reservas-list-container"></div>
+          </div>
+
+          <!-- Error State -->
+          <div id="reservas-error" class="alert alert-danger text-center" style="display: none;" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Error al cargar las reservas.</strong> Por favor, intente nuevamente.
           </div>
         </section>
 
@@ -696,6 +717,10 @@ export function AdminDashboard() {
 
     // Inicializar estadisticas avanzadas
     estadisticasAvanzadas = new EstadisticasAvanzadas();
+
+    // Inicializar la lista de reservas
+    listaReservasAdmin = new ListaReservasAdmin();
+
     cargarEstadisticasDashboard();
   }
 
@@ -932,6 +957,13 @@ export function AdminDashboard() {
     if (sectionName === 'estadisticas') {
       setTimeout(() => {
         estadisticasAvanzadas.initialize();
+      }, 100);
+    }
+
+    // Inicializar las reservas cuando se navega a esa sección
+    if (sectionName === 'reservas') {
+      setTimeout(() => {
+        listaReservasAdmin.initialize();
       }, 100);
     }
   }
