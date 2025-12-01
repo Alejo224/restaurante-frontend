@@ -54,7 +54,7 @@ export const adminReservaService = {
 
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reserva/${reservaId}/cancelar`, {
+        const response = await fetch(`${API_BASE_URL}/api/reserva/${reservaId}/cancelar-admin`, {
             method: 'PUT', //Usamos el DELETE como en el postman para eliminar la reserva
             headers: {
                 'Authorization': `Bearer ${token}`,
