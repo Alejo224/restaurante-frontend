@@ -1,6 +1,6 @@
 // src/modules/carrito/components/CarritoOffcanvas.js
 // Componente deslizante del carrito de compras
-
+import { router } from '../../../router.js'
 import {
   obtenerCarrito,
   calcularTotal,
@@ -66,7 +66,7 @@ export function CarritoOffcanvas() {
 
           <!-- Botón Tipo de Servicio -->
           <div class="d-grid mb-3">
-            <a class="btn btn-primary" id="btnTipoServicio" href="/restaurante-frontend/src/modules/tipo-servicio/tipo.html">
+            <a class="btn btn-primary" id="btnTipoServicio"">
               <i class="bi bi-truck me-2"></i>
               Tipo de Servicio
             </a>
@@ -309,6 +309,7 @@ function handleTipoServicio(e) {
 
   // Mostrar mensaje de confirmación
   mostrarToast('Redirigiendo a tipo de servicio...', 'info');
+  router.navigate('/tipo-servicio');
 }
 
 function mostrarToast(mensaje, tipo = 'success') {

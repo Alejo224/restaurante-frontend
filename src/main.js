@@ -20,7 +20,7 @@ import { UserDashboard } from "./modules/user/pages/UserDashboard.js";
 import { HistorialPedidosPage, afterRenderHistorialPedidos } from './modules/pedidos/pages/HistorialPedidosPage.js';
 import { ReservaMesaPagina } from "./modules/reservas-mesas/reservaPage.js";
 import { seccionMisReservas } from "./modules/gestionReservasClientes/misReservas.js";
-
+import { TipoServicioPage } from "./modules/tipo-servicio/TipoServicioPage.js";
 
 // ========================================
 // 🌐 RUTAS PÚBLICAS (sin autenticación)
@@ -72,6 +72,12 @@ router.addRoute("/reservar", ReservaMesaPagina, {
 // página para gestionar mis reservas
 
 router.addRoute("/reservar/mis-reservas", seccionMisReservas,{
+  requiresAuth:true,
+  requiresRole: "USER",
+});
+
+
+router.addRoute("/tipo-servicio", TipoServicioPage,{
   requiresAuth:true,
   requiresRole: "USER",
 });
