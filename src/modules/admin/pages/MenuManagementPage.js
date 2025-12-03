@@ -281,7 +281,7 @@ export function MenuManagementPage() {
   // Crear Plato
   page.querySelector('#crearPlatoBtn').addEventListener('click', () => {
     console.log('🔄 Abriendo página de crear plato...');
-    window.open('src/modules/admin/crear-plato/index.html', '_blank');
+    router.navigate('/admin/platos/crear');
   });
 
   // Crear Mesa (placeholder)
