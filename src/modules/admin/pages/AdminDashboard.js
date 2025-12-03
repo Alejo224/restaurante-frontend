@@ -807,7 +807,7 @@ export function AdminDashboard() {
       crearPlatoBtn.addEventListener('click', () => {
         announceToScreenReader('Abriendo página para crear nuevo plato');
         console.log('Abriendo página de crear plato...');
-        window.open('/restaurante-frontend/src/modules/admin/crear-plato/index.html', '_blank');
+        router.navigate('/admin/platos/crear');
       });
     }
 
