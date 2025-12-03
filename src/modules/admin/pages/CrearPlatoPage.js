@@ -266,7 +266,7 @@ export function CrearPlatoPage() {
       categorias = await obtenerCategorias();
       
       // Ordenar categorías alfabéticamente
-      categorias.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      categorias.sort((a, b) => a.nombreCategoria.localeCompare(b.nombreCategoria));
       
       // Limpiar y llenar el select
       categoriaSelect.innerHTML = '<option value="">Seleccione una categoría</option>';
@@ -274,7 +274,7 @@ export function CrearPlatoPage() {
       categorias.forEach(categoria => {
         const option = document.createElement('option');
         option.value = categoria.id;
-        option.textContent = categoria.nombre;
+        option.textContent = categoria.nombreCategoria;
         categoriaSelect.appendChild(option);
       });
       
@@ -291,11 +291,11 @@ export function CrearPlatoPage() {
       
       categoriaSelect.innerHTML = `
         <option value="">Error al cargar categorías</option>
-        <option value="6">Entrada</option>
-        <option value="7">Hamburguesa</option>
-        <option value="8">Plato Fuerte</option>
-        <option value="9">Postre</option>
-        <option value="10">Bebida</option>
+        <option value="1">Comida rapida</option>
+        <option value="2">Comida rapida</option>
+        <option value="3">Platos principales</option>
+        <option value="4">Postre</option>
+        <option value="5">Bebida</option>
       `;
       categoriaSelect.disabled = false;
       spinner.style.display = 'none';
