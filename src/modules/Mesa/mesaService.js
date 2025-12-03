@@ -1,7 +1,7 @@
     // src/modules/Mesa/mesaService.js
 import { getToken, isAuthenticated } from '../auth/userService.js';
 
-const API_URL = "http://localhost:8080/api/mesas";
+const API_URL = "https://gestion-restaurante-api.onrender.com/api/mesas";
 
 /**
  * 🔐 Helper para hacer fetch con autenticación

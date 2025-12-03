@@ -1,5 +1,5 @@
 // src/modules/admin/services/AdminPedidosService.js
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'https://gestion-restaurante-api.onrender.com/api';
 
 export function createAdminPedidosService() {
   return {

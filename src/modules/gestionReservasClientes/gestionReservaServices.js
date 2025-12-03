@@ -1,6 +1,6 @@
 import { getCurrentUser } from "../auth/userService";
 import { servicioNotificaciones } from "../../shared/services/toastService.js";
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://gestion-restaurante-api.onrender.com';
 
 //Funcion para llamar la api 
 export async function infoReservas() {

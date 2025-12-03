@@ -116,8 +116,7 @@ export function CrearMesaModal() {
 
     try {
       const token = getToken(); // ✅ Obtener token correctamente
-
-      const res = await fetch('http://localhost:8080/api/mesas', {
+      const res = await fetch('https://gestion-restaurante-api.onrender.com/api/mesas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

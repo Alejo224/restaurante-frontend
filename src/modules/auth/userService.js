@@ -80,7 +80,7 @@ function extractEmailFromToken(token) {
  * Registra un nuevo cliente (público)
  */
 export async function registerUser(data) {
-  const API_URL = 'http://localhost:8080/api/usuarios/register';
+  const API_URL = 'https://gestion-restaurante-api.onrender.com/api/usuarios/register';
 
   try {
     console.log('🌐 Registrando usuario en:', API_URL);
@@ -154,7 +154,7 @@ export async function registerUser(data) {
  * Inicia sesión
  */
 export async function loginUser(credentials) {
-  const API_URL = 'http://localhost:8080/api/usuarios/login';
+  const API_URL = 'https://gestion-restaurante-api.onrender.com/api/usuarios/login';
 
   try {
     console.log('🌐 Iniciando sesión en:', API_URL);
@@ -218,7 +218,7 @@ export async function loginUser(credentials) {
 export async function logout() {
   try {
     // Llamar endpoint de logout del backend
-    await fetch('http://localhost:8080/api/usuarios/logout', {
+    await fetch('https://gestion-restaurante-api.onrender.com/api/usuarios/logout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${getToken()}`

@@ -171,7 +171,7 @@ function crearItemHTML(item) {
           <!-- Imagen -->
           <div class="col-3">
             <img 
-              src="http://localhost:8080${item.imagenUrl}" 
+              src="https://gestion-restaurante-api.onrender.com${item.imagenUrl}" 
               class="img-fluid rounded"
               alt="${item.nombre}"
               style="height: 60px; width: 60px; object-fit: cover;"

@@ -2,7 +2,7 @@
 
 // Metodo para obtner las categorias de platos desde la API
 export async function obtenerCategorias() {
-    const API_URL = "http://localhost:8080/api/categoriasPlatos";
+    const API_URL = "https://gestion-restaurante-api.onrender.com/api/categoriasPlatos";
     
     try {
         console.log('🌐 Obteniendo categorías desde:', API_URL);

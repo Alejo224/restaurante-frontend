@@ -1,5 +1,5 @@
   export async function crearPlato(data) {
-    const API_URL = "http://localhost:8080/api/platos";
+    const API_URL = "https://gestion-restaurante-api.onrender.com/api/platos";
   /* try{
         const formData = new FormData();
         formData.append('nombre', data.nombre);
