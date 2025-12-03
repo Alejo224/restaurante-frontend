@@ -13,6 +13,7 @@ import { MenuPublicPage } from "./modules/menu/pages/MenuPublicPage.js";
 // Páginas de administrador
 import { MenuManagementPage } from "./modules/admin/pages/MenuManagementPage.js";
 import { AdminDashboard } from "./modules/admin/pages/AdminDashboard.js";
+import { CrearPlatoPage } from "./modules/admin/pages/CrearPlatoPage.js";
 
 // Páginas de usuarios (cliente)
 import { UserDashboard } from "./modules/user/pages/UserDashboard.js";
@@ -81,6 +82,11 @@ router.addRoute("/reservar/mis-reservas", seccionMisReservas,{
 /*
 */
 router.addRoute("/admin/panel", AdminDashboard, {
+  requiresAuth: true,
+  requiresRole: "ADMIN",
+});
+
+router.addRoute("/admin/platos/crear", CrearPlatoPage, {
   requiresAuth: true,
   requiresRole: "ADMIN",
 });
