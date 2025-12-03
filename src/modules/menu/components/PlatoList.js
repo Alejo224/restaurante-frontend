@@ -160,7 +160,7 @@ function renderPlatos(container, platos, isAdminView = false) {
         <!-- Imagen del plato -->
         <div class="position-relative">
           <img 
-            src="http://localhost:8080${plato.imagenUrl}" 
+            src="https://gestion-restaurante-api.onrender.com${plato.imagenUrl}" 
             class="card-img-top" 
             alt="${plato.nombre}"
             style="height: 200px; object-fit: cover;"

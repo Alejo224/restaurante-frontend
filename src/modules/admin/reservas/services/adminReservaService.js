@@ -1,7 +1,7 @@
 // src/modules/admin/reservas/services/adminReservaService.js
 import { fetchWithAuth, getCurrentUser } from '../../../auth/userService.js';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://gestion-restaurante-api.onrender.com';
 
 export const adminReservaService = {
   // Obtener todas las reservas (admin) - NUEVO ENDPOINT

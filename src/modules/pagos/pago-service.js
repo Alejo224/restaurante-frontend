@@ -45,7 +45,7 @@ async function cargarDatosPedido(pedidoId) {
     const token = getToken();
 
     const response = await fetch(
-      `http://localhost:8080/api/pedidos/${pedidoId}`,
+      `https://gestion-restaurante-api.onrender.com/api/pedidos/${pedidoId}`,
       {
         method: "GET",
         headers: {
@@ -187,7 +187,7 @@ async function crearSesionPago(customerEmail) {
     console.log("💰 Creando sesión para pedido:", pedido.id);
 
     const response = await fetch(
-      "http://localhost:8080/api/pagos/crear-sesion-pedido-existente",
+      "https://gestion-restaurante-api.onrender.com/api/pagos/crear-sesion-pedido-existente",
       {
         method: "POST",
         headers: {

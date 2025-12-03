@@ -3,7 +3,7 @@
 
 import { getToken, isAuthenticated, isAdmin, canCreate, canUpdate, canDelete } from '../../auth/userService.js';
 
-const API_BASE_URL = 'http://localhost:8080/api/platos';
+const API_BASE_URL = 'https://gestion-restaurante-api.onrender.com/api/platos';
 
 // ========================================
 // FUNCIÓN HELPER PARA PETICIONES CON AUTH

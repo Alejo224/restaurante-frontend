@@ -284,7 +284,7 @@ class ActualizarPlato {
       // Mostrar imagen actual
       const imagenPreview = document.querySelector('#imagen-preview');
       if (plato.imagenUrl) {
-        const imageUrl = `http://localhost:8080${plato.imagenUrl}`;
+        const imageUrl = `https://gestion-restaurante-api.onrender.com${plato.imagenUrl}`;
         imagenPreview.innerHTML = `
           <img src="${imageUrl}" 
                alt="${plato.nombre}" 

@@ -3,7 +3,7 @@ import { getToken, isAuthenticated } from '../auth/userService.js';
 import { servicioNotificaciones } from '../../shared/services/toastService.js';
 
 // Configuración del API
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://gestion-restaurante-api.onrender.com';
 
 function getApiUrl(endpoint, id = null) {
     let url = `${API_BASE_URL}${endpoint}`;

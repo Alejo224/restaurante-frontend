@@ -7,7 +7,7 @@ import { getCurrentUser, isAuthenticated } from '../auth/userService.js';
 // 🌐 CONFIGURACIÓN DEL API
 // ========================================
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://gestion-restaurante-api.onrender.com';
 
 function getApiUrl(endpoint, id = null) {
     let url = `${API_BASE_URL}${endpoint}`;

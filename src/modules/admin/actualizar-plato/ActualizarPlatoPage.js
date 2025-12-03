@@ -181,7 +181,7 @@ async function loadPlatoData(page, platoId) {
     const imagenPreview = page.querySelector('#imagen-preview');
     if (plato.imagenUrl) {
       imagenPreview.innerHTML = `
-        <img src="http://localhost:8080${plato.imagenUrl}" 
+        <img src="https://gestion-restaurante-api.onrender.com${plato.imagenUrl}" 
              alt="${plato.nombre}" 
              style="max-width: 200px; max-height: 150px; border-radius: 8px;">
         <p class="text-muted small mt-1">Imagen actual del plato</p>
