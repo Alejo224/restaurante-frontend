@@ -221,7 +221,7 @@ export function TipoServicioPage() {
   async function obtenerDatosCarrito() {
     try {
       // Importar funciones del carrito dinámicamente
-      const carritoModule = await import('../../carrito/carritoService.js');
+      const carritoModule = await import('../carrito/carritoService.js');
       
       const carrito = carritoModule.obtenerCarrito();
       
